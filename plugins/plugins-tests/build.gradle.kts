@@ -5,7 +5,6 @@ dependencies {
     testCompile(project(":compiler:util"))
     testCompile(project(":compiler:backend"))
     testCompile(project(":compiler:cli"))
-    testCompile(project(":compiler:tests-common"))
     testCompile(project(":plugins:android-extensions-compiler"))
     testCompile(project(":plugins:android-extensions-ide"))
     testCompile(project(":kotlin-android-extensions-runtime"))
@@ -20,6 +19,7 @@ dependencies {
     testCompile(project(":plugins:lint")) { isTransitive = false }
     testCompile(project(":plugins:uast-kotlin"))
     testCompile(projectDist(":kotlin-test:kotlin-test-jvm"))
+    testCompile(projectTests(":compiler:tests-common"))
     testCompile(projectTests(":jps-plugin"))
     testCompile(commonDep("junit:junit"))
     testCompileOnly(ideaSdkDeps("jps-builders"))
