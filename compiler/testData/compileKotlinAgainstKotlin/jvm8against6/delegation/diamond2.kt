@@ -1,5 +1,5 @@
+// IGNORE_BACKEND: NATIVE
 // FILE: 1.kt
-
 interface Test {
     fun test(): String {
         return "OK"
@@ -9,9 +9,20 @@ interface Test {
 // FILE: 2.kt
 // JVM_TARGET: 1.8
 // KOTLIN_CONFIGURATION_FLAGS: +JVM.JVM8_TARGET_WITH_DEFAULTS
-class TestClass : Test {
+open class TestClass : Test {
     override fun test(): String {
         return super.test()
+    }
+}
+
+interface Test2 : Test {
+    override fun test(): String
+}
+
+
+class TestClass2 : TestClass(), Test2 {
+    override fun test(): String {
+        return super<TestClass>.test()
     }
 }
 

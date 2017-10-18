@@ -546,22 +546,6 @@ fun main(args: Array<String>) {
         testClass<AbstractJvm8RuntimeDescriptorLoaderTest> {
             model("loadJava8/compiledJava", extension = "java", excludeDirs = listOf("sam", "kotlinSignature/propagation"))
         }
-
-        testClass<AbstractCompileKotlinAgainstKotlinTest> {
-            model("codegen/java8/compileKotlinAgainstKotlin")
-        }
-
-        testClass<AbstractJava8WriteSignatureTest> {
-            model("codegen/java8/writeSignature")
-        }
-
-        testClass<AbstractWriteFlagsTest> {
-            model("codegen/java8/writeFlags")
-        }
-
-        testClass<AbstractBytecodeTextTest>("BytecodeTextJava8TestGenerated") {
-            model("codegen/java8/bytecodeText")
-        }
     }
 
     testGroup("idea/tests", "idea/testData") {

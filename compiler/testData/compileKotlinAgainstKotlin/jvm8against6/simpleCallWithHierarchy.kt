@@ -1,4 +1,6 @@
+// IGNORE_BACKEND: NATIVE
 // FILE: 1.kt
+
 interface Test {
     fun test(): String {
         return "OK"
@@ -13,6 +15,7 @@ interface Test2 : Test {
         return super.test()
     }
 }
+
 
 class TestClass : Test2 {
 

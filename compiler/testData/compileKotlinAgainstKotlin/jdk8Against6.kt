@@ -1,3 +1,4 @@
+// IGNORE_BACKEND: NATIVE
 // FILE: A.kt
 import java.util.*
 class Jdk6List<F> : AbstractList<F>() {

@@ -126,6 +126,12 @@ public class WriteSignatureTestGenerated extends AbstractWriteSignatureTest {
         doTest(fileName);
     }
 
+    @TestMetadata("mutableMapRemove.kt")
+    public void testMutableMapRemove() throws Exception {
+        String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeSignature/mutableMapRemove.kt");
+        doTest(fileName);
+    }
+
     @TestMetadata("NonGeneric.kt")
     public void testNonGeneric() throws Exception {
         String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeSignature/NonGeneric.kt");

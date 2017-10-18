@@ -369,6 +369,51 @@ public class WriteFlagsTestGenerated extends AbstractWriteFlagsTest {
         }
     }
 
+    @TestMetadata("compiler/testData/writeFlags/defaultMethods")
+    @TestDataPath("$PROJECT_ROOT")
+    @RunWith(JUnit3RunnerWithInners.class)
+    public static class DefaultMethods extends AbstractWriteFlagsTest {
+        public void testAllFilesPresentInDefaultMethods() throws Exception {
+            KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/writeFlags/defaultMethods"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.ANY, true);
+        }
+
+        @TestMetadata("defaultMethod.kt")
+        public void testDefaultMethod() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeFlags/defaultMethods/defaultMethod.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("defaultMethodCompatibility.kt")
+        public void testDefaultMethodCompatibility() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeFlags/defaultMethods/defaultMethodCompatibility.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("defaultProperty.kt")
+        public void testDefaultProperty() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeFlags/defaultMethods/defaultProperty.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("defaultPropertyCompatibility.kt")
+        public void testDefaultPropertyCompatibility() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeFlags/defaultMethods/defaultPropertyCompatibility.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("interfaceMethodWithoutDefault.kt")
+        public void testInterfaceMethodWithoutDefault() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeFlags/defaultMethods/interfaceMethodWithoutDefault.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("interfacePropertyWithoutDefault.kt")
+        public void testInterfacePropertyWithoutDefault() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/writeFlags/defaultMethods/interfacePropertyWithoutDefault.kt");
+            doTest(fileName);
+        }
+    }
+
     @TestMetadata("compiler/testData/writeFlags/delegatedProperty")
     @TestDataPath("$PROJECT_ROOT")
     @RunWith(JUnit3RunnerWithInners.class)

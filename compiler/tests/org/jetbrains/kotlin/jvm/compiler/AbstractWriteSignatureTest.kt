@@ -19,13 +19,8 @@ package org.jetbrains.kotlin.jvm.compiler
 import com.google.common.io.Closeables
 import com.google.common.io.Files
 import com.intellij.openapi.util.Disposer
-import com.intellij.openapi.util.io.FileUtil
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.codegen.GenerationUtils
-import org.jetbrains.kotlin.test.ConfigurationKind
-import org.jetbrains.kotlin.test.KotlinTestUtils
-import org.jetbrains.kotlin.test.TestCaseWithTmpdir
-import org.jetbrains.kotlin.test.TestJdkKind
+import org.jetbrains.kotlin.test.*
 import org.jetbrains.kotlin.utils.sure
 import org.jetbrains.org.objectweb.asm.*
 import org.junit.Assert
@@ -36,30 +31,20 @@ import java.util.*
 import java.util.regex.MatchResult
 
 abstract class AbstractWriteSignatureTest : TestCaseWithTmpdir() {
-    private var environment: KotlinCoreEnvironment? = null
-
-    override fun setUp() {
-        super.setUp()
-        environment = KotlinTestUtils.createEnvironmentWithJdkAndNullabilityAnnotationsFromIdea(
-                myTestRootDisposable, ConfigurationKind.ALL, jdkKind
-        )
-    }
-
     protected open val jdkKind: TestJdkKind
         get() = TestJdkKind.MOCK_JDK
 
-    override fun tearDown() {
-        environment = null
-        super.tearDown()
-    }
-
     protected fun doTest(ktFileName: String) {
         val ktFile = File(ktFileName)
-        val text = FileUtil.loadFile(ktFile, true)
+        val text = ktFile.readText(Charsets.UTF_8)
 
-        val psiFile = KotlinTestUtils.createFile(ktFile.name, text, environment!!.project)
+        val jdkKind = if (InTextDirectivesUtils.isDirectiveDefined(text, "FULL_JDK")) TestJdkKind.FULL_JDK else TestJdkKind.MOCK_JDK
+        val environment = KotlinTestUtils.createEnvironmentWithJdkAndNullabilityAnnotationsFromIdea(
+                myTestRootDisposable, ConfigurationKind.ALL, jdkKind
+        )
+        val psiFile = KotlinTestUtils.createFile(ktFile.name, text, environment.project)
 
-        val fileFactory = GenerationUtils.compileFileTo(psiFile, environment!!, tmpdir)
+        val fileFactory = GenerationUtils.compileFileTo(psiFile, environment, tmpdir)
 
         Disposer.dispose(myTestRootDisposable)
 
