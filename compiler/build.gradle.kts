@@ -85,6 +85,11 @@ projectTest {
     dependsOn(*testDistProjects.map { "$it:dist" }.toTypedArray())
     workingDir = rootDir
     systemProperty("kotlin.test.script.classpath", the<JavaPluginConvention>().sourceSets.getByName("test").output.classesDirs.joinToString(File.pathSeparator))
+    testLogging {
+        setExceptionFormat("full")
+        showStackTraces = true
+        showCauses = true
+    }
 }
 
 evaluationDependsOn(":compiler:tests-common-jvm6")
