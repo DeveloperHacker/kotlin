@@ -509,10 +509,6 @@ fun main(args: Array<String>) {
     }
 
     testGroup("compiler/tests-java8/tests", "compiler/testData") {
-        testClass<AbstractBlackBoxCodegenTest>("BlackBoxWithJava8CodegenTestGenerated") {
-            model("codegen/java8/box")
-        }
-
         testClass<AbstractForeignJava8AnnotationsTest> {
             model("foreignAnnotationsJava8/tests")
         }
