@@ -396,6 +396,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "default",
             "distJar",
             "implementation",
@@ -404,6 +405,7 @@
             "runtime",
             "runtimeClasspath",
             "runtimeElements",
+            "runtimeJar",
             "runtimeOnly",
             "signatures",
             "testCompile",
@@ -473,6 +475,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "default",
             "implementation",
             "kapt",
@@ -590,6 +593,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "default",
             "implementation",
             "kapt",
@@ -621,7 +625,8 @@
     ":kotlin-annotations-android": {
         "conventions": {
             "base": "org.gradle.api.plugins.BasePluginConvention",
-            "java": "org.gradle.api.plugins.JavaPluginConvention"
+            "java": "org.gradle.api.plugins.JavaPluginConvention",
+            "maven": "org.gradle.api.plugins.MavenPluginConvention"
         },
         "configurations": [
             "apiElements",
@@ -639,6 +644,7 @@
             "runtimeElements",
             "runtimeJar",
             "runtimeOnly",
+            "signatures",
             "testCompile",
             "testCompileClasspath",
             "testCompileOnly",
@@ -652,7 +658,8 @@
             "kotlin": "org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension",
             "kapt": "org.jetbrains.kotlin.gradle.plugin.KaptExtension",
             "defaultArtifacts": "org.gradle.api.internal.plugins.DefaultArtifactPublicationSet",
-            "reporting": "org.gradle.api.reporting.ReportingExtension"
+            "reporting": "org.gradle.api.reporting.ReportingExtension",
+            "signing": "org.gradle.plugins.signing.SigningExtension"
         }
     },
     ":kotlin-annotations-jvm": {
@@ -867,6 +874,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "compilerJar",
             "default",
             "implementation",
@@ -903,6 +911,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "default",
             "implementation",
             "kapt",
@@ -989,6 +998,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "default",
             "distJar",
             "implementation",
@@ -998,6 +1008,7 @@
             "runtime",
             "runtimeClasspath",
             "runtimeElements",
+            "runtimeJar",
             "runtimeOnly",
             "signatures",
             "testCompile",
@@ -1158,6 +1169,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "default",
             "distJar",
             "implementation",
@@ -1166,6 +1178,7 @@
             "runtime",
             "runtimeClasspath",
             "runtimeElements",
+            "runtimeJar",
             "runtimeOnly",
             "signatures",
             "testCompile",
@@ -1392,6 +1405,7 @@
             "compile",
             "compileClasspath",
             "compileOnly",
+            "compilerDummyJar",
             "default",
             "distJar",
             "implementation",
@@ -1400,6 +1414,7 @@
             "runtime",
             "runtimeClasspath",
             "runtimeElements",
+            "runtimeJar",
             "runtimeOnly",
             "signatures",
             "testCompile",
@@ -2754,7 +2769,8 @@
             "testImplementation",
             "testRuntime",
             "testRuntimeClasspath",
-            "testRuntimeOnly"
+            "testRuntimeOnly",
+            "tests-jar"
         ],
         "extensions": {
             "ext": "org.gradle.api.plugins.ExtraPropertiesExtension",
@@ -2789,7 +2805,8 @@
             "testImplementation",
             "testRuntime",
             "testRuntimeClasspath",
-            "testRuntimeOnly"
+            "testRuntimeOnly",
+            "tests-jar"
         ],
         "extensions": {
             "ext": "org.gradle.api.plugins.ExtraPropertiesExtension",
@@ -3003,6 +3020,41 @@
         }
     },
     ":examples:kotlin-jsr223-local-example": {
+        "conventions": {
+            "base": "org.gradle.api.plugins.BasePluginConvention",
+            "java": "org.gradle.api.plugins.JavaPluginConvention"
+        },
+        "configurations": [
+            "apiElements",
+            "archives",
+            "compile",
+            "compileClasspath",
+            "compileOnly",
+            "default",
+            "implementation",
+            "kapt",
+            "kaptTest",
+            "runtime",
+            "runtimeClasspath",
+            "runtimeElements",
+            "runtimeOnly",
+            "testCompile",
+            "testCompileClasspath",
+            "testCompileOnly",
+            "testImplementation",
+            "testRuntime",
+            "testRuntimeClasspath",
+            "testRuntimeOnly"
+        ],
+        "extensions": {
+            "ext": "org.gradle.api.plugins.ExtraPropertiesExtension",
+            "kotlin": "org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension",
+            "kapt": "org.jetbrains.kotlin.gradle.plugin.KaptExtension",
+            "defaultArtifacts": "org.gradle.api.internal.plugins.DefaultArtifactPublicationSet",
+            "reporting": "org.gradle.api.reporting.ReportingExtension"
+        }
+    },
+    ":generators:test-generator": {
         "conventions": {
             "base": "org.gradle.api.plugins.BasePluginConvention",
             "java": "org.gradle.api.plugins.JavaPluginConvention"
