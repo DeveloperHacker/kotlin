@@ -44,6 +44,7 @@ dependencies {
     testCompileOnly(projectDist(":kotlin-test:kotlin-test-junit"))
     testCompile(projectTests(":compiler:tests-common"))
     testCompile(projectTests(":compiler:tests-common-jvm6"))
+    testCompile(projectTests(":generators:test-generator"))
     testCompile(project(":compiler:ir.ir2cfg"))
     testCompile(project(":compiler:ir.tree")) // used for deepCopyWithSymbols call that is removed by proguard from the compiler TODO: make it more straightforward
     testCompileOnly(project(":kotlin-daemon-client"))
@@ -176,3 +177,5 @@ codegenTest("codegen-target9-jvm9-test", "JDK_9") {
     systemProperty("kotlin.test.default.jvm.target", "1.8")
     systemProperty("kotlin.test.substitute.bytecode.1.8.to.1.9", "true")
 }
+
+val generateTests by generator("org.jetbrains.kotlin.generators.tests.GenerateCompilerTestsKt")
