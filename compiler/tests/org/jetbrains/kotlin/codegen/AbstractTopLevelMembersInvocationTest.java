@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2017 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,21 @@ package org.jetbrains.kotlin.codegen;
 
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.util.ArrayUtil;
+import kotlin.Pair;
 import kotlin.collections.CollectionsKt;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.kotlin.cli.AbstractCliTest;
+import org.jetbrains.kotlin.cli.common.ExitCode;
+import org.jetbrains.kotlin.cli.jvm.K2JVMCompiler;
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment;
 import org.jetbrains.kotlin.test.ConfigurationKind;
 import org.jetbrains.kotlin.test.KotlinTestUtils;
-import org.jetbrains.kotlin.test.MockLibraryUtil;
 import org.jetbrains.kotlin.test.TestJdkKind;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,11 +53,19 @@ public abstract class AbstractTopLevelMembersInvocationTest extends AbstractByte
             return true;
         }, file -> !LIBRARY.equals(file.getName()));
 
-        File library = new File(root, LIBRARY);
-        List<File> classPath =
-                library.exists()
-                ? Collections.singletonList(MockLibraryUtil.compileJvmLibraryToJar(library.getPath(), LIBRARY))
-                : Collections.emptyList();
+        List<File> classPath;
+        File librarySource = new File(root, LIBRARY);
+        if (librarySource.exists()) {
+            File libraryOutput = new File(KotlinTestUtils.tmpDir("testLibrary"), "library.jar");
+            Pair<String, ExitCode> result = AbstractCliTest.executeCompilerGrabOutput(new K2JVMCompiler(), Arrays.asList(
+                    librarySource.getAbsolutePath(), "-d", libraryOutput.getAbsolutePath()
+            ));
+            assertEquals(result.getFirst(), ExitCode.OK, result.getSecond());
+            classPath = Collections.singletonList(libraryOutput);
+        }
+        else {
+            classPath = Collections.emptyList();
+        }
 
         assert !sourceFiles.isEmpty() : getTestName(true) + " should contain at least one .kt file";
         Collections.sort(sourceFiles);
