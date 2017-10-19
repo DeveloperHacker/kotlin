@@ -139,7 +139,10 @@ object KotlinBuilderModuleScriptGenerator {
     fun getProductionModulesWhichInternalsAreVisible(from: ModuleBuildTarget): List<JpsModule> {
         if (!from.isTests) return emptyList()
 
-        val result = SmartList<JpsModule>(from.module)
+        val result = SmartList<JpsModule>()
+        if (from.module.hasProductionSourceRoot) {
+            result.add(from.module)
+        }
         result.addIfNotNull(getRelatedProductionModule(from.module))
 
         return result
