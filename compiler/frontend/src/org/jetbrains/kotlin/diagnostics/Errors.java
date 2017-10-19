@@ -908,6 +908,11 @@ public interface Errors {
 
     // When expressions
 
+    DiagnosticFactory1<KtElement, KtElement> UNSPECIFIED_TYPE = DiagnosticFactory1.create(ERROR);
+
+    DiagnosticFactory1<KtElement, KtElement> NOT_ALLOW_PROPERTY_DEFINITION = DiagnosticFactory1.create(ERROR);
+
+
     DiagnosticFactory0<KtWhenCondition> EXPECTED_CONDITION = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtWhenEntry> ELSE_MISPLACED_IN_WHEN = DiagnosticFactory0.create(ERROR, ELSE_ENTRY);
     DiagnosticFactory0<KtWhenEntry> REDUNDANT_ELSE_IN_WHEN = DiagnosticFactory0.create(WARNING, ELSE_ENTRY);
