@@ -50,7 +50,10 @@ import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.resolve.scopes.receivers.Qualifier;
 import org.jetbrains.kotlin.types.DeferredType;
 import org.jetbrains.kotlin.types.KotlinType;
-import org.jetbrains.kotlin.types.expressions.*;
+import org.jetbrains.kotlin.types.expressions.CaptureKind;
+import org.jetbrains.kotlin.types.expressions.DoubleColonLHS;
+import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo;
+import org.jetbrains.kotlin.types.expressions.PreliminaryDeclarationVisitor;
 import org.jetbrains.kotlin.util.Box;
 import org.jetbrains.kotlin.util.slicedMap.*;
 
@@ -146,11 +149,9 @@ public interface BindingContext {
 
     WritableSlice<Call, FunctionDescriptor> ENCLOSING_SUSPEND_FUNCTION_FOR_SUSPEND_FUNCTION_CALL = Slices.createSimpleSlice();
 
-    WritableSlice<VariableAccessorDescriptor, ResolvedCall<FunctionDescriptor>> DELEGATED_PROPERTY_RESOLVED_CALL =
-            Slices.createSimpleSlice();
+    WritableSlice<VariableAccessorDescriptor, ResolvedCall<FunctionDescriptor>> DELEGATED_PROPERTY_RESOLVED_CALL = Slices.createSimpleSlice();
     WritableSlice<VariableAccessorDescriptor, Call> DELEGATED_PROPERTY_CALL = Slices.createSimpleSlice();
-    WritableSlice<VariableDescriptorWithAccessors, ResolvedCall<FunctionDescriptor>> PROVIDE_DELEGATE_RESOLVED_CALL =
-            Slices.createSimpleSlice();
+    WritableSlice<VariableDescriptorWithAccessors, ResolvedCall<FunctionDescriptor>> PROVIDE_DELEGATE_RESOLVED_CALL = Slices.createSimpleSlice();
     WritableSlice<VariableDescriptorWithAccessors, Call> PROVIDE_DELEGATE_CALL = Slices.createSimpleSlice();
 
     WritableSlice<KtPatternTypedTuple, KotlinType> PATTERN_COMPONENTS_RECEIVER_TYPE = Slices.createSimpleSlice();
@@ -211,9 +212,7 @@ public interface BindingContext {
             }
             if (propertyDescriptor.getModality() == Modality.ABSTRACT) return false;
             if (declarationPsiElement instanceof KtProperty &&
-                ((KtProperty) declarationPsiElement).hasDelegate()) {
-                return false;
-            }
+                ((KtProperty) declarationPsiElement).hasDelegate()) return false;
             PropertyGetterDescriptor getter = propertyDescriptor.getGetter();
             PropertySetterDescriptor setter = propertyDescriptor.getSetter();
 
@@ -297,9 +296,7 @@ public interface BindingContext {
     @ReadOnly
     <K, V> Collection<K> getKeys(WritableSlice<K, V> slice);
 
-    /**
-     * This method should be used only for debug and testing
-     */
+    /** This method should be used only for debug and testing */
     @TestOnly
     @NotNull
     <K, V> ImmutableMap<K, V> getSliceContents(@NotNull ReadOnlySlice<K, V> slice);

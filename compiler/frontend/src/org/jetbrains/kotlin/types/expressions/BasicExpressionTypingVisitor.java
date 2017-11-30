@@ -1646,11 +1646,6 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
         return TypeInfoFactoryKt.noTypeInfo(context);
     }
 
-    //@Override
-    //public KotlinTypeInfo visitPattern(@NotNull KtPattern pattern, ExpressionTypingContext context) {
-    //    PatternResolver resolver = new PatternResolver(this);
-    //}
-
     @NotNull
     /*package*/ KotlinTypeInfo resolveArrayAccessSetMethod(
             @NotNull KtArrayAccessExpression arrayAccessExpression,
