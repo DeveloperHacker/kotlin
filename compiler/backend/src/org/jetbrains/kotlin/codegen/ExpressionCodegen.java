@@ -82,7 +82,7 @@ import org.jetbrains.kotlin.types.SimpleType;
 import org.jetbrains.kotlin.types.TypeProjection;
 import org.jetbrains.kotlin.types.TypeUtils;
 import org.jetbrains.kotlin.types.expressions.DoubleColonLHS;
-import org.jetbrains.kotlin.types.expressions.NotNullKotlinTypeInfo;
+import org.jetbrains.kotlin.types.expressions.KotlinTypeInfo;
 import org.jetbrains.kotlin.types.typesApproximation.CapturedTypeApproximationKt;
 import org.jetbrains.kotlin.util.OperatorNameConventions;
 import org.jetbrains.org.objectweb.asm.Label;
@@ -4507,7 +4507,7 @@ The "returned" value of try expression with no finally is either the last expres
     }
 
     private Pair<ReceiverValue, StackValue> generatePatternDeconstructReceiver(StackValue expressionToMatch, KtPatternTypedTuple entry) {
-        NotNullKotlinTypeInfo receiverTypeInfo = bindingContext.get(BindingContext.PATTERN_ELEMENT_TYPE_INFO, entry);
+        KotlinTypeInfo receiverTypeInfo = bindingContext.get(BindingContext.PATTERN_ELEMENT_TYPE_INFO, entry);
         forceAssert(receiverTypeInfo != null, "Element type info is null for " + entry.getText());
         StackValue receiverValue = expressionToMatch;
         ResolvedCall<FunctionDescriptor> deconstructCall = bindingContext.get(PATTERN_DECONSTRUCT_RESOLVED_CALL, entry);
