@@ -54,8 +54,8 @@ interface DataFlowValueFactory {
         containingDeclarationOrModule: DeclarationDescriptor
     ): DataFlowValue
 
-    fun createDataFlowValueForProperty(
-        property: KtProperty,
+    fun createDataFlowValue(
+        variableDeclaration: KtVariableDeclaration,
         variableDescriptor: VariableDescriptor,
         bindingContext: BindingContext,
         usageContainingModule: ModuleDescriptor?
