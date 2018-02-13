@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.resolve.BindingContextUtils;
 import org.jetbrains.kotlin.resolve.DeclarationsCheckerBuilder;
 import org.jetbrains.kotlin.resolve.bindingContextUtil.BindingContextUtilsKt;
 import org.jetbrains.kotlin.resolve.calls.context.CallPosition;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScopeKind;
 import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope;
 import org.jetbrains.kotlin.types.DeferredType;
@@ -33,6 +34,7 @@ import org.jetbrains.kotlin.util.ReenteringLazyValueComputationException;
 import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments;
 
 import static org.jetbrains.kotlin.diagnostics.Errors.TYPECHECKER_HAS_RUN_INTO_RECURSIVE_PROBLEM;
+import static org.jetbrains.kotlin.util.ExpressionUtilKt.getOwnerExpression;
 
 public abstract class ExpressionTypingVisitorDispatcher extends KtVisitor<KotlinTypeInfo, ExpressionTypingContext>
         implements ExpressionTypingInternals {
@@ -160,46 +162,50 @@ public abstract class ExpressionTypingVisitorDispatcher extends KtVisitor<Kotlin
     private KotlinTypeInfo getTypeInfo(@NotNull KtExpression expression, ExpressionTypingContext context, KtVisitor<KotlinTypeInfo, ExpressionTypingContext> visitor) {
         return typeInfoPerfCounter.time(() -> {
             try {
-                KotlinTypeInfo recordedTypeInfo = BindingContextUtils.getRecordedTypeInfo(expression, context.trace.getBindingContext());
+                KtExpression ownerExpression = getOwnerExpression(expression);
+                LexicalScope scope = context.trace.get(BindingContext.EXPRESSION_LEXICAL_SCOPE, ownerExpression);
+                ExpressionTypingContext newContext = scope != null ? context.replaceScope(scope) : context;
+
+                KotlinTypeInfo recordedTypeInfo = BindingContextUtils.getRecordedTypeInfo(expression, newContext.trace.getBindingContext());
                 if (recordedTypeInfo != null) {
                     return recordedTypeInfo;
                 }
 
-                context.trace.record(BindingContext.DATA_FLOW_INFO_BEFORE, expression, context.dataFlowInfo);
+                newContext.trace.record(BindingContext.DATA_FLOW_INFO_BEFORE, expression, newContext.dataFlowInfo);
 
                 KotlinTypeInfo result;
                 try {
-                    result = expression.accept(visitor, context);
+                    result = expression.accept(visitor, newContext);
                     // Some recursive definitions (object expressions) must put their types in the cache manually:
                     //noinspection ConstantConditions
-                    if (context.trace.get(BindingContext.PROCESSED, expression) == Boolean.TRUE) {
-                        KotlinType type = context.trace.getBindingContext().getType(expression);
+                    if (newContext.trace.get(BindingContext.PROCESSED, expression) == Boolean.TRUE) {
+                        KotlinType type = newContext.trace.getBindingContext().getType(expression);
                         return result.replaceType(type);
                     }
 
                     if (result.getType() instanceof DeferredType) {
                         result = result.replaceType(((DeferredType) result.getType()).getDelegate());
                     }
-                    context.trace.record(BindingContext.EXPRESSION_TYPE_INFO, expression, result);
+                    newContext.trace.record(BindingContext.EXPRESSION_TYPE_INFO, expression, result);
                 }
                 catch (ReenteringLazyValueComputationException e) {
-                    context.trace.report(TYPECHECKER_HAS_RUN_INTO_RECURSIVE_PROBLEM.on(expression));
-                    result = TypeInfoFactoryKt.noTypeInfo(context);
+                    newContext.trace.report(TYPECHECKER_HAS_RUN_INTO_RECURSIVE_PROBLEM.on(expression));
+                    result = TypeInfoFactoryKt.noTypeInfo(newContext);
                 }
 
-                context.trace.record(BindingContext.PROCESSED, expression);
+                newContext.trace.record(BindingContext.PROCESSED, expression);
 
                 // todo save scope before analyze and fix debugger: see CodeFragmentAnalyzer.correctContextForExpression
-                BindingContextUtilsKt.recordScope(context.trace, context.scope, expression);
-                BindingContextUtilsKt.recordDataFlowInfo(context.replaceDataFlowInfo(result.getDataFlowInfo()), expression);
+                BindingContextUtilsKt.recordScope(newContext.trace, newContext.scope, expression);
+                BindingContextUtilsKt.recordDataFlowInfo(newContext.replaceDataFlowInfo(result.getDataFlowInfo()), expression);
                 try {
                     // Here we have to resolve some types, so the following exception is possible
                     // Example: val a = ::a, fun foo() = ::foo
                     recordTypeInfo(expression, result);
                 }
                 catch (ReenteringLazyValueComputationException e) {
-                    context.trace.report(TYPECHECKER_HAS_RUN_INTO_RECURSIVE_PROBLEM.on(expression));
-                    return TypeInfoFactoryKt.noTypeInfo(context);
+                    newContext.trace.report(TYPECHECKER_HAS_RUN_INTO_RECURSIVE_PROBLEM.on(expression));
+                    return TypeInfoFactoryKt.noTypeInfo(newContext);
                 }
                 return result;
             }

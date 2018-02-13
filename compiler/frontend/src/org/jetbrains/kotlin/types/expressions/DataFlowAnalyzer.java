@@ -136,8 +136,12 @@ public class DataFlowAnalyzer {
         condition.accept(new KtVisitorVoid() {
             @Override
             public void visitIsExpression(@NotNull KtIsExpression expression) {
-                if (conditionValue && !expression.isNegated() || !conditionValue && expression.isNegated()) {
-                    result.set(context.trace.get(BindingContext.DATAFLOW_INFO_AFTER_CONDITION, expression));
+                ConditionalDataFlowInfo dataFlowInfo = context.trace.get(BindingContext.CONDITIONAL_DATA_FLOW_INFO_AFTER_CONDITION, expression);
+                if (dataFlowInfo == null) return;
+                if (conditionValue) {
+                    result.set(dataFlowInfo.getThenInfo());
+                } else {
+                    result.set(dataFlowInfo.getElseInfo());
                 }
             }
 

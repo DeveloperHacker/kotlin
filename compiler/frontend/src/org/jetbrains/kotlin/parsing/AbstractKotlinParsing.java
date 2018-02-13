@@ -33,7 +33,7 @@ import java.util.function.Predicate;
 
 import static org.jetbrains.kotlin.lexer.KtTokens.*;
 
-/*package*/ abstract class AbstractKotlinParsing {
+/*package*/public abstract class AbstractKotlinParsing {
     private static final Map<String, KtKeywordToken> SOFT_KEYWORD_TEXTS = new HashMap<>();
 
     static {

@@ -186,14 +186,10 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
-          PATTERN
-            PATTERN_ENTRY
-              PATTERN_CONSTRAINT
-                PATTERN_TYPE_REFERENCE
-                  TYPE_REFERENCE
-                    USER_TYPE
-                      REFERENCE_EXPRESSION
-                        PsiElement(IDENTIFIER)('String')
+          TYPE_REFERENCE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('String')
         PsiWhiteSpace(' ')
         PsiElement(ARROW)('->')
         PsiWhiteSpace(' ')
@@ -210,6 +206,8 @@ KtFile: PatternMatching.kt
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -271,6 +269,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_VARIABLE_DECLARATION
@@ -331,6 +331,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_VARIABLE_DECLARATION
@@ -379,6 +381,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_VARIABLE_DECLARATION
@@ -402,13 +406,15 @@ KtFile: PatternMatching.kt
                           PsiElement(val)('val')
                           PsiWhiteSpace(' ')
                           PsiElement(IDENTIFIER)('a')
-                          PsiElement(COLON)(':')
                           PsiWhiteSpace(' ')
-                          PATTERN_TYPE_REFERENCE
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Int')
+                          PATTERN_CONSTRAINT
+                            PsiElement(is)('is')
+                            PsiWhiteSpace(' ')
+                            PATTERN_TYPE_REFERENCE
+                              TYPE_REFERENCE
+                                USER_TYPE
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('Int')
                       PsiElement(COMMA)(',')
                       PsiWhiteSpace(' ')
                       PATTERN_ENTRY
@@ -439,6 +445,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_VARIABLE_DECLARATION
@@ -459,28 +467,24 @@ KtFile: PatternMatching.kt
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
-                            PATTERN_TYPE_REFERENCE
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('Int')
-                            PATTERN_TUPLE
-                              PsiElement(LPAR)('(')
-                              PsiElement(RPAR)(')')
+                          PsiElement(is)('is')
+                          PsiWhiteSpace(' ')
+                          PATTERN_TYPE_REFERENCE
+                            TYPE_REFERENCE
+                              USER_TYPE
+                                REFERENCE_EXPRESSION
+                                  PsiElement(IDENTIFIER)('Int')
                       PsiElement(COMMA)(',')
                       PsiWhiteSpace(' ')
                       PATTERN_ENTRY
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
-                            PATTERN_TYPE_REFERENCE
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('Int')
-                            PATTERN_TUPLE
-                              PsiElement(LPAR)('(')
-                              PsiElement(RPAR)(')')
+                          PsiElement(is)('is')
+                          PsiWhiteSpace(' ')
+                          PATTERN_TYPE_REFERENCE
+                            TYPE_REFERENCE
+                              USER_TYPE
+                                REFERENCE_EXPRESSION
+                                  PsiElement(IDENTIFIER)('Int')
                       PsiElement(RPAR)(')')
         PsiWhiteSpace(' ')
         PsiElement(ARROW)('->')
@@ -497,6 +501,8 @@ KtFile: PatternMatching.kt
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -521,13 +527,15 @@ KtFile: PatternMatching.kt
                           PsiElement(val)('val')
                           PsiWhiteSpace(' ')
                           PsiElement(IDENTIFIER)('a')
-                          PsiElement(COLON)(':')
                           PsiWhiteSpace(' ')
-                          PATTERN_TYPE_REFERENCE
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Int')
+                          PATTERN_CONSTRAINT
+                            PsiElement(is)('is')
+                            PsiWhiteSpace(' ')
+                            PATTERN_TYPE_REFERENCE
+                              TYPE_REFERENCE
+                                USER_TYPE
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('Int')
                       PsiElement(COMMA)(',')
                       PsiWhiteSpace(' ')
                       PATTERN_ENTRY
@@ -535,13 +543,15 @@ KtFile: PatternMatching.kt
                           PsiElement(val)('val')
                           PsiWhiteSpace(' ')
                           PsiElement(IDENTIFIER)('b')
-                          PsiElement(COLON)(':')
                           PsiWhiteSpace(' ')
-                          PATTERN_TYPE_REFERENCE
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Int')
+                          PATTERN_CONSTRAINT
+                            PsiElement(is)('is')
+                            PsiWhiteSpace(' ')
+                            PATTERN_TYPE_REFERENCE
+                              TYPE_REFERENCE
+                                USER_TYPE
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('Int')
                       PsiElement(RPAR)(')')
             PsiWhiteSpace(' ')
             PATTERN_GUARD
@@ -582,6 +592,8 @@ KtFile: PatternMatching.kt
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -638,6 +650,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_VARIABLE_DECLARATION
@@ -684,13 +698,15 @@ KtFile: PatternMatching.kt
                                   PsiElement(val)('val')
                                   PsiWhiteSpace(' ')
                                   PsiElement(IDENTIFIER)('a')
-                                  PsiElement(COLON)(':')
                                   PsiWhiteSpace(' ')
-                                  PATTERN_TYPE_REFERENCE
-                                    TYPE_REFERENCE
-                                      USER_TYPE
-                                        REFERENCE_EXPRESSION
-                                          PsiElement(IDENTIFIER)('Int')
+                                  PATTERN_CONSTRAINT
+                                    PsiElement(is)('is')
+                                    PsiWhiteSpace(' ')
+                                    PATTERN_TYPE_REFERENCE
+                                      TYPE_REFERENCE
+                                        USER_TYPE
+                                          REFERENCE_EXPRESSION
+                                            PsiElement(IDENTIFIER)('Int')
                               PsiElement(COMMA)(',')
                               PsiWhiteSpace(' ')
                               PATTERN_ENTRY
@@ -698,13 +714,15 @@ KtFile: PatternMatching.kt
                                   PsiElement(val)('val')
                                   PsiWhiteSpace(' ')
                                   PsiElement(IDENTIFIER)('b')
-                                  PsiElement(COLON)(':')
                                   PsiWhiteSpace(' ')
-                                  PATTERN_TYPE_REFERENCE
-                                    TYPE_REFERENCE
-                                      USER_TYPE
-                                        REFERENCE_EXPRESSION
-                                          PsiElement(IDENTIFIER)('Int')
+                                  PATTERN_CONSTRAINT
+                                    PsiElement(is)('is')
+                                    PsiWhiteSpace(' ')
+                                    PATTERN_TYPE_REFERENCE
+                                      TYPE_REFERENCE
+                                        USER_TYPE
+                                          REFERENCE_EXPRESSION
+                                            PsiElement(IDENTIFIER)('Int')
                               PsiElement(RPAR)(')')
                       PsiElement(RPAR)(')')
         PsiWhiteSpace(' ')
@@ -733,6 +751,8 @@ KtFile: PatternMatching.kt
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -818,14 +838,10 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
-          PATTERN
-            PATTERN_ENTRY
-              PATTERN_CONSTRAINT
-                PATTERN_TYPE_REFERENCE
-                  TYPE_REFERENCE
-                    USER_TYPE
-                      REFERENCE_EXPRESSION
-                        PsiElement(IDENTIFIER)('String')
+          TYPE_REFERENCE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('String')
         PsiWhiteSpace(' ')
         PsiElement(ARROW)('->')
         PsiWhiteSpace(' ')
@@ -842,6 +858,8 @@ KtFile: PatternMatching.kt
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -964,6 +982,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
@@ -990,15 +1010,6 @@ KtFile: PatternMatching.kt
                                 USER_TYPE
                                   REFERENCE_EXPRESSION
                                     PsiElement(IDENTIFIER)('Pair')
-                                  TYPE_ARGUMENT_LIST
-                                    PsiElement(LT)('<')
-                                    TYPE_PROJECTION
-                                      PsiElement(MUL)('*')
-                                    PsiElement(COMMA)(',')
-                                    PsiWhiteSpace(' ')
-                                    TYPE_PROJECTION
-                                      PsiElement(MUL)('*')
-                                    PsiElement(GT)('>')
                             PATTERN_TUPLE
                               PsiElement(LPAR)('(')
                               PATTERN_ENTRY
@@ -1006,13 +1017,15 @@ KtFile: PatternMatching.kt
                                   PsiElement(val)('val')
                                   PsiWhiteSpace(' ')
                                   PsiElement(IDENTIFIER)('b')
-                                  PsiElement(COLON)(':')
                                   PsiWhiteSpace(' ')
-                                  PATTERN_TYPE_REFERENCE
-                                    TYPE_REFERENCE
-                                      USER_TYPE
-                                        REFERENCE_EXPRESSION
-                                          PsiElement(IDENTIFIER)('Int')
+                                  PATTERN_CONSTRAINT
+                                    PsiElement(is)('is')
+                                    PsiWhiteSpace(' ')
+                                    PATTERN_TYPE_REFERENCE
+                                      TYPE_REFERENCE
+                                        USER_TYPE
+                                          REFERENCE_EXPRESSION
+                                            PsiElement(IDENTIFIER)('Int')
                               PsiElement(COMMA)(',')
                               PsiWhiteSpace(' ')
                               PATTERN_ENTRY
@@ -1023,15 +1036,13 @@ KtFile: PatternMatching.kt
                     PsiWhiteSpace(' ')
                     PATTERN_ENTRY
                       PATTERN_CONSTRAINT
-                        PATTERN_TYPED_TUPLE
-                          PATTERN_TYPE_REFERENCE
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Int')
-                          PATTERN_TUPLE
-                            PsiElement(LPAR)('(')
-                            PsiElement(RPAR)(')')
+                        PsiElement(is)('is')
+                        PsiWhiteSpace(' ')
+                        PATTERN_TYPE_REFERENCE
+                          TYPE_REFERENCE
+                            USER_TYPE
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('Int')
                     PsiElement(RPAR)(')')
         PsiWhiteSpace(' ')
         PsiElement(ARROW)('->')
@@ -1059,6 +1070,8 @@ KtFile: PatternMatching.kt
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -1118,6 +1131,2088 @@ KtFile: PatternMatching.kt
   FUN
     PsiElement(fun)('fun')
     PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('matcher')
+    VALUE_PARAMETER_LIST
+      PsiElement(LPAR)('(')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('value')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          NULLABLE_TYPE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('Any')
+            PsiElement(QUEST)('?')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p1')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p2')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p3')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p4')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(RPAR)(')')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    TYPE_REFERENCE
+      USER_TYPE
+        REFERENCE_EXPRESSION
+          PsiElement(IDENTIFIER)('List')
+        TYPE_ARGUMENT_LIST
+          PsiElement(LT)('<')
+          TYPE_PROJECTION
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('Int')
+          PsiElement(GT)('>')
+    PsiWhiteSpace(' ')
+    PsiElement(EQ)('=')
+    PsiWhiteSpace(' ')
+    WHEN
+      PsiElement(when)('when')
+      PsiWhiteSpace(' ')
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('String')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('0')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+                  PsiWhiteSpace(' ')
+                  PsiElement(EQ)('=')
+                  PsiWhiteSpace(' ')
+                  PATTERN_CONSTRAINT
+                    PATTERN_TYPED_TUPLE
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('B')
+                      PATTERN_TUPLE
+                        PsiElement(LPAR)('(')
+                        PATTERN_ENTRY
+                          PATTERN_VARIABLE_DECLARATION
+                            PsiElement(val)('val')
+                            PsiWhiteSpace(' ')
+                            PsiElement(IDENTIFIER)('a')
+                        PsiElement(COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PATTERN_EXPRESSION
+                              BINARY_EXPRESSION
+                                REFERENCE_EXPRESSION
+                                  PsiElement(IDENTIFIER)('p2')
+                                PsiWhiteSpace(' ')
+                                OPERATION_REFERENCE
+                                  PsiElement(PLUS)('+')
+                                PsiWhiteSpace(' ')
+                                REFERENCE_EXPRESSION
+                                  PsiElement(IDENTIFIER)('p3')
+                        PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('1')
+            PsiElement(COMMA)(',')
+            PsiWhiteSpace(' ')
+            VALUE_ARGUMENT
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('a')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+                  PsiWhiteSpace(' ')
+                  PsiElement(EQ)('=')
+                  PsiWhiteSpace(' ')
+                  PATTERN_CONSTRAINT
+                    PATTERN_TYPED_TUPLE
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('A')
+                      PATTERN_TUPLE
+                        PsiElement(LPAR)('(')
+                        PATTERN_ENTRY
+                          PATTERN_VARIABLE_DECLARATION
+                            PsiElement(val)('val')
+                            PsiWhiteSpace(' ')
+                            PsiElement(IDENTIFIER)('a')
+                        PsiElement(COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PATTERN_EXPRESSION
+                              BINARY_EXPRESSION
+                                REFERENCE_EXPRESSION
+                                  PsiElement(IDENTIFIER)('p2')
+                                PsiWhiteSpace(' ')
+                                OPERATION_REFERENCE
+                                  PsiElement(PLUS)('+')
+                                PsiWhiteSpace(' ')
+                                REFERENCE_EXPRESSION
+                                  PsiElement(IDENTIFIER)('p3')
+                        PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('2')
+            PsiElement(COMMA)(',')
+            PsiWhiteSpace(' ')
+            VALUE_ARGUMENT
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('a')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+                  PsiWhiteSpace(' ')
+                  PsiElement(EQ)('=')
+                  PsiWhiteSpace(' ')
+                  PATTERN_CONSTRAINT
+                    PATTERN_TYPED_TUPLE
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('Pair')
+                      PATTERN_TUPLE
+                        PsiElement(LPAR)('(')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PATTERN_EXPRESSION
+                              INTEGER_CONSTANT
+                                PsiElement(INTEGER_LITERAL)('5')
+                        PsiElement(COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PATTERN_EXPRESSION
+                              INTEGER_CONSTANT
+                                PsiElement(INTEGER_LITERAL)('7')
+                        PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('3')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+                  PsiWhiteSpace(' ')
+                  PsiElement(EQ)('=')
+                  PsiWhiteSpace(' ')
+                  PATTERN_CONSTRAINT
+                    PATTERN_TYPED_TUPLE
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('Pair')
+                      PATTERN_TUPLE
+                        PsiElement(LPAR)('(')
+                        PATTERN_ENTRY
+                          PATTERN_VARIABLE_DECLARATION
+                            PsiElement(val)('val')
+                            PsiWhiteSpace(' ')
+                            PsiElement(IDENTIFIER)('a')
+                            PsiWhiteSpace(' ')
+                            PATTERN_CONSTRAINT
+                              PsiElement(is)('is')
+                              PsiWhiteSpace(' ')
+                              PATTERN_TYPE_REFERENCE
+                                TYPE_REFERENCE
+                                  USER_TYPE
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(IDENTIFIER)('Int')
+                        PsiElement(COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PATTERN_EXPRESSION
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('p1')
+                        PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('4')
+            PsiElement(COMMA)(',')
+            PsiWhiteSpace(' ')
+            VALUE_ARGUMENT
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('a')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+                  PsiWhiteSpace(' ')
+                  PsiElement(EQ)('=')
+                  PsiWhiteSpace(' ')
+                  PATTERN_CONSTRAINT
+                    PATTERN_TYPED_TUPLE
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('List')
+                      PATTERN_TUPLE
+                        PsiElement(LPAR)('(')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PsiElement(is)('is')
+                            PsiWhiteSpace(' ')
+                            PATTERN_TYPE_REFERENCE
+                              TYPE_REFERENCE
+                                USER_TYPE
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('Int')
+                        PsiElement(COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PsiElement(is)('is')
+                            PsiWhiteSpace(' ')
+                            PATTERN_TYPE_REFERENCE
+                              TYPE_REFERENCE
+                                USER_TYPE
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('Int')
+                        PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('5')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          BINARY_EXPRESSION
+            IS_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('value')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(is)('is')
+              PsiWhiteSpace(' ')
+              PsiElement(like)('like')
+              PsiWhiteSpace(' ')
+              PATTERN
+                PATTERN_ENTRY
+                  PATTERN_VARIABLE_DECLARATION
+                    PsiElement(val)('val')
+                    PsiWhiteSpace(' ')
+                    PsiElement(IDENTIFIER)('m')
+                    PsiWhiteSpace(' ')
+                    PsiElement(EQ)('=')
+                    PsiWhiteSpace(' ')
+                    PATTERN_CONSTRAINT
+                      PATTERN_TYPED_TUPLE
+                        PATTERN_TYPE_REFERENCE
+                          TYPE_REFERENCE
+                            USER_TYPE
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('Pair')
+                        PATTERN_TUPLE
+                          PsiElement(LPAR)('(')
+                          PATTERN_ENTRY
+                            PATTERN_VARIABLE_DECLARATION
+                              PsiElement(val)('val')
+                              PsiWhiteSpace(' ')
+                              PsiElement(IDENTIFIER)('a')
+                              PsiWhiteSpace(' ')
+                              PATTERN_CONSTRAINT
+                                PsiElement(is)('is')
+                                PsiWhiteSpace(' ')
+                                PATTERN_TYPE_REFERENCE
+                                  TYPE_REFERENCE
+                                    USER_TYPE
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('Int')
+                          PsiElement(COMMA)(',')
+                          PsiWhiteSpace(' ')
+                          PATTERN_ENTRY
+                            PATTERN_VARIABLE_DECLARATION
+                              PsiElement(val)('val')
+                              PsiWhiteSpace(' ')
+                              PsiElement(IDENTIFIER)('b')
+                              PsiWhiteSpace(' ')
+                              PATTERN_CONSTRAINT
+                                PsiElement(is)('is')
+                                PsiWhiteSpace(' ')
+                                PATTERN_TYPE_REFERENCE
+                                  TYPE_REFERENCE
+                                    USER_TYPE
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('Int')
+                          PsiElement(RPAR)(')')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(ANDAND)('&&')
+            PsiWhiteSpace(' ')
+            BINARY_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('a')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(GT)('>')
+              PsiWhiteSpace(' ')
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('p1')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('6')
+            PsiElement(COMMA)(',')
+            PsiWhiteSpace(' ')
+            VALUE_ARGUMENT
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('a')
+            PsiElement(COMMA)(',')
+            PsiWhiteSpace(' ')
+            VALUE_ARGUMENT
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('b')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+                  PsiWhiteSpace(' ')
+                  PsiElement(EQ)('=')
+                  PsiWhiteSpace(' ')
+                  PATTERN_CONSTRAINT
+                    PATTERN_TYPED_TUPLE
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('Pair')
+                      PATTERN_TUPLE
+                        PsiElement(LPAR)('(')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PATTERN_EXPRESSION
+                              STRING_TEMPLATE
+                                PsiElement(OPEN_QUOTE)('"')
+                                LITERAL_STRING_TEMPLATE_ENTRY
+                                  PsiElement(REGULAR_STRING_PART)('some string ')
+                                SHORT_STRING_TEMPLATE_ENTRY
+                                  PsiElement(SHORT_TEMPLATE_ENTRY_START)('$')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('p4')
+                                LITERAL_STRING_TEMPLATE_ENTRY
+                                  PsiElement(REGULAR_STRING_PART)(' with parameter')
+                                PsiElement(CLOSING_QUOTE)('"')
+                        PsiElement(COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        PATTERN_ENTRY
+                          PATTERN_VARIABLE_DECLARATION
+                            PsiElement(IDENTIFIER)('_')
+                        PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('7')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+                  PsiWhiteSpace(' ')
+                  PsiElement(EQ)('=')
+                  PsiWhiteSpace(' ')
+                  PATTERN_CONSTRAINT
+                    PATTERN_TYPED_TUPLE
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('Pair')
+                      PATTERN_TUPLE
+                        PsiElement(LPAR)('(')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PsiElement(is)('is')
+                            PsiWhiteSpace(' ')
+                            PATTERN_TYPE_REFERENCE
+                              TYPE_REFERENCE
+                                USER_TYPE
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('Int')
+                        PsiElement(COMMA)(',')
+                        PsiWhiteSpace(' ')
+                        PATTERN_ENTRY
+                          PATTERN_CONSTRAINT
+                            PATTERN_TYPED_TUPLE
+                              PATTERN_TYPE_REFERENCE
+                                TYPE_REFERENCE
+                                  USER_TYPE
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(IDENTIFIER)('Pair')
+                              PATTERN_TUPLE
+                                PsiElement(LPAR)('(')
+                                PATTERN_ENTRY
+                                  PATTERN_VARIABLE_DECLARATION
+                                    PsiElement(val)('val')
+                                    PsiWhiteSpace(' ')
+                                    PsiElement(IDENTIFIER)('a')
+                                    PsiWhiteSpace(' ')
+                                    PATTERN_CONSTRAINT
+                                      PsiElement(is)('is')
+                                      PsiWhiteSpace(' ')
+                                      PATTERN_TYPE_REFERENCE
+                                        TYPE_REFERENCE
+                                          USER_TYPE
+                                            REFERENCE_EXPRESSION
+                                              PsiElement(IDENTIFIER)('Int')
+                                PsiElement(COMMA)(',')
+                                PsiWhiteSpace(' ')
+                                PATTERN_ENTRY
+                                  PATTERN_VARIABLE_DECLARATION
+                                    PsiElement(val)('val')
+                                    PsiWhiteSpace(' ')
+                                    PsiElement(IDENTIFIER)('b')
+                                    PsiWhiteSpace(' ')
+                                    PATTERN_CONSTRAINT
+                                      PsiElement(is)('is')
+                                      PsiWhiteSpace(' ')
+                                      PATTERN_TYPE_REFERENCE
+                                        TYPE_REFERENCE
+                                          USER_TYPE
+                                            REFERENCE_EXPRESSION
+                                              PsiElement(IDENTIFIER)('Int')
+                                PsiElement(RPAR)(')')
+                        PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('8')
+            PsiElement(COMMA)(',')
+            PsiWhiteSpace(' ')
+            VALUE_ARGUMENT
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('a')
+            PsiElement(COMMA)(',')
+            PsiWhiteSpace(' ')
+            VALUE_ARGUMENT
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('b')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          IS_EXPRESSION
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('value')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
+            PsiWhiteSpace(' ')
+            PATTERN
+              PATTERN_ENTRY
+                PATTERN_VARIABLE_DECLARATION
+                  PsiElement(val)('val')
+                  PsiWhiteSpace(' ')
+                  PsiElement(IDENTIFIER)('m')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('9')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n\n')
+  FUN
+    PsiElement(fun)('fun')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('matcher')
+    VALUE_PARAMETER_LIST
+      PsiElement(LPAR)('(')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('value')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          NULLABLE_TYPE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('Any')
+            PsiElement(QUEST)('?')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p1')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p2')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p3')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(COMMA)(',')
+      PsiWhiteSpace(' ')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('p4')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Int')
+      PsiElement(RPAR)(')')
+    PsiElement(COLON)(':')
+    PsiWhiteSpace(' ')
+    TYPE_REFERENCE
+      USER_TYPE
+        REFERENCE_EXPRESSION
+          PsiElement(IDENTIFIER)('List')
+        TYPE_ARGUMENT_LIST
+          PsiElement(LT)('<')
+          TYPE_PROJECTION
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('Int')
+          PsiElement(GT)('>')
+    PsiWhiteSpace(' ')
+    PsiElement(EQ)('=')
+    PsiWhiteSpace('\n    ')
+    IF
+      PsiElement(if)('if')
+      PsiWhiteSpace(' ')
+      PsiElement(LPAR)('(')
+      CONDITION
+        IS_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('value')
+          PsiWhiteSpace(' ')
+          OPERATION_REFERENCE
+            PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          TYPE_REFERENCE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('String')
+      PsiElement(RPAR)(')')
+      PsiWhiteSpace(' ')
+      THEN
+        CALL_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('listOf')
+          VALUE_ARGUMENT_LIST
+            PsiElement(LPAR)('(')
+            VALUE_ARGUMENT
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('0')
+            PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n    ')
+      PsiElement(else)('else')
+      PsiWhiteSpace(' ')
+      ELSE
+        IF
+          PsiElement(if)('if')
+          PsiWhiteSpace(' ')
+          PsiElement(LPAR)('(')
+          CONDITION
+            IS_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('value')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(is)('is')
+              PsiWhiteSpace(' ')
+              PsiElement(like)('like')
+              PsiWhiteSpace(' ')
+              PATTERN
+                PATTERN_ENTRY
+                  PATTERN_VARIABLE_DECLARATION
+                    PsiElement(val)('val')
+                    PsiWhiteSpace(' ')
+                    PsiElement(IDENTIFIER)('m')
+                    PsiWhiteSpace(' ')
+                    PsiElement(EQ)('=')
+                    PsiWhiteSpace(' ')
+                    PATTERN_CONSTRAINT
+                      PATTERN_TYPED_TUPLE
+                        PATTERN_TYPE_REFERENCE
+                          TYPE_REFERENCE
+                            USER_TYPE
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('B')
+                        PATTERN_TUPLE
+                          PsiElement(LPAR)('(')
+                          PATTERN_ENTRY
+                            PATTERN_VARIABLE_DECLARATION
+                              PsiElement(val)('val')
+                              PsiWhiteSpace(' ')
+                              PsiElement(IDENTIFIER)('a')
+                          PsiElement(COMMA)(',')
+                          PsiWhiteSpace(' ')
+                          PATTERN_ENTRY
+                            PATTERN_CONSTRAINT
+                              PATTERN_EXPRESSION
+                                BINARY_EXPRESSION
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('p2')
+                                  PsiWhiteSpace(' ')
+                                  OPERATION_REFERENCE
+                                    PsiElement(PLUS)('+')
+                                  PsiWhiteSpace(' ')
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('p3')
+                          PsiElement(RPAR)(')')
+          PsiElement(RPAR)(')')
+          PsiWhiteSpace(' ')
+          THEN
+            CALL_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('listOf')
+              VALUE_ARGUMENT_LIST
+                PsiElement(LPAR)('(')
+                VALUE_ARGUMENT
+                  INTEGER_CONSTANT
+                    PsiElement(INTEGER_LITERAL)('1')
+                PsiElement(COMMA)(',')
+                PsiWhiteSpace(' ')
+                VALUE_ARGUMENT
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('a')
+                PsiElement(RPAR)(')')
+          PsiWhiteSpace('\n    ')
+          PsiElement(else)('else')
+          PsiWhiteSpace(' ')
+          ELSE
+            IF
+              PsiElement(if)('if')
+              PsiWhiteSpace(' ')
+              PsiElement(LPAR)('(')
+              CONDITION
+                IS_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('value')
+                  PsiWhiteSpace(' ')
+                  OPERATION_REFERENCE
+                    PsiElement(is)('is')
+                  PsiWhiteSpace(' ')
+                  PsiElement(like)('like')
+                  PsiWhiteSpace(' ')
+                  PATTERN
+                    PATTERN_ENTRY
+                      PATTERN_VARIABLE_DECLARATION
+                        PsiElement(val)('val')
+                        PsiWhiteSpace(' ')
+                        PsiElement(IDENTIFIER)('m')
+                        PsiWhiteSpace(' ')
+                        PsiElement(EQ)('=')
+                        PsiWhiteSpace(' ')
+                        PATTERN_CONSTRAINT
+                          PATTERN_TYPED_TUPLE
+                            PATTERN_TYPE_REFERENCE
+                              TYPE_REFERENCE
+                                USER_TYPE
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('A')
+                            PATTERN_TUPLE
+                              PsiElement(LPAR)('(')
+                              PATTERN_ENTRY
+                                PATTERN_VARIABLE_DECLARATION
+                                  PsiElement(val)('val')
+                                  PsiWhiteSpace(' ')
+                                  PsiElement(IDENTIFIER)('a')
+                              PsiElement(COMMA)(',')
+                              PsiWhiteSpace(' ')
+                              PATTERN_ENTRY
+                                PATTERN_CONSTRAINT
+                                  PATTERN_EXPRESSION
+                                    BINARY_EXPRESSION
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('p2')
+                                      PsiWhiteSpace(' ')
+                                      OPERATION_REFERENCE
+                                        PsiElement(PLUS)('+')
+                                      PsiWhiteSpace(' ')
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('p3')
+                              PsiElement(RPAR)(')')
+              PsiElement(RPAR)(')')
+              PsiWhiteSpace(' ')
+              THEN
+                CALL_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('listOf')
+                  VALUE_ARGUMENT_LIST
+                    PsiElement(LPAR)('(')
+                    VALUE_ARGUMENT
+                      INTEGER_CONSTANT
+                        PsiElement(INTEGER_LITERAL)('2')
+                    PsiElement(COMMA)(',')
+                    PsiWhiteSpace(' ')
+                    VALUE_ARGUMENT
+                      REFERENCE_EXPRESSION
+                        PsiElement(IDENTIFIER)('a')
+                    PsiElement(RPAR)(')')
+              PsiWhiteSpace('\n    ')
+              PsiElement(else)('else')
+              PsiWhiteSpace(' ')
+              ELSE
+                IF
+                  PsiElement(if)('if')
+                  PsiWhiteSpace(' ')
+                  PsiElement(LPAR)('(')
+                  CONDITION
+                    IS_EXPRESSION
+                      REFERENCE_EXPRESSION
+                        PsiElement(IDENTIFIER)('value')
+                      PsiWhiteSpace(' ')
+                      OPERATION_REFERENCE
+                        PsiElement(is)('is')
+                      PsiWhiteSpace(' ')
+                      PsiElement(like)('like')
+                      PsiWhiteSpace(' ')
+                      PATTERN
+                        PATTERN_ENTRY
+                          PATTERN_VARIABLE_DECLARATION
+                            PsiElement(val)('val')
+                            PsiWhiteSpace(' ')
+                            PsiElement(IDENTIFIER)('m')
+                            PsiWhiteSpace(' ')
+                            PsiElement(EQ)('=')
+                            PsiWhiteSpace(' ')
+                            PATTERN_CONSTRAINT
+                              PATTERN_TYPED_TUPLE
+                                PATTERN_TYPE_REFERENCE
+                                  TYPE_REFERENCE
+                                    USER_TYPE
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('Pair')
+                                PATTERN_TUPLE
+                                  PsiElement(LPAR)('(')
+                                  PATTERN_ENTRY
+                                    PATTERN_CONSTRAINT
+                                      PATTERN_EXPRESSION
+                                        INTEGER_CONSTANT
+                                          PsiElement(INTEGER_LITERAL)('5')
+                                  PsiElement(COMMA)(',')
+                                  PsiWhiteSpace(' ')
+                                  PATTERN_ENTRY
+                                    PATTERN_CONSTRAINT
+                                      PATTERN_EXPRESSION
+                                        INTEGER_CONSTANT
+                                          PsiElement(INTEGER_LITERAL)('7')
+                                  PsiElement(RPAR)(')')
+                  PsiElement(RPAR)(')')
+                  PsiWhiteSpace(' ')
+                  THEN
+                    CALL_EXPRESSION
+                      REFERENCE_EXPRESSION
+                        PsiElement(IDENTIFIER)('listOf')
+                      VALUE_ARGUMENT_LIST
+                        PsiElement(LPAR)('(')
+                        VALUE_ARGUMENT
+                          INTEGER_CONSTANT
+                            PsiElement(INTEGER_LITERAL)('3')
+                        PsiElement(RPAR)(')')
+                  PsiWhiteSpace('\n    ')
+                  PsiElement(else)('else')
+                  PsiWhiteSpace(' ')
+                  ELSE
+                    IF
+                      PsiElement(if)('if')
+                      PsiWhiteSpace(' ')
+                      PsiElement(LPAR)('(')
+                      CONDITION
+                        IS_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(IDENTIFIER)('value')
+                          PsiWhiteSpace(' ')
+                          OPERATION_REFERENCE
+                            PsiElement(is)('is')
+                          PsiWhiteSpace(' ')
+                          PsiElement(like)('like')
+                          PsiWhiteSpace(' ')
+                          PATTERN
+                            PATTERN_ENTRY
+                              PATTERN_VARIABLE_DECLARATION
+                                PsiElement(val)('val')
+                                PsiWhiteSpace(' ')
+                                PsiElement(IDENTIFIER)('m')
+                                PsiWhiteSpace(' ')
+                                PsiElement(EQ)('=')
+                                PsiWhiteSpace(' ')
+                                PATTERN_CONSTRAINT
+                                  PATTERN_TYPED_TUPLE
+                                    PATTERN_TYPE_REFERENCE
+                                      TYPE_REFERENCE
+                                        USER_TYPE
+                                          REFERENCE_EXPRESSION
+                                            PsiElement(IDENTIFIER)('Pair')
+                                    PATTERN_TUPLE
+                                      PsiElement(LPAR)('(')
+                                      PATTERN_ENTRY
+                                        PATTERN_VARIABLE_DECLARATION
+                                          PsiElement(val)('val')
+                                          PsiWhiteSpace(' ')
+                                          PsiElement(IDENTIFIER)('a')
+                                          PsiWhiteSpace(' ')
+                                          PATTERN_CONSTRAINT
+                                            PsiElement(is)('is')
+                                            PsiWhiteSpace(' ')
+                                            PATTERN_TYPE_REFERENCE
+                                              TYPE_REFERENCE
+                                                USER_TYPE
+                                                  REFERENCE_EXPRESSION
+                                                    PsiElement(IDENTIFIER)('Int')
+                                      PsiElement(COMMA)(',')
+                                      PsiWhiteSpace(' ')
+                                      PATTERN_ENTRY
+                                        PATTERN_CONSTRAINT
+                                          PATTERN_EXPRESSION
+                                            REFERENCE_EXPRESSION
+                                              PsiElement(IDENTIFIER)('p1')
+                                      PsiElement(RPAR)(')')
+                      PsiElement(RPAR)(')')
+                      PsiWhiteSpace(' ')
+                      THEN
+                        CALL_EXPRESSION
+                          REFERENCE_EXPRESSION
+                            PsiElement(IDENTIFIER)('listOf')
+                          VALUE_ARGUMENT_LIST
+                            PsiElement(LPAR)('(')
+                            VALUE_ARGUMENT
+                              INTEGER_CONSTANT
+                                PsiElement(INTEGER_LITERAL)('4')
+                            PsiElement(COMMA)(',')
+                            PsiWhiteSpace(' ')
+                            VALUE_ARGUMENT
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('a')
+                            PsiElement(RPAR)(')')
+                      PsiWhiteSpace('\n    ')
+                      PsiElement(else)('else')
+                      PsiWhiteSpace(' ')
+                      ELSE
+                        IF
+                          PsiElement(if)('if')
+                          PsiWhiteSpace(' ')
+                          PsiElement(LPAR)('(')
+                          CONDITION
+                            IS_EXPRESSION
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('value')
+                              PsiWhiteSpace(' ')
+                              OPERATION_REFERENCE
+                                PsiElement(is)('is')
+                              PsiWhiteSpace(' ')
+                              PsiElement(like)('like')
+                              PsiWhiteSpace(' ')
+                              PATTERN
+                                PATTERN_ENTRY
+                                  PATTERN_VARIABLE_DECLARATION
+                                    PsiElement(val)('val')
+                                    PsiWhiteSpace(' ')
+                                    PsiElement(IDENTIFIER)('m')
+                                    PsiWhiteSpace(' ')
+                                    PsiElement(EQ)('=')
+                                    PsiWhiteSpace(' ')
+                                    PATTERN_CONSTRAINT
+                                      PATTERN_TYPED_TUPLE
+                                        PATTERN_TYPE_REFERENCE
+                                          TYPE_REFERENCE
+                                            USER_TYPE
+                                              REFERENCE_EXPRESSION
+                                                PsiElement(IDENTIFIER)('List')
+                                        PATTERN_TUPLE
+                                          PsiElement(LPAR)('(')
+                                          PATTERN_ENTRY
+                                            PATTERN_CONSTRAINT
+                                              PsiElement(is)('is')
+                                              PsiWhiteSpace(' ')
+                                              PATTERN_TYPE_REFERENCE
+                                                TYPE_REFERENCE
+                                                  USER_TYPE
+                                                    REFERENCE_EXPRESSION
+                                                      PsiElement(IDENTIFIER)('Int')
+                                          PsiElement(COMMA)(',')
+                                          PsiWhiteSpace(' ')
+                                          PATTERN_ENTRY
+                                            PATTERN_CONSTRAINT
+                                              PsiElement(is)('is')
+                                              PsiWhiteSpace(' ')
+                                              PATTERN_TYPE_REFERENCE
+                                                TYPE_REFERENCE
+                                                  USER_TYPE
+                                                    REFERENCE_EXPRESSION
+                                                      PsiElement(IDENTIFIER)('Int')
+                                          PsiElement(RPAR)(')')
+                          PsiElement(RPAR)(')')
+                          THEN
+                            CALL_EXPRESSION
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('listOf')
+                              VALUE_ARGUMENT_LIST
+                                PsiElement(LPAR)('(')
+                                VALUE_ARGUMENT
+                                  INTEGER_CONSTANT
+                                    PsiElement(INTEGER_LITERAL)('5')
+                                PsiElement(RPAR)(')')
+                          PsiWhiteSpace('\n    ')
+                          PsiElement(else)('else')
+                          PsiWhiteSpace(' ')
+                          ELSE
+                            IF
+                              PsiElement(if)('if')
+                              PsiWhiteSpace(' ')
+                              PsiElement(LPAR)('(')
+                              CONDITION
+                                BINARY_EXPRESSION
+                                  IS_EXPRESSION
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(IDENTIFIER)('value')
+                                    PsiWhiteSpace(' ')
+                                    OPERATION_REFERENCE
+                                      PsiElement(is)('is')
+                                    PsiWhiteSpace(' ')
+                                    PsiElement(like)('like')
+                                    PsiWhiteSpace(' ')
+                                    PATTERN
+                                      PATTERN_ENTRY
+                                        PATTERN_VARIABLE_DECLARATION
+                                          PsiElement(val)('val')
+                                          PsiWhiteSpace(' ')
+                                          PsiElement(IDENTIFIER)('m')
+                                          PsiWhiteSpace(' ')
+                                          PsiElement(EQ)('=')
+                                          PsiWhiteSpace(' ')
+                                          PATTERN_CONSTRAINT
+                                            PATTERN_TYPED_TUPLE
+                                              PATTERN_TYPE_REFERENCE
+                                                TYPE_REFERENCE
+                                                  USER_TYPE
+                                                    REFERENCE_EXPRESSION
+                                                      PsiElement(IDENTIFIER)('Pair')
+                                              PATTERN_TUPLE
+                                                PsiElement(LPAR)('(')
+                                                PATTERN_ENTRY
+                                                  PATTERN_VARIABLE_DECLARATION
+                                                    PsiElement(val)('val')
+                                                    PsiWhiteSpace(' ')
+                                                    PsiElement(IDENTIFIER)('a')
+                                                    PsiWhiteSpace(' ')
+                                                    PATTERN_CONSTRAINT
+                                                      PsiElement(is)('is')
+                                                      PsiWhiteSpace(' ')
+                                                      PATTERN_TYPE_REFERENCE
+                                                        TYPE_REFERENCE
+                                                          USER_TYPE
+                                                            REFERENCE_EXPRESSION
+                                                              PsiElement(IDENTIFIER)('Int')
+                                                PsiElement(COMMA)(',')
+                                                PsiWhiteSpace(' ')
+                                                PATTERN_ENTRY
+                                                  PATTERN_VARIABLE_DECLARATION
+                                                    PsiElement(val)('val')
+                                                    PsiWhiteSpace(' ')
+                                                    PsiElement(IDENTIFIER)('b')
+                                                    PsiWhiteSpace(' ')
+                                                    PATTERN_CONSTRAINT
+                                                      PsiElement(is)('is')
+                                                      PsiWhiteSpace(' ')
+                                                      PATTERN_TYPE_REFERENCE
+                                                        TYPE_REFERENCE
+                                                          USER_TYPE
+                                                            REFERENCE_EXPRESSION
+                                                              PsiElement(IDENTIFIER)('Int')
+                                                PsiElement(RPAR)(')')
+                                  PsiWhiteSpace(' ')
+                                  OPERATION_REFERENCE
+                                    PsiElement(ANDAND)('&&')
+                                  PsiWhiteSpace(' ')
+                                  BINARY_EXPRESSION
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(IDENTIFIER)('a')
+                                    PsiWhiteSpace(' ')
+                                    OPERATION_REFERENCE
+                                      PsiElement(GT)('>')
+                                    PsiWhiteSpace(' ')
+                                    REFERENCE_EXPRESSION
+                                      PsiElement(IDENTIFIER)('p1')
+                              PsiElement(RPAR)(')')
+                              PsiWhiteSpace(' ')
+                              THEN
+                                CALL_EXPRESSION
+                                  REFERENCE_EXPRESSION
+                                    PsiElement(IDENTIFIER)('listOf')
+                                  VALUE_ARGUMENT_LIST
+                                    PsiElement(LPAR)('(')
+                                    VALUE_ARGUMENT
+                                      INTEGER_CONSTANT
+                                        PsiElement(INTEGER_LITERAL)('6')
+                                    PsiElement(COMMA)(',')
+                                    PsiWhiteSpace(' ')
+                                    VALUE_ARGUMENT
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('a')
+                                    PsiElement(COMMA)(',')
+                                    PsiWhiteSpace(' ')
+                                    VALUE_ARGUMENT
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('b')
+                                    PsiElement(RPAR)(')')
+                              PsiWhiteSpace('\n    ')
+                              PsiElement(else)('else')
+                              PsiWhiteSpace(' ')
+                              ELSE
+                                IF
+                                  PsiElement(if)('if')
+                                  PsiWhiteSpace(' ')
+                                  PsiElement(LPAR)('(')
+                                  CONDITION
+                                    IS_EXPRESSION
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('value')
+                                      PsiWhiteSpace(' ')
+                                      OPERATION_REFERENCE
+                                        PsiElement(is)('is')
+                                      PsiWhiteSpace(' ')
+                                      PsiElement(like)('like')
+                                      PsiWhiteSpace(' ')
+                                      PATTERN
+                                        PATTERN_ENTRY
+                                          PATTERN_VARIABLE_DECLARATION
+                                            PsiElement(val)('val')
+                                            PsiWhiteSpace(' ')
+                                            PsiElement(IDENTIFIER)('m')
+                                            PsiWhiteSpace(' ')
+                                            PsiElement(EQ)('=')
+                                            PsiWhiteSpace(' ')
+                                            PATTERN_CONSTRAINT
+                                              PATTERN_TYPED_TUPLE
+                                                PATTERN_TYPE_REFERENCE
+                                                  TYPE_REFERENCE
+                                                    USER_TYPE
+                                                      REFERENCE_EXPRESSION
+                                                        PsiElement(IDENTIFIER)('Pair')
+                                                PATTERN_TUPLE
+                                                  PsiElement(LPAR)('(')
+                                                  PATTERN_ENTRY
+                                                    PATTERN_CONSTRAINT
+                                                      PATTERN_EXPRESSION
+                                                        STRING_TEMPLATE
+                                                          PsiElement(OPEN_QUOTE)('"')
+                                                          LITERAL_STRING_TEMPLATE_ENTRY
+                                                            PsiElement(REGULAR_STRING_PART)('some string ')
+                                                          SHORT_STRING_TEMPLATE_ENTRY
+                                                            PsiElement(SHORT_TEMPLATE_ENTRY_START)('$')
+                                                            REFERENCE_EXPRESSION
+                                                              PsiElement(IDENTIFIER)('p4')
+                                                          LITERAL_STRING_TEMPLATE_ENTRY
+                                                            PsiElement(REGULAR_STRING_PART)(' with parameter')
+                                                          PsiElement(CLOSING_QUOTE)('"')
+                                                  PsiElement(COMMA)(',')
+                                                  PsiWhiteSpace(' ')
+                                                  PATTERN_ENTRY
+                                                    PATTERN_VARIABLE_DECLARATION
+                                                      PsiElement(IDENTIFIER)('_')
+                                                  PsiElement(RPAR)(')')
+                                  PsiElement(RPAR)(')')
+                                  PsiWhiteSpace(' ')
+                                  THEN
+                                    CALL_EXPRESSION
+                                      REFERENCE_EXPRESSION
+                                        PsiElement(IDENTIFIER)('listOf')
+                                      VALUE_ARGUMENT_LIST
+                                        PsiElement(LPAR)('(')
+                                        VALUE_ARGUMENT
+                                          INTEGER_CONSTANT
+                                            PsiElement(INTEGER_LITERAL)('7')
+                                        PsiElement(RPAR)(')')
+                                  PsiWhiteSpace('\n    ')
+                                  PsiElement(else)('else')
+                                  PsiWhiteSpace(' ')
+                                  ELSE
+                                    IF
+                                      PsiElement(if)('if')
+                                      PsiWhiteSpace(' ')
+                                      PsiElement(LPAR)('(')
+                                      CONDITION
+                                        IS_EXPRESSION
+                                          REFERENCE_EXPRESSION
+                                            PsiElement(IDENTIFIER)('value')
+                                          PsiWhiteSpace(' ')
+                                          OPERATION_REFERENCE
+                                            PsiElement(is)('is')
+                                          PsiWhiteSpace(' ')
+                                          PsiElement(like)('like')
+                                          PsiWhiteSpace(' ')
+                                          PATTERN
+                                            PATTERN_ENTRY
+                                              PATTERN_VARIABLE_DECLARATION
+                                                PsiElement(val)('val')
+                                                PsiWhiteSpace(' ')
+                                                PsiElement(IDENTIFIER)('m')
+                                                PsiWhiteSpace(' ')
+                                                PsiElement(EQ)('=')
+                                                PsiWhiteSpace(' ')
+                                                PATTERN_CONSTRAINT
+                                                  PATTERN_TYPED_TUPLE
+                                                    PATTERN_TYPE_REFERENCE
+                                                      TYPE_REFERENCE
+                                                        USER_TYPE
+                                                          REFERENCE_EXPRESSION
+                                                            PsiElement(IDENTIFIER)('Pair')
+                                                    PATTERN_TUPLE
+                                                      PsiElement(LPAR)('(')
+                                                      PATTERN_ENTRY
+                                                        PATTERN_CONSTRAINT
+                                                          PsiElement(is)('is')
+                                                          PsiWhiteSpace(' ')
+                                                          PATTERN_TYPE_REFERENCE
+                                                            TYPE_REFERENCE
+                                                              USER_TYPE
+                                                                REFERENCE_EXPRESSION
+                                                                  PsiElement(IDENTIFIER)('Int')
+                                                      PsiElement(COMMA)(',')
+                                                      PsiWhiteSpace(' ')
+                                                      PATTERN_ENTRY
+                                                        PATTERN_CONSTRAINT
+                                                          PATTERN_TYPED_TUPLE
+                                                            PATTERN_TYPE_REFERENCE
+                                                              TYPE_REFERENCE
+                                                                USER_TYPE
+                                                                  REFERENCE_EXPRESSION
+                                                                    PsiElement(IDENTIFIER)('Pair')
+                                                            PATTERN_TUPLE
+                                                              PsiElement(LPAR)('(')
+                                                              PATTERN_ENTRY
+                                                                PATTERN_VARIABLE_DECLARATION
+                                                                  PsiElement(val)('val')
+                                                                  PsiWhiteSpace(' ')
+                                                                  PsiElement(IDENTIFIER)('a')
+                                                                  PsiWhiteSpace(' ')
+                                                                  PATTERN_CONSTRAINT
+                                                                    PsiElement(is)('is')
+                                                                    PsiWhiteSpace(' ')
+                                                                    PATTERN_TYPE_REFERENCE
+                                                                      TYPE_REFERENCE
+                                                                        USER_TYPE
+                                                                          REFERENCE_EXPRESSION
+                                                                            PsiElement(IDENTIFIER)('Int')
+                                                              PsiElement(COMMA)(',')
+                                                              PsiWhiteSpace(' ')
+                                                              PATTERN_ENTRY
+                                                                PATTERN_VARIABLE_DECLARATION
+                                                                  PsiElement(val)('val')
+                                                                  PsiWhiteSpace(' ')
+                                                                  PsiElement(IDENTIFIER)('b')
+                                                                  PsiWhiteSpace(' ')
+                                                                  PATTERN_CONSTRAINT
+                                                                    PsiElement(is)('is')
+                                                                    PsiWhiteSpace(' ')
+                                                                    PATTERN_TYPE_REFERENCE
+                                                                      TYPE_REFERENCE
+                                                                        USER_TYPE
+                                                                          REFERENCE_EXPRESSION
+                                                                            PsiElement(IDENTIFIER)('Int')
+                                                              PsiElement(RPAR)(')')
+                                                      PsiElement(RPAR)(')')
+                                      PsiElement(RPAR)(')')
+                                      PsiWhiteSpace(' ')
+                                      THEN
+                                        CALL_EXPRESSION
+                                          REFERENCE_EXPRESSION
+                                            PsiElement(IDENTIFIER)('listOf')
+                                          VALUE_ARGUMENT_LIST
+                                            PsiElement(LPAR)('(')
+                                            VALUE_ARGUMENT
+                                              INTEGER_CONSTANT
+                                                PsiElement(INTEGER_LITERAL)('8')
+                                            PsiElement(COMMA)(',')
+                                            PsiWhiteSpace(' ')
+                                            VALUE_ARGUMENT
+                                              REFERENCE_EXPRESSION
+                                                PsiElement(IDENTIFIER)('a')
+                                            PsiElement(COMMA)(',')
+                                            PsiWhiteSpace(' ')
+                                            VALUE_ARGUMENT
+                                              REFERENCE_EXPRESSION
+                                                PsiElement(IDENTIFIER)('b')
+                                            PsiElement(RPAR)(')')
+                                      PsiWhiteSpace('\n    ')
+                                      PsiElement(else)('else')
+                                      PsiWhiteSpace(' ')
+                                      ELSE
+                                        IF
+                                          PsiElement(if)('if')
+                                          PsiWhiteSpace(' ')
+                                          PsiElement(LPAR)('(')
+                                          CONDITION
+                                            IS_EXPRESSION
+                                              REFERENCE_EXPRESSION
+                                                PsiElement(IDENTIFIER)('value')
+                                              PsiWhiteSpace(' ')
+                                              OPERATION_REFERENCE
+                                                PsiElement(is)('is')
+                                              PsiWhiteSpace(' ')
+                                              PsiElement(like)('like')
+                                              PsiWhiteSpace(' ')
+                                              PATTERN
+                                                PATTERN_ENTRY
+                                                  PATTERN_VARIABLE_DECLARATION
+                                                    PsiElement(val)('val')
+                                                    PsiWhiteSpace(' ')
+                                                    PsiElement(IDENTIFIER)('m')
+                                          PsiElement(RPAR)(')')
+                                          PsiWhiteSpace(' ')
+                                          THEN
+                                            CALL_EXPRESSION
+                                              REFERENCE_EXPRESSION
+                                                PsiElement(IDENTIFIER)('listOf')
+                                              VALUE_ARGUMENT_LIST
+                                                PsiElement(LPAR)('(')
+                                                VALUE_ARGUMENT
+                                                  INTEGER_CONSTANT
+                                                    PsiElement(INTEGER_LITERAL)('9')
+                                                PsiElement(RPAR)(')')
+                                          PsiWhiteSpace('\n    ')
+                                          PsiElement(else)('else')
+                                          PsiWhiteSpace(' ')
+                                          ELSE
+                                            THROW
+                                              PsiElement(throw)('throw')
+                                              PsiWhiteSpace(' ')
+                                              DOT_QUALIFIED_EXPRESSION
+                                                DOT_QUALIFIED_EXPRESSION
+                                                  REFERENCE_EXPRESSION
+                                                    PsiElement(IDENTIFIER)('java')
+                                                  PsiElement(DOT)('.')
+                                                  REFERENCE_EXPRESSION
+                                                    PsiElement(IDENTIFIER)('lang')
+                                                PsiElement(DOT)('.')
+                                                CALL_EXPRESSION
+                                                  REFERENCE_EXPRESSION
+                                                    PsiElement(IDENTIFIER)('IllegalStateException')
+                                                  VALUE_ARGUMENT_LIST
+                                                    PsiElement(LPAR)('(')
+                                                    VALUE_ARGUMENT
+                                                      STRING_TEMPLATE
+                                                        PsiElement(OPEN_QUOTE)('"')
+                                                        LITERAL_STRING_TEMPLATE_ENTRY
+                                                          PsiElement(REGULAR_STRING_PART)('Unexpected else')
+                                                        PsiElement(CLOSING_QUOTE)('"')
+                                                    PsiElement(RPAR)(')')
+  PsiWhiteSpace('\n\n')
+  FUN
+    PsiElement(fun)('fun')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('foo')
+    VALUE_PARAMETER_LIST
+      PsiElement(LPAR)('(')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('parent')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Parent')
+      PsiElement(RPAR)(')')
+    PsiWhiteSpace(' ')
+    PsiElement(EQ)('=')
+    PsiWhiteSpace('\n    ')
+    IF
+      PsiElement(if)('if')
+      PsiWhiteSpace(' ')
+      PsiElement(LPAR)('(')
+      CONDITION
+        BINARY_EXPRESSION
+          BINARY_EXPRESSION
+            IS_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('parent')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(is)('is')
+              PsiWhiteSpace(' ')
+              PsiElement(like)('like')
+              PsiWhiteSpace(' ')
+              PATTERN
+                PATTERN_ENTRY
+                  PATTERN_VARIABLE_DECLARATION
+                    PsiElement(val)('val')
+                    PsiWhiteSpace(' ')
+                    PsiElement(IDENTIFIER)('child')
+                    PsiWhiteSpace(' ')
+                    PATTERN_CONSTRAINT
+                      PsiElement(is)('is')
+                      PsiWhiteSpace(' ')
+                      PATTERN_TYPE_REFERENCE
+                        TYPE_REFERENCE
+                          USER_TYPE
+                            REFERENCE_EXPRESSION
+                              PsiElement(IDENTIFIER)('Child1')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(ANDAND)('&&')
+            PsiWhiteSpace(' ')
+            BINARY_EXPRESSION
+              DOT_QUALIFIED_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('child')
+                PsiElement(DOT)('.')
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('field1')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(EQEQ)('==')
+              PsiWhiteSpace(' ')
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('1')
+          PsiWhiteSpace(' ')
+          OPERATION_REFERENCE
+            PsiElement(ANDAND)('&&')
+          PsiWhiteSpace(' ')
+          BINARY_EXPRESSION
+            DOT_QUALIFIED_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('parent')
+              PsiElement(DOT)('.')
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('field1')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(EQEQ)('==')
+            PsiWhiteSpace(' ')
+            INTEGER_CONSTANT
+              PsiElement(INTEGER_LITERAL)('1')
+      PsiElement(RPAR)(')')
+      PsiWhiteSpace(' ')
+      THEN
+        DOT_QUALIFIED_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('child')
+          PsiElement(DOT)('.')
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('field1')
+      PsiWhiteSpace('\n    ')
+      PsiElement(else)('else')
+      PsiWhiteSpace(' ')
+      ELSE
+        IF
+          PsiElement(if)('if')
+          PsiWhiteSpace(' ')
+          PsiElement(LPAR)('(')
+          CONDITION
+            BINARY_EXPRESSION
+              BINARY_EXPRESSION
+                IS_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('parent')
+                  PsiWhiteSpace(' ')
+                  OPERATION_REFERENCE
+                    PsiElement(is)('is')
+                  PsiWhiteSpace(' ')
+                  PsiElement(like)('like')
+                  PsiWhiteSpace(' ')
+                  PATTERN
+                    PATTERN_ENTRY
+                      PATTERN_VARIABLE_DECLARATION
+                        PsiElement(val)('val')
+                        PsiWhiteSpace(' ')
+                        PsiElement(IDENTIFIER)('child')
+                        PsiWhiteSpace(' ')
+                        PATTERN_CONSTRAINT
+                          PsiElement(is)('is')
+                          PsiWhiteSpace(' ')
+                          PATTERN_TYPE_REFERENCE
+                            TYPE_REFERENCE
+                              USER_TYPE
+                                REFERENCE_EXPRESSION
+                                  PsiElement(IDENTIFIER)('Child2')
+                PsiWhiteSpace(' ')
+                OPERATION_REFERENCE
+                  PsiElement(ANDAND)('&&')
+                PsiWhiteSpace(' ')
+                BINARY_EXPRESSION
+                  DOT_QUALIFIED_EXPRESSION
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('child')
+                    PsiElement(DOT)('.')
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('field2')
+                  PsiWhiteSpace(' ')
+                  OPERATION_REFERENCE
+                    PsiElement(EQEQ)('==')
+                  PsiWhiteSpace(' ')
+                  INTEGER_CONSTANT
+                    PsiElement(INTEGER_LITERAL)('2')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(ANDAND)('&&')
+              PsiWhiteSpace(' ')
+              BINARY_EXPRESSION
+                DOT_QUALIFIED_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('parent')
+                  PsiElement(DOT)('.')
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('field2')
+                PsiWhiteSpace(' ')
+                OPERATION_REFERENCE
+                  PsiElement(EQEQ)('==')
+                PsiWhiteSpace(' ')
+                INTEGER_CONSTANT
+                  PsiElement(INTEGER_LITERAL)('2')
+          PsiElement(RPAR)(')')
+          PsiWhiteSpace(' ')
+          THEN
+            DOT_QUALIFIED_EXPRESSION
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('child')
+              PsiElement(DOT)('.')
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('field2')
+          PsiWhiteSpace('\n    ')
+          PsiElement(else)('else')
+          PsiWhiteSpace(' ')
+          ELSE
+            INTEGER_CONSTANT
+              PsiElement(INTEGER_LITERAL)('10')
+  PsiWhiteSpace('\n\n')
+  FUN
+    PsiElement(fun)('fun')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('foo')
+    VALUE_PARAMETER_LIST
+      PsiElement(LPAR)('(')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('parent')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Parent')
+      PsiElement(RPAR)(')')
+    PsiWhiteSpace(' ')
+    PsiElement(EQ)('=')
+    PsiWhiteSpace(' ')
+    WHEN
+      PsiElement(when)('when')
+      PsiWhiteSpace(' ')
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          BINARY_EXPRESSION
+            BINARY_EXPRESSION
+              IS_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('parent')
+                PsiWhiteSpace(' ')
+                OPERATION_REFERENCE
+                  PsiElement(is)('is')
+                PsiWhiteSpace(' ')
+                PsiElement(like)('like')
+                PsiWhiteSpace(' ')
+                PATTERN
+                  PATTERN_ENTRY
+                    PATTERN_VARIABLE_DECLARATION
+                      PsiElement(val)('val')
+                      PsiWhiteSpace(' ')
+                      PsiElement(IDENTIFIER)('child')
+                      PsiWhiteSpace(' ')
+                      PATTERN_CONSTRAINT
+                        PsiElement(is)('is')
+                        PsiWhiteSpace(' ')
+                        PATTERN_TYPE_REFERENCE
+                          TYPE_REFERENCE
+                            USER_TYPE
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('Child1')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(ANDAND)('&&')
+              PsiWhiteSpace(' ')
+              BINARY_EXPRESSION
+                DOT_QUALIFIED_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('child')
+                  PsiElement(DOT)('.')
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('field1')
+                PsiWhiteSpace(' ')
+                OPERATION_REFERENCE
+                  PsiElement(EQEQ)('==')
+                PsiWhiteSpace(' ')
+                INTEGER_CONSTANT
+                  PsiElement(INTEGER_LITERAL)('1')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(ANDAND)('&&')
+            PsiWhiteSpace(' ')
+            BINARY_EXPRESSION
+              DOT_QUALIFIED_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('parent')
+                PsiElement(DOT)('.')
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('field1')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(EQEQ)('==')
+              PsiWhiteSpace(' ')
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('1')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        DOT_QUALIFIED_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('child')
+          PsiElement(DOT)('.')
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('field1')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_WITH_EXPRESSION
+          BINARY_EXPRESSION
+            BINARY_EXPRESSION
+              IS_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('parent')
+                PsiWhiteSpace(' ')
+                OPERATION_REFERENCE
+                  PsiElement(is)('is')
+                PsiWhiteSpace(' ')
+                PsiElement(like)('like')
+                PsiWhiteSpace(' ')
+                PATTERN
+                  PATTERN_ENTRY
+                    PATTERN_VARIABLE_DECLARATION
+                      PsiElement(val)('val')
+                      PsiWhiteSpace(' ')
+                      PsiElement(IDENTIFIER)('child')
+                      PsiWhiteSpace(' ')
+                      PATTERN_CONSTRAINT
+                        PsiElement(is)('is')
+                        PsiWhiteSpace(' ')
+                        PATTERN_TYPE_REFERENCE
+                          TYPE_REFERENCE
+                            USER_TYPE
+                              REFERENCE_EXPRESSION
+                                PsiElement(IDENTIFIER)('Child2')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(ANDAND)('&&')
+              PsiWhiteSpace(' ')
+              BINARY_EXPRESSION
+                DOT_QUALIFIED_EXPRESSION
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('child')
+                  PsiElement(DOT)('.')
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('field2')
+                PsiWhiteSpace(' ')
+                OPERATION_REFERENCE
+                  PsiElement(EQEQ)('==')
+                PsiWhiteSpace(' ')
+                INTEGER_CONSTANT
+                  PsiElement(INTEGER_LITERAL)('2')
+            PsiWhiteSpace(' ')
+            OPERATION_REFERENCE
+              PsiElement(ANDAND)('&&')
+            PsiWhiteSpace(' ')
+            BINARY_EXPRESSION
+              DOT_QUALIFIED_EXPRESSION
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('parent')
+                PsiElement(DOT)('.')
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('field2')
+              PsiWhiteSpace(' ')
+              OPERATION_REFERENCE
+                PsiElement(EQEQ)('==')
+              PsiWhiteSpace(' ')
+              INTEGER_CONSTANT
+                PsiElement(INTEGER_LITERAL)('2')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        DOT_QUALIFIED_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('child')
+          PsiElement(DOT)('.')
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('field2')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        PsiElement(else)('else')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        INTEGER_CONSTANT
+          PsiElement(INTEGER_LITERAL)('10')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n\n')
+  FUN
+    PsiElement(fun)('fun')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('foo3')
+    VALUE_PARAMETER_LIST
+      PsiElement(LPAR)('(')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('x')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Pair')
+            TYPE_ARGUMENT_LIST
+              PsiElement(LT)('<')
+              TYPE_PROJECTION
+                TYPE_REFERENCE
+                  USER_TYPE
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('Int')
+              PsiElement(COMMA)(',')
+              PsiWhiteSpace(' ')
+              TYPE_PROJECTION
+                TYPE_REFERENCE
+                  USER_TYPE
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('Int')
+              PsiElement(GT)('>')
+      PsiElement(RPAR)(')')
+    PsiWhiteSpace(' ')
+    PsiElement(EQ)('=')
+    PsiWhiteSpace(' ')
+    WHEN
+      PsiElement(when)('when')
+      PsiWhiteSpace(' ')
+      PsiElement(LPAR)('(')
+      REFERENCE_EXPRESSION
+        PsiElement(IDENTIFIER)('x')
+      PsiElement(RPAR)(')')
+      PsiWhiteSpace(' ')
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        WHEN_CONDITION_IS_PATTERN
+          PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
+          PATTERN
+            PATTERN_ENTRY
+              PATTERN_CONSTRAINT
+                PATTERN_TYPED_TUPLE
+                  PATTERN_TUPLE
+                    PsiElement(LPAR)('(')
+                    PATTERN_ENTRY
+                      PATTERN_VARIABLE_DECLARATION
+                        PsiElement(val)('val')
+                        PsiWhiteSpace(' ')
+                        PsiElement(IDENTIFIER)('a')
+                    PsiElement(COMMA)(',')
+                    PsiWhiteSpace(' ')
+                    PATTERN_ENTRY
+                      PATTERN_VARIABLE_DECLARATION
+                        PsiElement(val)('val')
+                        PsiWhiteSpace(' ')
+                        PsiElement(IDENTIFIER)('b')
+                    PsiElement(RPAR)(')')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        INTEGER_CONSTANT
+          PsiElement(INTEGER_LITERAL)('0')
+      PsiWhiteSpace('\n    ')
+      WHEN_ENTRY
+        PsiElement(else)('else')
+        PsiWhiteSpace(' ')
+        PsiElement(ARROW)('->')
+        PsiWhiteSpace(' ')
+        INTEGER_CONSTANT
+          PsiElement(INTEGER_LITERAL)('0')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n\n')
+  FUN
+    PsiElement(fun)('fun')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('foo3')
+    VALUE_PARAMETER_LIST
+      PsiElement(LPAR)('(')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('x')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Pair')
+            TYPE_ARGUMENT_LIST
+              PsiElement(LT)('<')
+              TYPE_PROJECTION
+                TYPE_REFERENCE
+                  USER_TYPE
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('Int')
+              PsiElement(COMMA)(',')
+              PsiWhiteSpace(' ')
+              TYPE_PROJECTION
+                TYPE_REFERENCE
+                  USER_TYPE
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('Int')
+              PsiElement(GT)('>')
+      PsiElement(RPAR)(')')
+    PsiWhiteSpace(' ')
+    PsiElement(EQ)('=')
+    PsiWhiteSpace('\n    ')
+    IF
+      PsiElement(if)('if')
+      PsiWhiteSpace(' ')
+      PsiElement(LPAR)('(')
+      CONDITION
+        IS_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('x')
+          PsiWhiteSpace(' ')
+          OPERATION_REFERENCE
+            PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          TYPE_REFERENCE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('Int')
+      PsiElement(RPAR)(')')
+      PsiWhiteSpace(' ')
+      THEN
+        INTEGER_CONSTANT
+          PsiElement(INTEGER_LITERAL)('0')
+      PsiWhiteSpace('\n    ')
+      PsiElement(else)('else')
+      PsiWhiteSpace(' ')
+      ELSE
+        INTEGER_CONSTANT
+          PsiElement(INTEGER_LITERAL)('0')
+  PsiWhiteSpace('\n\n')
+  FUN
+    PsiElement(fun)('fun')
+    PsiWhiteSpace(' ')
+    PsiElement(IDENTIFIER)('foo3')
+    VALUE_PARAMETER_LIST
+      PsiElement(LPAR)('(')
+      VALUE_PARAMETER
+        PsiElement(IDENTIFIER)('x')
+        PsiElement(COLON)(':')
+        PsiWhiteSpace(' ')
+        TYPE_REFERENCE
+          USER_TYPE
+            REFERENCE_EXPRESSION
+              PsiElement(IDENTIFIER)('Pair')
+            TYPE_ARGUMENT_LIST
+              PsiElement(LT)('<')
+              TYPE_PROJECTION
+                TYPE_REFERENCE
+                  USER_TYPE
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('Int')
+              PsiElement(COMMA)(',')
+              PsiWhiteSpace(' ')
+              TYPE_PROJECTION
+                TYPE_REFERENCE
+                  USER_TYPE
+                    REFERENCE_EXPRESSION
+                      PsiElement(IDENTIFIER)('Int')
+              PsiElement(GT)('>')
+      PsiElement(RPAR)(')')
+    PsiWhiteSpace(' ')
+    BLOCK
+      PsiElement(LBRACE)('{')
+      PsiWhiteSpace('\n    ')
+      PROPERTY
+        PsiElement(val)('val')
+        PsiWhiteSpace(' ')
+        PsiElement(IDENTIFIER)('a')
+        PsiWhiteSpace(' ')
+        PsiElement(EQ)('=')
+        PsiWhiteSpace(' ')
+        IS_EXPRESSION
+          REFERENCE_EXPRESSION
+            PsiElement(IDENTIFIER)('x')
+          PsiWhiteSpace(' ')
+          OPERATION_REFERENCE
+            PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          TYPE_REFERENCE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('Int')
+      PsiWhiteSpace('\n    ')
+      PARENTHESIZED
+        PsiElement(LPAR)('(')
+        STRING_TEMPLATE
+          PsiElement(OPEN_QUOTE)('"')
+          LITERAL_STRING_TEMPLATE_ENTRY
+            PsiElement(REGULAR_STRING_PART)('string')
+          PsiElement(CLOSING_QUOTE)('"')
+        PsiElement(RPAR)(')')
+      PsiWhiteSpace('\n')
+      PsiElement(RBRACE)('}')
+  PsiWhiteSpace('\n\n')
+  FUN
+    PsiElement(fun)('fun')
+    PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('box')
     VALUE_PARAMETER_LIST
       PsiElement(LPAR)('(')
@@ -1168,6 +3263,8 @@ KtFile: PatternMatching.kt
         WHEN_ENTRY
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
+            PsiWhiteSpace(' ')
+            PsiElement(like)('like')
             PsiWhiteSpace(' ')
             PATTERN
               PATTERN_ENTRY
@@ -1290,6 +3387,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
@@ -1304,21 +3403,17 @@ KtFile: PatternMatching.kt
         STRING_TEMPLATE
           PsiElement(OPEN_QUOTE)('"')
           LITERAL_STRING_TEMPLATE_ENTRY
-            PsiElement(REGULAR_STRING_PART)('is eq y')
+            PsiElement(REGULAR_STRING_PART)('is like eq y')
           PsiElement(CLOSING_QUOTE)('"')
       PsiWhiteSpace('\n    ')
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
-          PATTERN
-            PATTERN_ENTRY
-              PATTERN_CONSTRAINT
-                PATTERN_TYPE_REFERENCE
-                  TYPE_REFERENCE
-                    USER_TYPE
-                      REFERENCE_EXPRESSION
-                        PsiElement(IDENTIFIER)('String')
+          TYPE_REFERENCE
+            USER_TYPE
+              REFERENCE_EXPRESSION
+                PsiElement(IDENTIFIER)('String')
         PsiWhiteSpace(' ')
         PsiElement(ARROW)('->')
         PsiWhiteSpace(' ')
@@ -1331,6 +3426,8 @@ KtFile: PatternMatching.kt
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(NOT_IS)('!is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -1358,6 +3455,8 @@ KtFile: PatternMatching.kt
         PsiWhiteSpace(' ')
         WHEN_CONDITION_IS_PATTERN
           PsiElement(NOT_IS)('!is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -1387,12 +3486,14 @@ KtFile: PatternMatching.kt
         STRING_TEMPLATE
           PsiElement(OPEN_QUOTE)('"')
           LITERAL_STRING_TEMPLATE_ENTRY
-            PsiElement(REGULAR_STRING_PART)('!is Pair(1, _), !is Pair(_, 2)')
+            PsiElement(REGULAR_STRING_PART)('!is like Pair(1, _), !is like Pair(_, 2)')
           PsiElement(CLOSING_QUOTE)('"')
       PsiWhiteSpace('\n    ')
       WHEN_ENTRY
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
+          PsiWhiteSpace(' ')
+          PsiElement(like)('like')
           PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
@@ -1449,6 +3550,8 @@ KtFile: PatternMatching.kt
         WHEN_CONDITION_IS_PATTERN
           PsiElement(is)('is')
           PsiWhiteSpace(' ')
+          PsiElement(like)('like')
+          PsiWhiteSpace(' ')
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
@@ -1479,7 +3582,7 @@ KtFile: PatternMatching.kt
         STRING_TEMPLATE
           PsiElement(OPEN_QUOTE)('"')
           LITERAL_STRING_TEMPLATE_ENTRY
-            PsiElement(REGULAR_STRING_PART)('is Pair(1, 2)')
+            PsiElement(REGULAR_STRING_PART)('is like Pair(1, 2)')
           PsiElement(CLOSING_QUOTE)('"')
       PsiWhiteSpace('\n    ')
       WHEN_ENTRY

@@ -16,7 +16,7 @@
 
 package org.jetbrains.kotlin.contracts.parsing
 
-import org.jetbrains.kotlin.contracts.description.*
+import org.jetbrains.kotlin.contracts.description.BooleanExpression
 import org.jetbrains.kotlin.contracts.description.expressions.*
 import org.jetbrains.kotlin.descriptors.ValueDescriptor
 import org.jetbrains.kotlin.diagnostics.Errors

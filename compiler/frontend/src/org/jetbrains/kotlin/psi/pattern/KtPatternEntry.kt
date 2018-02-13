@@ -49,14 +49,11 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     private val typedTupleType: KtPatternTypeReference?
         get() = typedTuple?.typeReference
 
-    private val declarationType: KtPatternTypeReference?
-        get() = declaration?.patternTypeReference
-
     private val simpleType: KtPatternTypeReference?
         get() = constraint?.typeReference
 
     val typeReference: KtTypeReference?
-        get() = (simpleType ?: declarationType ?: typedTupleType)?.typeReference
+        get() = (simpleType ?: typedTupleType)?.typeReference
 
     val isSimple: Boolean
         get() = expression == null && tuple?.entries?.all { it.isSimple && it.typeReference == null } ?: true

@@ -62,6 +62,7 @@ public class KotlinParsing extends AbstractKotlinParsing {
     static KotlinParsing createForTopLevel(SemanticWhitespaceAwarePsiBuilder builder) {
         KotlinParsing kotlinParsing = new KotlinParsing(builder);
         kotlinParsing.myExpressionParsing = new KotlinExpressionParsing(builder, kotlinParsing);
+        kotlinParsing.myPatternMatchingParsing = new PatternMatchingParsing(builder, kotlinParsing);
         return kotlinParsing;
     }
 
@@ -82,10 +83,12 @@ public class KotlinParsing extends AbstractKotlinParsing {
                 return createForByClause(builder);
             }
         };
+        kotlinParsing.myPatternMatchingParsing = new PatternMatchingParsing(builder, kotlinParsing);
         return kotlinParsing;
     }
 
-    private KotlinExpressionParsing myExpressionParsing;
+    KotlinExpressionParsing myExpressionParsing;
+    PatternMatchingParsing myPatternMatchingParsing;
 
     private KotlinParsing(SemanticWhitespaceAwarePsiBuilder builder) {
         super(builder);
@@ -1893,194 +1896,13 @@ public class KotlinParsing extends AbstractKotlinParsing {
         mark.done(TYPE_PARAMETER);
     }
 
-    /**
-     * pattern
-     * : patternEntry (guard)?
-     * ;
-     * <p>
-     * patternEntry
-     * : patternDeclaration
-     * : patternConstraint
-     * ;
-     * <p>
-     * patternVariableDeclaration
-     * : "val" identifier (":" typeRef)? ("=" patternConstraint)?
-     * ;
-     * <p>
-     * patternConstraint
-     * : patternTypeReference <!if (isTopLevel)!>
-     * : patternTypedTuple
-     * : ("eq")? expression
-     * ;
-     * <p>
-     * patternTypedTuple
-     * : ("(" typeRef ")")? tuple
-     * : simpleTypeRef? tuple
-     * ;
-     * <p>
-     * patternTypeReference
-     * : typeRef
-     * ;
-     * <p>
-     * tuple
-     * : "(" patternEntry{","}? ")"
-     * ;
-     * <p>
-     * guard
-     * : "&&" condExpression
-     * ;
-     */
-    public void parsePattern() {
-        PsiBuilder.Marker patternMarker = mark();
-        parsePatternEntry(true);
-        if (at(ANDAND)) {
-            parsePatternGuard();
+    void parseIsExpression(boolean isExpression) {
+        if (at(LIKE_KEYWORD)) {
+            advance(); // LIKE_KEYWORD
+            myPatternMatchingParsing.parsePattern(isExpression);
+        } else {
+            parseTypeRef();
         }
-        patternMarker.done(PATTERN);
-    }
-
-    private void parsePatternEntry(boolean isTopLevelPattern) {
-        PsiBuilder.Marker patternMarker = mark();
-        if (at(VAL_KEYWORD) || atSingleUnderscore()) {
-            parsePatternVariableDeclaration();
-        }
-        else {
-            parsePatternConstraint(isTopLevelPattern);
-        }
-        patternMarker.done(PATTERN_ENTRY);
-    }
-
-    private void parsePatternVariableDeclaration() {
-        PsiBuilder.Marker patternMarker = mark();
-        if (atSingleUnderscore()) {
-            advance(); // IDENTIFIER
-        }
-        else {
-            expect(VAL_KEYWORD, "expected val keyword in begin of variable declaration");
-            expect(IDENTIFIER, "expected identifier after val keyword");
-            if (at(COLON)) {
-                advance(); // COLON
-                parsePatternTypeReference();
-            }
-            if (at(EQ)) {
-                advance(); // EQ
-                parsePatternConstraint(false);
-            }
-        }
-        patternMarker.done(PATTERN_VARIABLE_DECLARATION);
-    }
-
-    private void parsePatternConstraint(boolean isTopLevelPattern) {
-        PsiBuilder.Marker patternMarker = mark();
-        if (atTruePatternExpression()) {
-            parsePatternExpression();
-        }
-        else if (isTopLevelPattern && tryParsePatternTopLevelTypeReference()) {
-            // nothing
-        }
-        else if (tryParsePatternTypedTuple()) {
-            // nothing
-        }
-        else if (isTopLevelPattern) {
-            parsePatternTypeReference();
-        }
-        else {
-            parsePatternExpression();
-        }
-        patternMarker.done(PATTERN_CONSTRAINT);
-    }
-
-    private boolean tryParsePatternTopLevelTypeReference() {
-        PsiBuilder.Marker patternMarker = mark();
-        parsePatternTypeReference();
-        boolean success = at(ARROW);
-        if (!success) {
-            patternMarker.rollbackTo();
-        }
-        else {
-            patternMarker.drop();
-        }
-        return success;
-    }
-
-    private boolean tryParsePatternTypedTuple() {
-        PsiBuilder.Marker patternMarker = mark();
-        if (at(LPAR)) {
-            advance(); // LPAR
-            parsePatternTypeReference();
-            if (at(RPAR) && at(1, LPAR)) {
-                advance(); // RPAR
-            }
-            else {
-                patternMarker.rollbackTo();
-                patternMarker = mark();
-            }
-        }
-        else {
-            parsePatternTypeReference();
-        }
-        if (!at(LPAR)) {
-            patternMarker.rollbackTo();
-            return false;
-        }
-        parsePatternTuple();
-        patternMarker.done(PATTERN_TYPED_TUPLE);
-        return true;
-    }
-
-    private void parsePatternTuple() {
-        PsiBuilder.Marker tupleMarker = mark();
-        expect(LPAR, "expected '(' in begin of tuple");
-        while (at(COMMA)) errorAndAdvance("expected pattern parameter before ','");
-        while (!at(RPAR)) {
-            parsePatternEntry(false);
-            if (at(COMMA)) {
-                advance(); // COMMA
-            }
-            else {
-                break;
-            }
-        }
-        expect(RPAR, "expected ')' token at end of destructing tuple");
-        tupleMarker.done(PATTERN_TUPLE);
-    }
-
-    private void parsePatternGuard() {
-        PsiBuilder.Marker patternMarker = mark();
-        expect(ANDAND, "expected operator '&&' in begin of guard");
-        myExpressionParsing.parseExpression();
-        patternMarker.done(PATTERN_GUARD);
-    }
-
-    private void parsePatternTypeReference() {
-        PsiBuilder.Marker patternMarker = mark();
-        parseTypeRef();
-        patternMarker.done(PATTERN_TYPE_REFERENCE);
-    }
-
-    private void parsePatternExpression() {
-        PsiBuilder.Marker patternMarker = mark();
-        if (atTruePatternExpression()) {
-            if (at(EQ_KEYWORD)) {
-                advance(); // EQ_KEYWORD
-            }
-        }
-        myExpressionParsing.parseExpression();
-        patternMarker.done(PATTERN_EXPRESSION);
-    }
-
-    private boolean atTruePatternExpression() {
-        if (atSet(KotlinExpressionParsing.LITERAL_CONSTANT_FIRST)) {
-            return true;
-        }
-        if (!at(EQ_KEYWORD)) {
-            return false;
-        }
-        PsiBuilder.Marker marker = mark();
-        advance(); // EQ_KEYWORD
-        boolean result = atSet(KotlinExpressionParsing.EXPRESSION_FIRST);
-        marker.rollbackTo();
-        return result;
     }
 
     /*
@@ -2103,14 +1925,22 @@ public class KotlinParsing extends AbstractKotlinParsing {
         parseTypeRef(TokenSet.EMPTY);
     }
 
+    void parseTypeRefNoParenthesized() {
+        parseTypeRef(TokenSet.EMPTY, false);
+    }
+
     void parseTypeRef(TokenSet extraRecoverySet) {
-        PsiBuilder.Marker typeRefMarker = parseTypeRefContents(extraRecoverySet);
+        parseTypeRef(extraRecoverySet, true);
+    }
+
+    private void parseTypeRef(TokenSet extraRecoverySet, boolean allowParenthesized) {
+        PsiBuilder.Marker typeRefMarker = parseTypeRefContents(extraRecoverySet, allowParenthesized);
         typeRefMarker.done(TYPE_REFERENCE);
     }
 
     // The extraRecoverySet is needed for the foo(bar<x, 1, y>(z)) case, to tell whether we should stop
     // on expression-indicating symbols or not
-    private PsiBuilder.Marker parseTypeRefContents(TokenSet extraRecoverySet) {
+    private PsiBuilder.Marker parseTypeRefContents(TokenSet extraRecoverySet, boolean allowParenthesized) {
         PsiBuilder.Marker typeRefMarker = mark();
 
         parseTypeModifierList();
@@ -2128,12 +1958,13 @@ public class KotlinParsing extends AbstractKotlinParsing {
         else if (at(IDENTIFIER) || at(PACKAGE_KEYWORD) || atParenthesizedMutableForPlatformTypes(0)) {
             parseUserType();
         }
-        else if (at(LPAR)) {
+        else if (allowParenthesized && at(LPAR)) {
             PsiBuilder.Marker functionOrParenthesizedType = mark();
 
-            // This may be a function parameter list or just a prenthesized type
+            // This may be a function parameter list or just a parenthesized type
             advance(); // LPAR
-            parseTypeRefContents(TokenSet.EMPTY).drop(); // parenthesized types, no reference element around it is needed
+            PsiBuilder.Marker controlMarker = parseTypeRefContents(TokenSet.EMPTY, true);
+            controlMarker.drop(); // parenthesized types, no reference element around it is needed
 
             if (at(RPAR)) {
                 advance(); // RPAR

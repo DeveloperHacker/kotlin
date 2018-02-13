@@ -38,10 +38,7 @@ import org.jetbrains.kotlin.psi.pattern.KtPatternTypedTuple;
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemCompleter;
 import org.jetbrains.kotlin.resolve.calls.model.CallResolutionResult;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo;
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue;
-import org.jetbrains.kotlin.resolve.calls.smartcasts.ExplicitSmartCasts;
-import org.jetbrains.kotlin.resolve.calls.smartcasts.ImplicitSmartCasts;
+import org.jetbrains.kotlin.resolve.calls.smartcasts.*;
 import org.jetbrains.kotlin.resolve.calls.tower.KotlinResolutionCallbacksImpl;
 import org.jetbrains.kotlin.resolve.checkers.PrimitiveNumericComparisonInfo;
 import org.jetbrains.kotlin.resolve.constants.CompileTimeConstant;
@@ -112,7 +109,8 @@ public interface BindingContext {
     WritableSlice<KtElement, Computation> EXPRESSION_EFFECTS = Slices.createSimpleSlice();
     WritableSlice<FunctionDescriptor, Functor> FUNCTOR = Slices.createSimpleSlice();
     WritableSlice<KtFunction, KotlinType> EXPECTED_RETURN_TYPE = new BasicWritableSlice<>(DO_NOTHING);
-    WritableSlice<KtExpression, DataFlowInfo> DATAFLOW_INFO_AFTER_CONDITION = Slices.createSimpleSlice();
+    WritableSlice<KtExpression, ConditionalDataFlowInfo> CONDITIONAL_DATA_FLOW_INFO_AFTER_CONDITION = Slices.createSimpleSlice();
+    WritableSlice<KtExpression, LexicalScope> EXPRESSION_LEXICAL_SCOPE = new BasicWritableSlice<>(RewritePolicy.DO_NOTHING);
     WritableSlice<VariableDescriptor, DataFlowValue> BOUND_INITIALIZER_VALUE = Slices.createSimpleSlice();
     WritableSlice<KtExpression, LeakingThisDescriptor> LEAKING_THIS = Slices.createSimpleSlice();
 

@@ -43,13 +43,13 @@ class KtPattern(node: ASTNode) : KtPatternElementImpl(node) {
         get() = findChildByType(KtNodeTypes.PATTERN_GUARD)
 
     val isSimple: Boolean
-        get() = entry?.isSimple?.and(guard == null) ?: true
+        get() = guard == null && entry?.isSimple ?: true
 
     val isRestrictionsFree: Boolean
-        get() = entry?.isRestrictionsFree?.and(guard == null) ?: true
+        get() = guard == null && entry?.isRestrictionsFree ?: true
 
     val onlyTypeRestrictions: Boolean
-        get() = entry?.onlyTypeRestrictions?.and(guard == null) ?: true
+        get() = guard == null && entry?.onlyTypeRestrictions ?: true
 
     val typeReference: KtTypeReference?
         get() = entry?.typeReference

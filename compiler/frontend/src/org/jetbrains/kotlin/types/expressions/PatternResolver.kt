@@ -16,6 +16,7 @@
 
 package org.jetbrains.kotlin.types.expressions
 
+import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1
@@ -38,6 +39,9 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
 
+
+infix fun <F, S, T> Pair<F, S>.to(triple: T) = Triple(first, second, triple)
+
 class ConditionalTypeInfo(val type: KotlinType, val dataFlowInfo: ConditionalDataFlowInfo) {
     fun and(other: ConditionalTypeInfo?) = other?.let {
         ConditionalTypeInfo(type, dataFlowInfo.and(it.dataFlowInfo))
@@ -45,16 +49,19 @@ class ConditionalTypeInfo(val type: KotlinType, val dataFlowInfo: ConditionalDat
 
     fun replaceThenInfo(thenInfo: DataFlowInfo) = ConditionalTypeInfo(type, dataFlowInfo.replaceThenInfo(thenInfo))
 
+    val kotlinTypeInfo: KotlinTypeInfo
+        get() = KotlinTypeInfo(type, dataFlowInfo.thenInfo)
+
     companion object {
         fun empty(type: KotlinType, thenInfo: DataFlowInfo) =
-                ConditionalTypeInfo(type, ConditionalDataFlowInfo(thenInfo, DataFlowInfo.EMPTY))
+            ConditionalTypeInfo(type, ConditionalDataFlowInfo(thenInfo, DataFlowInfo.EMPTY))
     }
 }
 
 class PatternResolver(
-        private val patternMatchingTypingVisitor: PatternMatchingTypingVisitor,
-        private val components: ExpressionTypingComponents,
-        private val facade: ExpressionTypingInternals
+    private val patternMatchingTypingVisitor: PatternMatchingTypingVisitor,
+    private val components: ExpressionTypingComponents,
+    private val facade: ExpressionTypingInternals
 ) {
     val builtIns = components.builtIns!!
 
@@ -63,28 +70,31 @@ class PatternResolver(
         fun getComponentName(index: Int) = DataClassDescriptorResolver.createComponentName(index + 1)
     }
 
-    fun resolve(context: ExpressionTypingContext, pattern: KtPattern, subject: Subject, allowDefinition: Boolean, isNegated: Boolean) = run {
-        val redeclarationChecker = TraceBasedLocalRedeclarationChecker(context.trace, components.overloadChecker)
-        val outerScope = context.scope
-        val scopeDescriptor = outerScope.ownerDescriptor
-        val isOwnerDescriptorAccessibleByLabel = outerScope.isOwnerDescriptorAccessibleByLabel
-        val scopeKind = outerScope.kind
-        val scope = LexicalWritableScope(outerScope, scopeDescriptor, isOwnerDescriptorAccessibleByLabel, redeclarationChecker, scopeKind)
-        val state = PatternResolveState(scope, context, allowDefinition, isNegated, false, subject)
-        val typeInfo = pattern.getTypeInfo(this, state)
-        typeInfo to scope
-    }
+    fun resolve(context: ExpressionTypingContext, pattern: KtPattern, subject: Subject, allowDefinition: Boolean, isNegated: Boolean) =
+        run {
+            val redeclarationChecker = TraceBasedLocalRedeclarationChecker(context.trace, components.overloadChecker)
+            val outerScope = context.scope
+            val scopeDescriptor = outerScope.ownerDescriptor
+            val isOwnerDescriptorAccessibleByLabel = outerScope.isOwnerDescriptorAccessibleByLabel
+            val scopeKind = outerScope.kind
+            val scope =
+                LexicalWritableScope(outerScope, scopeDescriptor, isOwnerDescriptorAccessibleByLabel, redeclarationChecker, scopeKind)
+            val state = PatternResolveState(scope, context, allowDefinition, isNegated, false, subject)
+            val typeInfo = pattern.getTypeInfo(this, state)
+            val useless = state.getUsefulCheckCounter() == 0 && pattern.onlyTypeRestrictions && !pattern.isRestrictionsFree
+            typeInfo to scope to useless
+        }
 
     fun getDeconstructType(typedTuple: KtPatternTypedTuple, state: PatternResolveState): KotlinType? {
         val results = repairAfterInvoke(state) {
             components.fakeCallResolver.resolveFakeCall(
-                    context = state.context,
-                    receiver = state.subject.receiverValue,
-                    name = getDeconstructName(),
-                    callElement = state.subject.expression,
-                    reportErrorsOn = typedTuple,
-                    callKind = FakeCallKind.OTHER,
-                    valueArguments = emptyList()
+                context = state.context,
+                receiver = state.subject.receiverValue,
+                name = getDeconstructName(),
+                callElement = state.subject.expression,
+                reportErrorsOn = typedTuple,
+                callKind = FakeCallKind.OTHER,
+                valueArguments = emptyList()
             )
         }
         if (!results.isSuccess) return null
@@ -96,13 +106,13 @@ class PatternResolver(
         val componentName = getComponentName(index)
         val results = repairAfterInvoke(state) {
             components.fakeCallResolver.resolveFakeCall(
-                    context = state.context,
-                    receiver = state.subject.receiverValue,
-                    name = componentName,
-                    callElement = state.subject.expression,
-                    reportErrorsOn = entry,
-                    callKind = FakeCallKind.COMPONENT,
-                    valueArguments = emptyList()
+                context = state.context,
+                receiver = state.subject.receiverValue,
+                name = componentName,
+                callElement = state.subject.expression,
+                reportErrorsOn = entry,
+                callKind = FakeCallKind.COMPONENT,
+                valueArguments = emptyList()
             )
         }
         val errorType = lazy { ErrorUtils.createErrorType("$componentName() return type") }
@@ -129,9 +139,19 @@ class PatternResolver(
         val dataFlowValue = state.subject.dataFlowValue
         val isNegated = state.isNegated
         val isTuple = state.isTuple
-        val (type, conditionInfo) = patternMatchingTypingVisitor.checkTypeForIs(
-                context, typeReference, isNegated, subjectType, typeReference, !isTuple, dataFlowValue)
-        return ConditionalTypeInfo(type, conditionInfo)
+        val (type, typeInfo, useless) = patternMatchingTypingVisitor.checkTypeForIs(
+            context,
+            subjectType,
+            typeReference,
+            !isTuple,
+            dataFlowValue
+        )
+        if (useless) {
+            context.trace.report(Errors.USELESS_TYPE_CHECK.on(typeReference, !isNegated))
+        } else {
+            state.incrementUsefulCheckCounter()
+        }
+        return ConditionalTypeInfo(type, typeInfo)
     }
 
     fun getTypeInfo(expression: KtExpression, state: PatternResolveState): ConditionalTypeInfo {
@@ -166,15 +186,16 @@ class PatternResolver(
             return state.dataFlowInfo
         }
         val scope = state.scope
-        val type = state.subject.type
-        val descriptor = components.localVariableResolver.resolveLocalVariableDescriptorWithType(scope, declaration, type, trace)
+        val descriptor = components.localVariableResolver.resolveLocalVariableDescriptorWithType(scope, declaration, null, trace)
+        descriptor.setOutType(state.subject.type)
         ExpressionTypingUtils.checkVariableShadowing(scope, trace, descriptor)
         scope.addVariableDescriptor(descriptor)
         val usageModuleDescriptor = DescriptorUtils.getContainingModuleOrNull(scope.ownerDescriptor)
         val variableDataFlowValue = DataFlowValueFactory.createDataFlowValue(
-                declaration, descriptor, state.context.trace.bindingContext, usageModuleDescriptor)
-        val dataFlowValue = state.subject.dataFlowValue
-        return state.dataFlowInfo.assign(variableDataFlowValue, dataFlowValue, components.languageVersionSettings)
+            declaration, descriptor, trace.bindingContext, usageModuleDescriptor
+        )
+        val subjectDataFlowValue = state.subject.dataFlowValue
+        return state.dataFlowInfo.assign(variableDataFlowValue, subjectDataFlowValue, components.languageVersionSettings)
     }
 }
 
@@ -200,32 +221,49 @@ data class Subject(val expression: KtExpression, val receiverValue: ReceiverValu
     }
 }
 
-class PatternResolveState(
-        val scope: LexicalWritableScope,
-        val context: ExpressionTypingContext,
-        val allowDefinition: Boolean,
-        val isNegated: Boolean,
-        val isTuple: Boolean,
-        val subject: Subject
+class PatternResolveState private constructor(
+    val scope: LexicalWritableScope,
+    val context: ExpressionTypingContext,
+    val allowDefinition: Boolean,
+    val isNegated: Boolean,
+    val isTuple: Boolean,
+    val subject: Subject,
+    private val usefulCheckCounter: Ref<Int>
 ) {
+    constructor(
+        scope: LexicalWritableScope,
+        context: ExpressionTypingContext,
+        allowDefinition: Boolean,
+        isNegated: Boolean,
+        isTuple: Boolean,
+        subject: Subject
+    ) : this(scope, context, allowDefinition, isNegated, isTuple, subject, Ref.create(0))
+
     val dataFlowInfo: DataFlowInfo
         get() = context.dataFlowInfo
 
+    fun incrementUsefulCheckCounter() {
+        val value = usefulCheckCounter.get()
+        usefulCheckCounter.set(value + 1)
+    }
+
+    fun getUsefulCheckCounter() = usefulCheckCounter.get()!!
+
     fun setIsTuple(): PatternResolveState {
-        return PatternResolveState(scope, context, allowDefinition, isNegated, true, subject)
+        return PatternResolveState(scope, context, allowDefinition, isNegated, true, subject, usefulCheckCounter)
     }
 
     fun replaceDataFlow(dataFlowInfo: DataFlowInfo): PatternResolveState {
         val context = context.replaceDataFlowInfo(dataFlowInfo)
-        return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject)
+        return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject, usefulCheckCounter)
     }
 
     fun replaceSubjectType(type: KotlinType): PatternResolveState {
         val subject = subject.replaceType(type)
-        return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject)
+        return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject, usefulCheckCounter)
     }
 
     fun replaceSubject(subject: Subject): PatternResolveState {
-        return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject)
+        return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject, usefulCheckCounter)
     }
 }

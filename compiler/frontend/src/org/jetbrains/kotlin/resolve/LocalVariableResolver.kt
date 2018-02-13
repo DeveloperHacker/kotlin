@@ -149,7 +149,7 @@ class LocalVariableResolver(
         LateinitModifierApplicabilityChecker.checkLateinitModifierApplicability(context.trace, ktProperty, descriptor)
     }
 
-    private fun resolveLocalVariableDescriptor(
+    fun resolveLocalVariableDescriptor(
         scope: LexicalScope,
         variable: KtVariableDeclaration,
         dataFlowInfo: DataFlowInfo,

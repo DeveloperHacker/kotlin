@@ -36,7 +36,8 @@ class KtPatternTypedTuple(node: ASTNode) : KtPatternElementImpl(node) {
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D) = visitor.visitPatternTypedTuple(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
-        val typeReferenceInfo = typeReference?.getTypeInfo(resolver, state.setIsTuple()) ?: ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
+        val typeReferenceInfo =
+            typeReference?.getTypeInfo(resolver, state.setIsTuple()) ?: ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
         val deconstructState = state.replaceSubjectType(typeReferenceInfo.type)
         val componentsState = resolver.getDeconstructType(this, deconstructState)?.let {
             val receiverValue = TransientReceiver(it)

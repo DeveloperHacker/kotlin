@@ -23,6 +23,7 @@ import com.intellij.psi.*
 import com.intellij.psi.impl.source.tree.TreeUtil
 import com.intellij.psi.search.PsiSearchScopeUtil
 import com.intellij.psi.search.SearchScope
+import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -31,6 +32,30 @@ import org.jetbrains.kotlin.psi.KtFileAnnotationList
 import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import java.util.*
+
+
+
+inline fun <reified T : PsiElement> PsiElement.getParent(strict: Boolean, predicate: (PsiElement) -> Boolean): T? {
+    var node: PsiElement? = this
+    if (strict) {
+        node = node?.parent
+    }
+    while (node != null && !predicate(node)) {
+        node = node.parent
+    }
+    return node as? T
+}
+
+inline fun <reified T : PsiElement> PsiElement.getParentByType(strict: Boolean, type: IElementType): T? {
+    var node: PsiElement? = this
+    if (strict) {
+        node = node?.parent
+    }
+    while (node != null && node.node.elementType != type) {
+        node = node.parent
+    }
+    return node as? T
+}
 
 // NOTE: in this file we collect only LANGUAGE INDEPENDENT methods working with PSI and not modifying it
 
