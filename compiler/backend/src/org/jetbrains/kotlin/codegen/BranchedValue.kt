@@ -156,27 +156,27 @@ abstract class AbstractBranchedValue(type: Type) : StackValue(type) {
 
 // ToDo(sergei): java doc
 class Trigger(
-        private val blockType: Type,
-        private val block: StackValue,
-        private val triggerType: Type,
-        private val trigger: StackValue
-) : AbstractBranchedValue(triggerType) {
+    private val masterBlockType: Type,
+    private val masterBlock: StackValue,
+    private val slaveBlockType: Type,
+    private val slaveBlock: StackValue
+) : AbstractBranchedValue(slaveBlockType) {
 
     override fun putSelector(type: Type, v: InstructionAdapter) {
-        block.put(blockType, v)
-        trigger.put(triggerType, v)
+        masterBlock.put(masterBlockType, v)
+        slaveBlock.put(slaveBlockType, v)
         coerceTo(type, v)
     }
 
     override fun condJump(jumpLabel: Label, v: InstructionAdapter, jumpIfFalse: Boolean) {
-        BranchedValue.condJump(block).condJump(jumpLabel, v, jumpIfFalse)
-        trigger.put(triggerType, v)
+        BranchedValue.condJump(masterBlock).condJump(jumpLabel, v, jumpIfFalse)
+        slaveBlock.put(slaveBlockType, v)
     }
 
     companion object {
-        fun make(block: StackValue, triggerType: Type, trigger: (InstructionAdapter) -> Unit): Trigger {
-            val triggerValue = StackValue.operation(triggerType, trigger)
-            return Trigger(block.type, block, triggerType, triggerValue)
+        fun make(masterBlock: StackValue, slaveBlockType: Type, slaveFactory: (InstructionAdapter) -> Unit): Trigger {
+            val slaveBlock = StackValue.operation(slaveBlockType, slaveFactory)
+            return Trigger(masterBlock.type, masterBlock, slaveBlockType, slaveBlock)
         }
     }
 }

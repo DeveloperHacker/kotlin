@@ -103,9 +103,11 @@ public class ControlStructureTypingVisitor extends ExpressionTypingVisitor {
         KtExpression elseBranch = ifExpression.getElse();
         KtExpression thenBranch = ifExpression.getThen();
 
-        LexicalWritableScope thenScope = newWritableScopeImpl(context, LexicalScopeKind.THEN, components.overloadChecker);
+        LexicalScope conditionScope = condition != null ? context.trace.get(BindingContext.EXPRESSION_LEXICAL_SCOPE, condition) : null;
+        ExpressionTypingContext thenContext = conditionScope != null ? context.replaceScope(conditionScope) : context;
+        LexicalWritableScope thenScope = newWritableScopeImpl(thenContext, LexicalScopeKind.THEN, components.overloadChecker);
         LexicalWritableScope elseScope = newWritableScopeImpl(context, LexicalScopeKind.ELSE, components.overloadChecker);
-        DataFlowInfo thenInfo = components.dataFlowAnalyzer.extractDataFlowInfoFromCondition(condition, true, context).and(conditionDataFlowInfo);
+        DataFlowInfo thenInfo = components.dataFlowAnalyzer.extractDataFlowInfoFromCondition(condition, true, thenContext).and(conditionDataFlowInfo);
         DataFlowInfo elseInfo = components.dataFlowAnalyzer.extractDataFlowInfoFromCondition(condition, false, context).and(conditionDataFlowInfo);
 
         if (elseBranch == null) {
@@ -126,7 +128,9 @@ public class ControlStructureTypingVisitor extends ExpressionTypingVisitor {
         KtPsiFactory psiFactory = KtPsiFactoryKt.KtPsiFactory(ifExpression, false);
         KtBlockExpression thenBlock = psiFactory.wrapInABlockWrapper(thenBranch);
         KtBlockExpression elseBlock = psiFactory.wrapInABlockWrapper(elseBranch);
-        Call callForIf = createCallForSpecialConstruction(ifExpression, ifExpression, Lists.newArrayList(thenBlock, elseBlock));
+        List<KtExpression> arguments = Lists.newArrayList(thenBlock, elseBlock);
+        List<LexicalScope> scopeArguments = Lists.newArrayList(conditionScope, null);
+        Call callForIf = createCallForSpecialConstruction(ifExpression, ifExpression, arguments, scopeArguments);
         MutableDataFlowInfoForArguments dataFlowInfoForArguments =
                     createDataFlowInfoForArgumentsForIfCall(callForIf, conditionDataFlowInfo, thenInfo, elseInfo);
         ResolvedCall<FunctionDescriptor> resolvedCall = components.controlStructureTypingUtils.resolveSpecialConstructionAsCall(

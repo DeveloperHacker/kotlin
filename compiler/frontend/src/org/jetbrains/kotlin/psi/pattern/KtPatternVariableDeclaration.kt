@@ -37,7 +37,6 @@ import org.jetbrains.kotlin.psi.findDocComment.findDocComment
 import org.jetbrains.kotlin.psi.typeRefHelpers.setTypeReference
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
-import org.jetbrains.kotlin.types.expressions.PatternMatchingTypingVisitor
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
 
@@ -47,8 +46,7 @@ class KtPatternVariableDeclaration(node: ASTNode) : KtPatternElementImpl(node), 
         if (identifier != null) {
             val text = identifier.text
             return if (text != null) KtPsiUtil.unquoteIdentifier(text) else null
-        }
-        else {
+        } else {
             return null
         }
     }
@@ -109,7 +107,7 @@ class KtPatternVariableDeclaration(node: ASTNode) : KtPatternElementImpl(node), 
     }
 
     override fun getTypeReference(): KtTypeReference? {
-        return (patternTypeReference ?: constraint?.typeReference)?.typeReference
+        return null
     }
 
     override fun setTypeReference(typeRef: KtTypeReference?): KtTypeReference? {
@@ -181,25 +179,18 @@ class KtPatternVariableDeclaration(node: ASTNode) : KtPatternElementImpl(node), 
     }
 
     val isEmpty: Boolean
-        get() = isSingleUnderscore && patternTypeReference == null && constraint == null
-
-    val patternTypeReference: KtPatternTypeReference?
-        get() = findChildByType(KtNodeTypes.PATTERN_TYPE_REFERENCE)
+        get() = isSingleUnderscore && constraint == null
 
     val constraint: KtPatternConstraint?
         get() = findChildByType(KtNodeTypes.PATTERN_CONSTRAINT)
 
     val parentEntry: KtPatternEntry?
-        get() = (parent as? KtPatternEntry)
+        get() = parent as? KtPatternEntry
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
-        val typeReferenceInfo = patternTypeReference?.getTypeInfo(resolver, state)
         val constraintInfo = constraint?.getTypeInfo(resolver, state)
-        if (typeReferenceInfo != null && constraintInfo != null) {
-            PatternMatchingTypingVisitor.checkTypeCompatibility(state.context, typeReferenceInfo.type, constraintInfo.type, this)
-        }
-        val info = (typeReferenceInfo ?: ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)).and(constraintInfo)
-        val defineState = state.replaceSubjectType(info.type).replaceDataFlow(info.dataFlowInfo.thenInfo)
+        val info = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo).and(constraintInfo)
+        val defineState = state.replaceDataFlow(info.dataFlowInfo.thenInfo)
         val defineInfo = resolver.defineVariable(this, defineState)
         info.replaceThenInfo(info.dataFlowInfo.thenInfo.and(defineInfo))
     }

@@ -47,14 +47,10 @@ KtFile: When.kt
                   WHEN_CONDITION_IS_PATTERN
                     PsiElement(is)('is')
                     PsiWhiteSpace(' ')
-                    PATTERN
-                      PATTERN_ENTRY
-                        PATTERN_CONSTRAINT
-                          PATTERN_TYPE_REFERENCE
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('a')
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        REFERENCE_EXPRESSION
+                          PsiElement(IDENTIFIER)('a')
                   PsiWhiteSpace(' ')
                   PsiElement(ARROW)('->')
                   PsiWhiteSpace(' ')
@@ -117,14 +113,10 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('a')
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('a')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -147,29 +139,25 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('Tree')
+                TYPE_ARGUMENT_LIST
+                  PsiElement(LT)('<')
+                  TYPE_PROJECTION
                     TYPE_REFERENCE
                       USER_TYPE
                         REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Tree')
-                        TYPE_ARGUMENT_LIST
-                          PsiElement(LT)('<')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('a')
-                          PsiElement(COMMA)(',')
-                          PsiWhiteSpace(' ')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('b')
-                          PsiElement(GT)('>')
+                          PsiElement(IDENTIFIER)('a')
+                  PsiElement(COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  TYPE_PROJECTION
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        REFERENCE_EXPRESSION
+                          PsiElement(IDENTIFIER)('b')
+                  PsiElement(GT)('>')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -321,14 +309,10 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Tree')
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('Tree')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -339,33 +323,29 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
+            TYPE_REFERENCE
+              USER_TYPE
+                USER_TYPE
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('a')
+                PsiElement(DOT)('.')
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('a')
+                TYPE_ARGUMENT_LIST
+                  PsiElement(LT)('<')
+                  TYPE_PROJECTION
                     TYPE_REFERENCE
                       USER_TYPE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('a')
-                        PsiElement(DOT)('.')
                         REFERENCE_EXPRESSION
                           PsiElement(IDENTIFIER)('a')
-                        TYPE_ARGUMENT_LIST
-                          PsiElement(LT)('<')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('a')
-                          PsiElement(COMMA)(',')
-                          PsiWhiteSpace(' ')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('b')
-                          PsiElement(GT)('>')
+                  PsiElement(COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  TYPE_PROJECTION
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        REFERENCE_EXPRESSION
+                          PsiElement(IDENTIFIER)('b')
+                  PsiElement(GT)('>')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -376,36 +356,32 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
+            TYPE_REFERENCE
+              USER_TYPE
+                USER_TYPE
+                  PsiErrorElement:Expecting an element
+                    PsiElement(package)('package')
+                  PsiElement(DOT)('.')
+                  REFERENCE_EXPRESSION
+                    PsiElement(IDENTIFIER)('a')
+                PsiElement(DOT)('.')
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('a')
+                TYPE_ARGUMENT_LIST
+                  PsiElement(LT)('<')
+                  TYPE_PROJECTION
                     TYPE_REFERENCE
                       USER_TYPE
-                        USER_TYPE
-                          PsiErrorElement:Expecting an element
-                            PsiElement(package)('package')
-                          PsiElement(DOT)('.')
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('a')
-                        PsiElement(DOT)('.')
                         REFERENCE_EXPRESSION
                           PsiElement(IDENTIFIER)('a')
-                        TYPE_ARGUMENT_LIST
-                          PsiElement(LT)('<')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('a')
-                          PsiElement(COMMA)(',')
-                          PsiWhiteSpace(' ')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('b')
-                          PsiElement(GT)('>')
+                  PsiElement(COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  TYPE_PROJECTION
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        REFERENCE_EXPRESSION
+                          PsiElement(IDENTIFIER)('b')
+                  PsiElement(GT)('>')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -447,14 +423,10 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(NOT_IS)('!is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('t')
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('t')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -487,29 +459,25 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('Pair')
+                TYPE_ARGUMENT_LIST
+                  PsiElement(LT)('<')
+                  TYPE_PROJECTION
                     TYPE_REFERENCE
                       USER_TYPE
                         REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Pair')
-                        TYPE_ARGUMENT_LIST
-                          PsiElement(LT)('<')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Int')
-                          PsiElement(COMMA)(',')
-                          PsiWhiteSpace(' ')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Int')
-                          PsiElement(GT)('>')
+                          PsiElement(IDENTIFIER)('Int')
+                  PsiElement(COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  TYPE_PROJECTION
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        REFERENCE_EXPRESSION
+                          PsiElement(IDENTIFIER)('Int')
+                  PsiElement(GT)('>')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -560,42 +528,34 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Tree')
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('Tree')
           PsiElement(COMMA)(',')
           PsiWhiteSpace('\n    ')
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('a')
+                TYPE_ARGUMENT_LIST
+                  PsiElement(LT)('<')
+                  TYPE_PROJECTION
                     TYPE_REFERENCE
                       USER_TYPE
                         REFERENCE_EXPRESSION
                           PsiElement(IDENTIFIER)('a')
-                        TYPE_ARGUMENT_LIST
-                          PsiElement(LT)('<')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('a')
-                          PsiElement(COMMA)(',')
-                          PsiWhiteSpace(' ')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('b')
-                          PsiElement(GT)('>')
+                  PsiElement(COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  TYPE_PROJECTION
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        REFERENCE_EXPRESSION
+                          PsiElement(IDENTIFIER)('b')
+                  PsiElement(GT)('>')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')
@@ -637,29 +597,25 @@ KtFile: When.kt
           WHEN_CONDITION_IS_PATTERN
             PsiElement(is)('is')
             PsiWhiteSpace(' ')
-            PATTERN
-              PATTERN_ENTRY
-                PATTERN_CONSTRAINT
-                  PATTERN_TYPE_REFERENCE
+            TYPE_REFERENCE
+              USER_TYPE
+                REFERENCE_EXPRESSION
+                  PsiElement(IDENTIFIER)('a')
+                TYPE_ARGUMENT_LIST
+                  PsiElement(LT)('<')
+                  TYPE_PROJECTION
                     TYPE_REFERENCE
                       USER_TYPE
                         REFERENCE_EXPRESSION
                           PsiElement(IDENTIFIER)('a')
-                        TYPE_ARGUMENT_LIST
-                          PsiElement(LT)('<')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('a')
-                          PsiElement(COMMA)(',')
-                          PsiWhiteSpace(' ')
-                          TYPE_PROJECTION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('b')
-                          PsiElement(GT)('>')
+                  PsiElement(COMMA)(',')
+                  PsiWhiteSpace(' ')
+                  TYPE_PROJECTION
+                    TYPE_REFERENCE
+                      USER_TYPE
+                        REFERENCE_EXPRESSION
+                          PsiElement(IDENTIFIER)('b')
+                  PsiElement(GT)('>')
           PsiWhiteSpace(' ')
           PsiElement(ARROW)('->')
           PsiWhiteSpace(' ')

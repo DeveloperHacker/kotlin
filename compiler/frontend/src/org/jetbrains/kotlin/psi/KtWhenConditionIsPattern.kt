@@ -33,13 +33,13 @@ class KtWhenConditionIsPattern(node: ASTNode) : KtWhenCondition(node) {
         get() = pattern?.isSimple ?: true
 
     val isRestrictionsFree: Boolean
-        get() = pattern?.isRestrictionsFree ?: true
-
-    val onlyTypeRestrictions: Boolean
-        get() = pattern?.onlyTypeRestrictions ?: true
+        get() = typeReference == null && pattern?.isRestrictionsFree ?: true
 
     val typeReference: KtTypeReference?
-        get() = pattern?.typeReference
+        get() = findChildByType(KtNodeTypes.TYPE_REFERENCE)
+
+    val fullTypeReference: KtTypeReference?
+        get() = pattern?.typeReference ?: typeReference
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R {
         return visitor.visitWhenConditionIsPattern(this, data)

@@ -178,12 +178,11 @@ public class KotlinExpressionParsing extends AbstractKotlinParsing {
         RANGE(KtTokens.RANGE),
         SIMPLE_NAME(IDENTIFIER),
         ELVIS(KtTokens.ELVIS),
-        // PATTERN_EQ_OR_NOT_EQ(EQ_KEYWORD, NOT_EQ),
         IN_OR_IS(IN_KEYWORD, NOT_IN, IS_KEYWORD, NOT_IS) {
             @Override
             public KtNodeType parseRightHandSide(IElementType operation, KotlinExpressionParsing parser) {
                 if (operation == IS_KEYWORD || operation == NOT_IS) {
-                    parser.myKotlinParsing.parseTypeRef();
+                    parser.myKotlinParsing.parseIsExpression(true);
                     return IS_EXPRESSION;
                 }
 
@@ -703,7 +702,7 @@ public class KotlinExpressionParsing extends AbstractKotlinParsing {
      *   : OPEN_QUOTE stringTemplateElement* CLOSING_QUOTE
      *   ;
      */
-    void parseStringTemplate() {
+    private void parseStringTemplate() {
         assert _at(OPEN_QUOTE);
 
         PsiBuilder.Marker template = mark();
@@ -980,7 +979,7 @@ public class KotlinExpressionParsing extends AbstractKotlinParsing {
                 error("Expecting a type");
             }
             else {
-                myKotlinParsing.parsePattern();
+                myKotlinParsing.parseIsExpression(false);
             }
             condition.done(WHEN_CONDITION_IS_PATTERN);
         }

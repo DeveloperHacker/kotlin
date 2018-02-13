@@ -164,7 +164,7 @@ internal abstract class WhenOnClassExhaustivenessChecker : WhenExhaustivenessChe
     private fun KtWhenCondition.getCheckedDescriptor(context: BindingContext): ClassDescriptor? {
         return when (this) {
             is KtWhenConditionIsPattern -> {
-                val checkedType = context.get(BindingContext.TYPE, typeReference) ?: return null
+                val checkedType = context.get(BindingContext.TYPE, fullTypeReference) ?: return null
                 TypeUtils.getClassDescriptor(checkedType)
             }
             is KtWhenConditionWithExpression -> {
@@ -265,17 +265,29 @@ interface MissingCasesResolver {
     fun resolve(unresolvedMissingCases: List<WhenMissingCase>, expression: KtWhenExpression, context: BindingContext): List<WhenMissingCase>
 }
 
-object SimpleMissingCasesResolver : MissingCasesResolver {
-    @Suppress("UNCHECKED_CAST")
+object WhenSimpleIsMatchesMissingCasesResolver : MissingCasesResolver {
     override fun isApplicable(subjectType: KotlinType?, expression: KtWhenExpression) = expression.entries.asSequence()
-            .map { it.conditions.asSequence() }.flatten()
-            .filterIsInstance<KtWhenConditionIsPattern>()
-            .filter { !it.isNegated }
-            .any { it.isRestrictionsFree }
+        .map { it.conditions.asSequence() }.flatten()
+        .filterIsInstance<KtWhenConditionIsPattern>()
+        .filterNot { it.isNegated }
+        .any { it.isRestrictionsFree }
 
-    override fun resolve(unresolvedMissingCases: List<WhenMissingCase>, expression: KtWhenExpression, context: BindingContext): List<WhenMissingCase> {
-        return listOf()
-    }
+    override fun resolve(unresolvedMissingCases: List<WhenMissingCase>, expression: KtWhenExpression, context: BindingContext) =
+        listOf<WhenMissingCase>()
+}
+
+object WhenWithoutSubjectSimpleIsMatchesMissingCasesResolver : MissingCasesResolver {
+    override fun isApplicable(subjectType: KotlinType?, expression: KtWhenExpression) = expression.entries.asSequence()
+        .map { it.conditions.asSequence() }.flatten()
+        .filterIsInstance<KtWhenConditionWithExpression>()
+        .mapNotNull { it.expression }
+        .filterIsInstance<KtIsExpression>()
+        .filterNot { it.isNegated }
+        .mapNotNull { it.pattern }
+        .any { it.isRestrictionsFree }
+
+    override fun resolve(unresolvedMissingCases: List<WhenMissingCase>, expression: KtWhenExpression, context: BindingContext) =
+        listOf<WhenMissingCase>()
 }
 
 object WhenChecker {
@@ -286,7 +298,10 @@ object WhenChecker {
         WhenOnSealedExhaustivenessChecker
     )
 
-    private val missingCasesResolvers = listOf(SimpleMissingCasesResolver)
+    private val missingCasesResolvers = listOf(
+        WhenSimpleIsMatchesMissingCasesResolver,
+        WhenWithoutSubjectSimpleIsMatchesMissingCasesResolver
+    )
 
     @JvmStatic
     fun isWhenByEnum(expression: KtWhenExpression, context: BindingContext) =
@@ -374,7 +389,7 @@ object WhenChecker {
 
                     }
                     is KtWhenConditionIsPattern -> {
-                        val typeReference = condition.typeReference ?: continue@conditions
+                        val typeReference = condition.fullTypeReference ?: continue@conditions
                         val type = trace.get(BindingContext.TYPE, typeReference) ?: continue@conditions
                         val typeWithIsNegation = type to condition.isNegated
                         if (checkedTypes.contains(typeWithIsNegation)) {
