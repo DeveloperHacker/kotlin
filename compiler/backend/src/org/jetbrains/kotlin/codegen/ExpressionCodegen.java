@@ -104,6 +104,7 @@ import org.jetbrains.org.objectweb.asm.commons.Method;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.jetbrains.kotlin.builtins.KotlinBuiltIns.isInt;
 import static org.jetbrains.kotlin.codegen.AsmUtil.*;
@@ -517,6 +518,8 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
     }
 
     private void generateWhile(@NotNull KtWhileExpression expression) {
+        FrameMap.Mark mark = myFrameMap.mark();
+
         Label condition = new Label();
         v.mark(condition);
 
@@ -534,6 +537,8 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
         v.mark(end);
 
         blockStackElements.pop();
+
+        mark.dropTo();
     }
 
     @Override
@@ -4276,7 +4281,7 @@ The "returned" value of try expression with no finally is either the last expres
 
     private StackValue generateMatchGuard(KtPatternGuard guard) {
         KtExpression expression = guard.getExpression();
-        assert expression != null : "guard condition must exist " + guard.getText();
+        assert expression != null : "guard condition must be exist " + guard.getText();
         return StackValue.operation(Type.BOOLEAN_TYPE, v -> {
             StackValue value = generateExpressionMatch(null, null, expression);
             value.put(Type.BOOLEAN_TYPE, v);
@@ -4284,9 +4289,9 @@ The "returned" value of try expression with no finally is either the last expres
         });
     }
 
-    private StackValue generateMatchTypeReference(StackValue expressionToMatch, KtPatternTypeReference entry) {
-        KtTypeReference typeReference = entry.getTypeReference();
-        assert typeReference != null : "type reference must exist " + entry.getText();
+    private StackValue generateMatchTypeReference(StackValue expressionToMatch, KtPatternTypeReference patternTypeReference) {
+        KtTypeReference typeReference = patternTypeReference.getTypeReference();
+        assert typeReference != null : "type reference must be exist " + patternTypeReference.getText();
         return generateMatchTypeReference(expressionToMatch, typeReference);
     }
 
@@ -4294,68 +4299,75 @@ The "returned" value of try expression with no finally is either the last expres
         return generateIsCheck(expressionToMatch, typeReference, false);
     }
 
+    @Nullable
+    private static <T, R> R let(@Nullable T t, @NotNull Function<T, R> fun) {
+        return t == null ? null : fun.fun(t);
+    }
+
     private StackValue generateMatchTypedTuple(StackValue expressionToMatch, KtPatternTypedTuple typedTuple) {
         KtPatternTuple tuple = typedTuple.getTuple();
         assert tuple != null : "pattern tuple is null for " + typedTuple.getText();
-        // it possible if expression is KtPatternVariableDeclaration is empty, etc is '_' token
-        List<KtPatternEntry> entries = tuple.getEntries().stream()
-                .filter(KtPatternEntry::isNotEmptyDeclaration)
-                .collect(Collectors.toList());
-        KtPatternTypeReference typeReference = typedTuple.getTypeReference();
+        Stream<KtPatternEntry> entries = tuple.getEntries().stream().filter(KtPatternEntry::isNotEmptyDeclaration);
+        KtPatternTypeCallExpression typeCallExpression = typedTuple.getTypeCallExpression();
+        KtTypeReference typeReference = let(typeCallExpression, it -> it.getTypeReference(bindingContext));
+        StackValue deconstructStackValue = let(typeCallExpression, it -> generatePatternDeconstructReceiver(expressionToMatch, it));
+        boolean hasDeconstructor = deconstructStackValue != null;
+        StackValue receiverStackValue = hasDeconstructor ? deconstructStackValue : expressionToMatch;
+        Boolean generateNullCheck = bindingContext.get(NEEDED_PATTERN_NULL_CHECK, typeCallExpression);
+        assert generateNullCheck != null : "pattern nullability info is null for " + typedTuple.getText();
+        boolean generateIsCheck = !hasDeconstructor && typeReference != null;
 
-        if (entries.size() == 0) {
-            if (typeReference != null)
-                return generateMatchTypeReference(expressionToMatch, typeReference);
-            return StackValue.constant(true, Type.BOOLEAN_TYPE);
-        }
-
-        StackValue receiverStackValue = generatePatternDeconstructReceiver(expressionToMatch, typedTuple);
         ReceiverValue receiver = bindingContext.get(PATTERN_COMPONENTS_RECEIVER, typedTuple);
         assert receiver != null : "receiver is null for " + typedTuple.getText();
         Type receiverType = receiverStackValue.type;
         Call receiverCall = makeFakeCall(receiver);
 
-        StackValue match = new ConstantLocalVariable(myFrameMap, receiverStackValue, receiverType, Type.BOOLEAN_TYPE, loadReceiver -> {
-            StackValue result = null;
-            for (KtPatternEntry entry : entries) {
+        return new ConstantLocalVariable(myFrameMap, receiverStackValue, receiverType, Type.BOOLEAN_TYPE, loadReceiver -> {
+            StackValue result = StackValue.constant(true, Type.BOOLEAN_TYPE);
+            if (generateNullCheck) {
+                StackValue match = genCmpWithNull(null, KtTokens.EXCLEQ, loadReceiver);
+                result = StackValue.and(result, match);
+            }
+            if (generateIsCheck) {
+                StackValue match = generateMatchTypeReference(loadReceiver, typeReference);
+                result = StackValue.and(result, match);
+            }
+            for (KtPatternEntry entry : entries.collect(Collectors.toList())) {
                 ResolvedCall<FunctionDescriptor> componentCall = bindingContext.get(PATTERN_COMPONENT_RESOLVED_CALL, entry);
                 assert componentCall != null : "resolved call is null for " + entry.getText();
                 StackValue expressionValue = invokeFunction(receiverCall, componentCall, loadReceiver);
-                StackValue matchExpression = generateMatchEntry(expressionValue, entry);
-                result = result == null ? matchExpression : StackValue.and(result, matchExpression);
+                StackValue match = generateMatchEntry(expressionValue, entry);
+                result = StackValue.and(result, match);
             }
             return result;
         });
-
-        if (typeReference != null) {
-            StackValue checkTupleType = generateMatchTypeReference(expressionToMatch, typeReference);
-            return StackValue.and(checkTupleType, match);
-        }
-        return match;
     }
 
-    private StackValue generatePatternDeconstructReceiver(StackValue expressionToMatch, KtPatternTypedTuple typedTuple) {
-        ConditionalTypeInfo receiverTypeInfo = bindingContext.get(BindingContext.PATTERN_ELEMENT_TYPE_INFO, typedTuple);
-        assert receiverTypeInfo != null : "element type info is null for " + typedTuple.getText();
-        StackValue receiverStackValue = expressionToMatch;
-        ResolvedCall<FunctionDescriptor> deconstructCall = bindingContext.get(PATTERN_DECONSTRUCT_RESOLVED_CALL, typedTuple);
-        if (deconstructCall != null) {
-            ReceiverValue receiver = new TransientReceiver(receiverTypeInfo.getType());
-            Call call = makeFakeCall(receiver);
-            receiverStackValue = invokeFunction(call, deconstructCall, receiverStackValue);
-        }
-        return receiverStackValue;
+    private StackValue generatePatternDeconstructReceiver(StackValue expressionToMatch, KtPatternTypeCallExpression typeCallExpression) {
+        ResolvedCall<FunctionDescriptor> deconstructCall = bindingContext.get(PATTERN_DECONSTRUCT_RESOLVED_CALL, typeCallExpression);
+        if (deconstructCall == null)  return null;
+        ConditionalTypeInfo receiverTypeInfo = bindingContext.get(BindingContext.PATTERN_ELEMENT_TYPE_INFO, typeCallExpression);
+        assert receiverTypeInfo != null : "element type info is null for " + typeCallExpression.getText();
+        ReceiverValue receiver = new TransientReceiver(receiverTypeInfo.getType());
+        Call call = makeFakeCall(receiver);
+        return invokeFunction(call, deconstructCall, expressionToMatch);
     }
 
     private StackValue generateMatchVariableDeclaration(StackValue expressionToMatch, KtPatternVariableDeclaration declaration) {
         KtPatternConstraint constraint = declaration.getConstraint();
-        StackValue matchConstraint = StackValue.constant(true, Type.BOOLEAN_TYPE);
-        if (constraint != null)
-            matchConstraint = generateMatchConstraint(expressionToMatch, constraint);
-        return Trigger.Companion.make(matchConstraint, Type.BOOLEAN_TYPE, v -> {
+        if (constraint == null) {
+            StackValue constant = StackValue.constant(true, Type.BOOLEAN_TYPE);
+            return Trigger.Companion.make(constant, Type.BOOLEAN_TYPE, v -> {
+                if (UnderscoreUtilKt.isNotSingleUnderscore(declaration))
+                    initializeLocalVariable(declaration, expressionToMatch);
+                return null;
+            });
+        }
+        return new ConstantLocalVariable(myFrameMap, expressionToMatch, expressionToMatch.type, Type.BOOLEAN_TYPE, loadExpression -> {
+            StackValue matchConstraint = generateMatchConstraint(loadExpression, constraint);
             if (UnderscoreUtilKt.isNotSingleUnderscore(declaration))
-                initializeLocalVariable(declaration, expressionToMatch);
-            return null;
+                initializeLocalVariable(declaration, loadExpression);
+            return matchConstraint;
         });
     }
 

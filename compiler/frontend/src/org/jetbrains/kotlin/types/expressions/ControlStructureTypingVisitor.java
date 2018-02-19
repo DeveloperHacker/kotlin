@@ -274,10 +274,12 @@ public class ControlStructureTypingVisitor extends ExpressionTypingVisitor {
         KotlinTypeInfo bodyTypeInfo;
         DataFlowInfo conditionInfo = components.dataFlowAnalyzer.extractDataFlowInfoFromCondition(condition, true, context).and(dataFlowInfo);
         if (body != null) {
-            LexicalWritableScope scopeToExtend = newWritableScopeImpl(context, LexicalScopeKind.WHILE_BODY, components.overloadChecker);
+            LexicalScope bodyScope = condition != null ? context.trace.get(BindingContext.EXPRESSION_LEXICAL_SCOPE, condition) : null;
+            ExpressionTypingContext bodyContext = bodyScope != null ? context.replaceScope(bodyScope) : context;
+            LexicalWritableScope scopeToExtend = newWritableScopeImpl(bodyContext, LexicalScopeKind.WHILE_BODY, components.overloadChecker);
             bodyTypeInfo = components.expressionTypingServices.getBlockReturnedTypeWithWritableScope(
                     scopeToExtend, Collections.singletonList(body),
-                    CoercionStrategy.NO_COERCION, context.replaceDataFlowInfo(conditionInfo));
+                    CoercionStrategy.NO_COERCION, bodyContext.replaceDataFlowInfo(conditionInfo));
         }
         else {
             bodyTypeInfo = TypeInfoFactoryKt.noTypeInfo(conditionInfo);

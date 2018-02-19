@@ -5,7 +5,7 @@ class Equlitive(val value: Int) {
     
     infix fun eq(other: Int) = value + other + 21
 
-    override fun equals(other: Any?) = when (other) {
+    override fun equals(other: Any?) = when (<!DEBUG_INFO_SMARTCAST!>other<!>) {
         is like Equlitive(val o) -> o == value
         is like val o is Int -> o == value + 5
         else -> false

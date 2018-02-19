@@ -13401,6 +13401,24 @@ public class BlackBoxCodegenTestGenerated extends AbstractBlackBoxCodegenTest {
             KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/codegen/box/patternMatching"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.JVM, true);
         }
 
+        @TestMetadata("assign.kt")
+        public void testAssign() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/assign.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("deconstructor.kt")
+        public void testDeconstructor() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/deconstructor.kt");
+            doTest(fileName);
+        }
+
+        @TestMetadata("like.kt")
+        public void testLike() throws Exception {
+            String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/like.kt");
+            doTest(fileName);
+        }
+
         @TestMetadata("compiler/testData/codegen/box/patternMatching/if")
         @TestDataPath("$PROJECT_ROOT")
         @RunWith(JUnit3RunnerWithInners.class)
@@ -13730,6 +13748,63 @@ public class BlackBoxCodegenTestGenerated extends AbstractBlackBoxCodegenTest {
             @TestMetadata("smartDestructuring.kt")
             public void testSmartDestructuring() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/whenWithoutSubject/smartDestructuring.kt");
+                doTest(fileName);
+            }
+        }
+
+        @TestMetadata("compiler/testData/codegen/box/patternMatching/while")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class While extends AbstractBlackBoxCodegenTest {
+            public void testAllFilesPresentInWhile() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/codegen/box/patternMatching/while"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.JVM, true);
+            }
+
+            @TestMetadata("elseMatch.kt")
+            public void testElseMatch() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/elseMatch.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("equalsWithConstants.kt")
+            public void testEqualsWithConstants() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/equalsWithConstants.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("expressions.kt")
+            public void testExpressions() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/expressions.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("nullableMatch.kt")
+            public void testNullableMatch() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/nullableMatch.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("orPatterns.kt")
+            public void testOrPatterns() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/orPatterns.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("otherSmartCasts.kt")
+            public void testOtherSmartCasts() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/otherSmartCasts.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("smartCastsInGuards.kt")
+            public void testSmartCastsInGuards() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/smartCastsInGuards.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("smartDestructuring.kt")
+            public void testSmartDestructuring() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/while/smartDestructuring.kt");
                 doTest(fileName);
             }
         }

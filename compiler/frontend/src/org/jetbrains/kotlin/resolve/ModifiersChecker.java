@@ -283,6 +283,7 @@ public class ModifiersChecker {
             for (DeclarationChecker checker : declarationCheckers) {
                 checker.check(declaration, descriptor, context);
             }
+            DeconstructorModifierChecker.INSTANCE.check(declaration, descriptor, trace);
             OperatorModifierChecker.INSTANCE.check(declaration, descriptor, trace, languageVersionSettings);
             PublishedApiUsageChecker.INSTANCE.check(declaration, descriptor, trace);
         }

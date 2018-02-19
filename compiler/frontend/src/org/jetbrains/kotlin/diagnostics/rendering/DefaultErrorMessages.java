@@ -76,6 +76,7 @@ public class DefaultErrorMessages {
         MAP.put(EXPECTED_PATTERN_ENTRY_ELEMENT, "Expected pattern entry element");
         MAP.put(EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE, "Expected pattern tuple in pattern typed tuple");
         MAP.put(EXPECTED_PATTERN_TYPE_REFERENCE_INSTANCE, "Expected type reference in pattern type reference");
+        MAP.put(EXPECTED_TYPE_REFERENCE_INSTANCE, "Expected type reference in pattern type call expression");
         MAP.put(EXPECTED_PATTERN_EXPRESSION_INSTANCE, "Expected expression element");
         MAP.put(NOT_ALLOW_PROPERTY_DEFINITION, "Not allow property definition: {0}", ELEMENT_TEXT);
 
@@ -460,9 +461,11 @@ public class DefaultErrorMessages {
         MAP.put(YIELD_IS_RESERVED, "{0}", STRING);
         MAP.put(INVALID_CHARACTERS, "Name {0}", STRING);
 
+        MAP.put(INAPPLICABLE_DECONSTRUCTOR_MODIFIER, "''deconstructor'' modifier is inapplicable on this function: {0}", STRING);
         MAP.put(INAPPLICABLE_OPERATOR_MODIFIER, "''operator'' modifier is inapplicable on this function: {0}", STRING);
         MAP.put(INAPPLICABLE_INFIX_MODIFIER, "''infix'' modifier is inapplicable on this function: {0}", STRING);
 
+        MAP.put(DECONSTRUCTOR_MODIFIER_REQUIRED, "''deconstructor'' modifier is required on ''{0}'' in ''{1}''", NAME, STRING);
         MAP.put(OPERATOR_MODIFIER_REQUIRED, "''operator'' modifier is required on ''{0}'' in ''{1}''", NAME, STRING);
         MAP.put(INFIX_MODIFIER_REQUIRED, "''infix'' modifier is required on ''{0}'' in ''{1}''", NAME, STRING);
 

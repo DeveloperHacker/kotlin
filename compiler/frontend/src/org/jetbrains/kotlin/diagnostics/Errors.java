@@ -897,12 +897,16 @@ public interface Errors {
 
     // When expressions
 
+    DiagnosticFactory2<PsiElement, FunctionDescriptor, String> DECONSTRUCTOR_MODIFIER_REQUIRED = DiagnosticFactory2.create(ERROR);
+    DiagnosticFactory1<PsiElement, String> INAPPLICABLE_DECONSTRUCTOR_MODIFIER = DiagnosticFactory1.create(ERROR);
+
     DiagnosticFactory0<KtPattern> EXPECTED_PATTERN_ENTRY = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternConstraint> EXPECTED_PATTERN_CONSTRAINT_ELEMENT = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternEntry> EXPECTED_PATTERN_ENTRY_ELEMENT = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternTypedTuple> EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternExpression> EXPECTED_PATTERN_EXPRESSION_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternTypeReference> EXPECTED_PATTERN_TYPE_REFERENCE_INSTANCE = DiagnosticFactory0.create(ERROR);
+    DiagnosticFactory0<KtPatternTypeCallExpression> EXPECTED_TYPE_REFERENCE_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory1<KtElement, KtElement> NOT_ALLOW_PROPERTY_DEFINITION = DiagnosticFactory1.create(ERROR);
 
 

@@ -159,6 +159,10 @@ public class KtVisitor<R, D> extends PsiElementVisitor {
         return visitPatternElement(node, data);
     }
 
+    public R visitPatternTypeCallExpression(@NotNull KtPatternTypeCallExpression node, D data) {
+        return visitPatternElement(node, data);
+    }
+
     public R visitPatternVariableDeclaration(@NotNull KtPatternVariableDeclaration node, D data) {
         return visitPatternElement(node, data);
     }

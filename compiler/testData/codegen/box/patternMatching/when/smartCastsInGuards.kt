@@ -9,8 +9,8 @@ class Child1(val field1: Int): Parent()
 class Child2(val field2: Int): Parent()
 
 fun foo(parent: Parent) = when(parent) {
-    is like is Child1 && parent.field1 == 1 -> parent.field1
-    is like is Child2 && parent.field2 == 2 -> parent.field2
+    is like Child1() && parent.field1 == 1 -> parent.field1
+    is like Child2() && parent.field2 == 2 -> parent.field2
     else -> 10
 }
 

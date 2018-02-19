@@ -216,7 +216,7 @@ class AnnotationChecker(
             }.toSet()
         }
 
-        fun getDeclarationSiteActualTargetList(annotated: KtElement, descriptor: ClassDescriptor?, trace: BindingTrace):
+        fun getDeclarationSiteActualTargetList(annotated: KtElement, descriptor: DeclarationDescriptor?, trace: BindingTrace):
                 List<KotlinTarget> {
             return getActualTargetList(annotated, descriptor, trace).defaultTargets
         }

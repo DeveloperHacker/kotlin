@@ -213,6 +213,7 @@ class FunctionDescriptorResolver(
         functionDescriptor.isInline = function.hasModifier(KtTokens.INLINE_KEYWORD)
         functionDescriptor.isTailrec = function.hasModifier(KtTokens.TAILREC_KEYWORD)
         functionDescriptor.isSuspend = function.hasModifier(KtTokens.SUSPEND_KEYWORD)
+        functionDescriptor.isDeconstructor = function.hasModifier(KtTokens.DECONSTRUCTOR_KEYWORD)
         functionDescriptor.isExpect = container is PackageFragmentDescriptor && function.hasExpectModifier() ||
                 container is ClassDescriptor && container.isExpect
         functionDescriptor.isActual = function.hasActualModifier()

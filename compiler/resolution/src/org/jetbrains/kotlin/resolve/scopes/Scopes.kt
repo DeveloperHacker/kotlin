@@ -89,6 +89,7 @@ enum class LexicalScopeKind(val withLocalDescriptors: Boolean) {
 
     CODE_BLOCK(true),
 
+    MATCH_EXPRESSION(true),
     LEFT_BOOLEAN_EXPRESSION(true),
     RIGHT_BOOLEAN_EXPRESSION(true),
 

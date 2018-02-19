@@ -20,9 +20,9 @@ import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
@@ -42,21 +42,21 @@ class KtPattern(node: ASTNode) : KtPatternElementImpl(node) {
     val guard: KtPatternGuard?
         get() = findChildByType(KtNodeTypes.PATTERN_GUARD)
 
-    val isSimple: Boolean
-        get() = guard == null && entry?.isSimple ?: true
+    val isExpressionRestrictionsFree
+        get() = innerNotPatternExpressions.isEmpty()
 
-    val isRestrictionsFree: Boolean
-        get() = guard == null && entry?.isRestrictionsFree ?: true
+    val isVariableDeclarationsFree
+        get() = innerVariableDeclarations.isEmpty()
 
-    val onlyTypeRestrictions: Boolean
-        get() = guard == null && entry?.onlyTypeRestrictions ?: true
+    fun isSimple(context: BindingContext) = guard == null && entry?.isSimple(context) ?: true
 
-    val typeReference: KtTypeReference?
-        get() = entry?.typeReference
+    fun isRestrictionsFree(context: BindingContext) = guard == null && entry?.isRestrictionsFree(context) ?: true
 
-    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R {
-        return visitor.visitPattern(this, data)
-    }
+    fun onlyTypeRestrictions(context: BindingContext) = guard == null && entry?.onlyTypeRestrictions(context) ?: true
+
+    fun getTypeReference(context: BindingContext) = entry?.getTypeReference(context)
+
+    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPattern(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val error = Errors.EXPECTED_PATTERN_ENTRY

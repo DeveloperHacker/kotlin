@@ -165,7 +165,6 @@ class Trigger(
     override fun putSelector(type: Type, v: InstructionAdapter) {
         masterBlock.put(masterBlockType, v)
         slaveBlock.put(slaveBlockType, v)
-        coerceTo(type, v)
     }
 
     override fun condJump(jumpLabel: Label, v: InstructionAdapter, jumpIfFalse: Boolean) {
@@ -183,14 +182,12 @@ class Trigger(
 
 // ToDo(sergei): java doc
 class ConstantLocalVariable(
-        private val frameMap: FrameMap,
-        private val variableValue: StackValue,
-        private val variableType: Type,
-        private val blockType: Type,
-        private val block: (StackValue) -> StackValue
+    private val frameMap: FrameMap,
+    private val variableValue: StackValue,
+    private val variableType: Type,
+    private val blockType: Type,
+    private val block: (StackValue) -> StackValue
 ) : AbstractBranchedValue(blockType) {
-
-    private lateinit var debug: StackValue
 
     private fun store(v: InstructionAdapter): Int {
         variableValue.put(variableType, v)
@@ -199,17 +196,14 @@ class ConstantLocalVariable(
         return storage
     }
 
-    private fun load(storage: Int): StackValue {
-        return StackValue.operation(variableType) { v ->
-            v.load(storage, variableType)
-        }
+    private fun load(storage: Int) = StackValue.operation(variableType) { v ->
+        v.load(storage, variableType)
     }
 
     private fun execute(v: InstructionAdapter): StackValue {
         val storage = store(v)
         val load = load(storage)
         val blockValue = block(load)
-        debug = blockValue
         if (blockValue.type != blockType)
             throw IllegalArgumentException("The claimed type doesn't correspond to the actual type")
         return blockValue
@@ -220,9 +214,9 @@ class ConstantLocalVariable(
     }
 
     override fun putSelector(type: Type, v: InstructionAdapter) {
-        execute(v)
+        val blockValue = execute(v)
+        blockValue.put(type, v)
         free()
-        coerceTo(type, v)
     }
 
     override fun condJump(jumpLabel: Label, v: InstructionAdapter, jumpIfFalse: Boolean) {
