@@ -32,9 +32,7 @@ import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor;
 import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.name.FqNameUnsafe;
 import org.jetbrains.kotlin.psi.*;
-import org.jetbrains.kotlin.psi.pattern.KtPatternElement;
-import org.jetbrains.kotlin.psi.pattern.KtPatternEntry;
-import org.jetbrains.kotlin.psi.pattern.KtPatternTypedTuple;
+import org.jetbrains.kotlin.psi.pattern.*;
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemCompleter;
 import org.jetbrains.kotlin.resolve.calls.model.CallResolutionResult;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
@@ -151,8 +149,10 @@ public interface BindingContext {
     WritableSlice<VariableDescriptorWithAccessors, Call> PROVIDE_DELEGATE_CALL = Slices.createSimpleSlice();
 
     WritableSlice<KtPatternTypedTuple, ReceiverValue> PATTERN_COMPONENTS_RECEIVER = Slices.createSimpleSlice();
-    WritableSlice<KtPatternTypedTuple, ResolvedCall<FunctionDescriptor>> PATTERN_DECONSTRUCT_RESOLVED_CALL = Slices.createSimpleSlice();
+    WritableSlice<KtPatternTypeCallExpression, ResolvedCall<FunctionDescriptor>> PATTERN_DECONSTRUCT_RESOLVED_CALL = Slices.createSimpleSlice();
     WritableSlice<KtPatternEntry, ResolvedCall<FunctionDescriptor>> PATTERN_COMPONENT_RESOLVED_CALL = Slices.createSimpleSlice();
+    WritableSlice<KtPatternTypeCallExpression, Boolean> IS_PATTERN_CALL_EXPRESSION = Slices.createSimpleSetSlice();
+    WritableSlice<KtPatternTypeCallExpression, Boolean> NEEDED_PATTERN_NULL_CHECK = Slices.createSimpleSetSlice();
 
     WritableSlice<KtDestructuringDeclarationEntry, ResolvedCall<FunctionDescriptor>> COMPONENT_RESOLVED_CALL = Slices.createSimpleSlice();
 

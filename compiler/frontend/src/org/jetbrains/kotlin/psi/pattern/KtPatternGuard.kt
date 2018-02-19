@@ -28,7 +28,7 @@ class KtPatternGuard(node: ASTNode) : KtPatternElementImpl(node) {
     val expression: KtExpression?
         get() = findChildByClass(KtExpression::class.java)
 
-    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D) = visitor.visitPatternGuard(this, data)
+    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternGuard(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val dataFlow = resolver.checkCondition(this.expression, state)

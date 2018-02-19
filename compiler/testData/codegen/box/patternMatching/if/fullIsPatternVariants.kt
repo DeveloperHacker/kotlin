@@ -3,7 +3,7 @@
 import kotlin.test.assertEquals
 
 fun matcher(value: Any?) =
-    if (value is like Pair(val a = Pair(val b is Int, _), is Int)) listOf(0, a, b)
+    if (value is like Pair(val a = Pair(val b is Int, _), Int())) listOf(0, a, b)
     else if (value is like val x) listOf(1, x)
     else throw java.lang.IllegalStateException("Unexpected else")
 

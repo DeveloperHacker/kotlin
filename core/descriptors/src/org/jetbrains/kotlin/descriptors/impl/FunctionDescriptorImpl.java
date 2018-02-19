@@ -51,6 +51,7 @@ public abstract class FunctionDescriptorImpl extends DeclarationDescriptorNonRoo
     private boolean isHiddenToOvercomeSignatureClash = false;
     private boolean isHiddenForResolutionEverywhereBesideSupercalls = false;
     private boolean isSuspend = false;
+    private boolean isDeconstructor = false;
     private boolean hasStableParameterNames = true;
     private boolean hasSynthesizedParameterNames = false;
     private Collection<? extends FunctionDescriptor> overriddenFunctions = null;
@@ -156,6 +157,10 @@ public abstract class FunctionDescriptorImpl extends DeclarationDescriptorNonRoo
         isSuspend = suspend;
     }
 
+    public void setDeconstructor(boolean deconstructor) {
+        isDeconstructor = deconstructor;
+    }
+
     public void setReturnType(@NotNull KotlinType unsubstitutedReturnType) {
         if (this.unsubstitutedReturnType != null) {
             // TODO: uncomment and fix tests
@@ -255,6 +260,11 @@ public abstract class FunctionDescriptorImpl extends DeclarationDescriptorNonRoo
     @Override
     public boolean isSuspend() {
         return isSuspend;
+    }
+
+    @Override
+    public boolean isDeconstructor() {
+        return isDeconstructor;
     }
 
     @Override
@@ -664,6 +674,7 @@ public abstract class FunctionDescriptorImpl extends DeclarationDescriptorNonRoo
         substitutedDescriptor.setInline(isInline);
         substitutedDescriptor.setTailrec(isTailrec);
         substitutedDescriptor.setSuspend(isSuspend);
+        substitutedDescriptor.setDeconstructor(isDeconstructor);
         substitutedDescriptor.setExpect(isExpect);
         substitutedDescriptor.setActual(isActual);
         substitutedDescriptor.setHasStableParameterNames(hasStableParameterNames);

@@ -18,10 +18,10 @@ package org.jetbrains.kotlin.types.expressions
 
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1
 import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.pattern.*
@@ -33,11 +33,13 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameUnsafe
+import org.jetbrains.kotlin.resolve.scopes.LexicalScopeKind
 import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope
-import org.jetbrains.kotlin.resolve.scopes.TraceBasedLocalRedeclarationChecker
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 
 
 infix fun <F, S, T> Pair<F, S>.to(triple: T) = Triple(first, second, triple)
@@ -49,8 +51,8 @@ class ConditionalTypeInfo(val type: KotlinType, val dataFlowInfo: ConditionalDat
 
     fun replaceThenInfo(thenInfo: DataFlowInfo) = ConditionalTypeInfo(type, dataFlowInfo.replaceThenInfo(thenInfo))
 
-    val kotlinTypeInfo: KotlinTypeInfo
-        get() = KotlinTypeInfo(type, dataFlowInfo.thenInfo)
+    val thenInfo: DataFlowInfo
+        get() = dataFlowInfo.thenInfo
 
     companion object {
         fun empty(type: KotlinType, thenInfo: DataFlowInfo) =
@@ -66,40 +68,45 @@ class PatternResolver(
     val builtIns = components.builtIns!!
 
     companion object {
-        fun getDeconstructName() = Name.identifier("deconstruct")
         fun getComponentName(index: Int) = DataClassDescriptorResolver.createComponentName(index + 1)
     }
 
     fun resolve(context: ExpressionTypingContext, pattern: KtPattern, subject: Subject, allowDefinition: Boolean, isNegated: Boolean) =
         run {
-            val redeclarationChecker = TraceBasedLocalRedeclarationChecker(context.trace, components.overloadChecker)
-            val outerScope = context.scope
-            val scopeDescriptor = outerScope.ownerDescriptor
-            val isOwnerDescriptorAccessibleByLabel = outerScope.isOwnerDescriptorAccessibleByLabel
-            val scopeKind = outerScope.kind
-            val scope =
-                LexicalWritableScope(outerScope, scopeDescriptor, isOwnerDescriptorAccessibleByLabel, redeclarationChecker, scopeKind)
+            val scope = ExpressionTypingUtils.newWritableScopeImpl(context, LexicalScopeKind.MATCH_EXPRESSION, components.overloadChecker)
             val state = PatternResolveState(scope, context, allowDefinition, isNegated, false, subject)
             val typeInfo = pattern.getTypeInfo(this, state)
-            val useless = state.getUsefulCheckCounter() == 0 && pattern.onlyTypeRestrictions && !pattern.isRestrictionsFree
+            val isExpressionRestrictionsFree = pattern.isExpressionRestrictionsFree
+            val isVariableDeclarationsFree = pattern.isVariableDeclarationsFree
+            val useless = state.getUsefulCheckCounter() == 0 && isVariableDeclarationsFree && isExpressionRestrictionsFree
             typeInfo to scope to useless
         }
 
-    fun getDeconstructType(typedTuple: KtPatternTypedTuple, state: PatternResolveState): KotlinType? {
+    fun getDeconstructType(typeCallExpression: KtPatternTypeCallExpression, state: PatternResolveState): KotlinType? {
+        val callExpression = typeCallExpression.asCallExpression ?: return null
+        val receiverValue = state.subject.receiverValue
         val results = repairAfterInvoke(state) {
-            components.fakeCallResolver.resolveFakeCall(
-                context = state.context,
-                receiver = state.subject.receiverValue,
-                name = getDeconstructName(),
-                callElement = state.subject.expression,
-                reportErrorsOn = typedTuple,
-                callKind = FakeCallKind.OTHER,
-                valueArguments = emptyList()
-            )
+            components.fakeCallResolver.resolveMemberFunctionCallWithoutArguments(receiverValue, callExpression, state.context)
         }
-        if (!results.isSuccess) return null
-        state.context.trace.record(BindingContext.PATTERN_DECONSTRUCT_RESOLVED_CALL, typedTuple, results.resultingCall)
-        return results.resultingDescriptor.returnType
+        if (!results.isSuccess) {
+            state.context.trace.record(BindingContext.IS_PATTERN_CALL_EXPRESSION, typeCallExpression, false)
+            return null
+        }
+        val resolvedCall = results.resultingCall
+        val descriptor = resolvedCall.candidateDescriptor
+        if (descriptor is ClassConstructorDescriptor) {
+            state.context.trace.record(BindingContext.IS_PATTERN_CALL_EXPRESSION, typeCallExpression, false)
+            return null
+        }
+        state.context.trace.record(BindingContext.IS_PATTERN_CALL_EXPRESSION, typeCallExpression, true)
+        val containingDeclarationName = descriptor.containingDeclaration.fqNameUnsafe.asString()
+        if (!descriptor.isDeconstructor) {
+            state.context.trace.report(Errors.DECONSTRUCTOR_MODIFIER_REQUIRED.on(typeCallExpression, descriptor, containingDeclarationName))
+        }
+        val type = results.resultingDescriptor.returnType
+        state.context.trace.record(BindingContext.NEEDED_PATTERN_NULL_CHECK, typeCallExpression, type?.isMarkedNullable == true)
+        state.context.trace.record(BindingContext.PATTERN_DECONSTRUCT_RESOLVED_CALL, typeCallExpression, resolvedCall)
+        return type?.makeNotNullable()
     }
 
     fun getComponentType(index: Int, entry: KtPatternEntry, state: PatternResolveState): KotlinType {
@@ -139,7 +146,7 @@ class PatternResolver(
         val dataFlowValue = state.subject.dataFlowValue
         val isNegated = state.isNegated
         val isTuple = state.isTuple
-        val (type, typeInfo, useless) = patternMatchingTypingVisitor.checkTypeForIs(
+        val (type, dataFlowInfo, useless) = patternMatchingTypingVisitor.checkTypeForIs(
             context,
             subjectType,
             typeReference,
@@ -151,7 +158,7 @@ class PatternResolver(
         } else {
             state.incrementUsefulCheckCounter()
         }
-        return ConditionalTypeInfo(type, typeInfo)
+        return ConditionalTypeInfo.empty(type, dataFlowInfo)
     }
 
     fun getTypeInfo(expression: KtExpression, state: PatternResolveState): ConditionalTypeInfo {
@@ -161,7 +168,7 @@ class PatternResolver(
         }
         val info = facade.getTypeInfo(expression, state.context)
         val type = info.type ?: ErrorUtils.createErrorType("${expression.text} return type")
-        return ConditionalTypeInfo(type, ConditionalDataFlowInfo(info.dataFlowInfo))
+        return ConditionalTypeInfo(type, ConditionalDataFlowInfo(info.dataFlowInfo, DataFlowInfo.EMPTY))
     }
 
     fun restoreOrCreate(element: KtPatternElement, state: PatternResolveState, creator: () -> ConditionalTypeInfo): ConditionalTypeInfo {

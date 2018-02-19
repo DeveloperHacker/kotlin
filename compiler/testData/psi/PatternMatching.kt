@@ -11,7 +11,7 @@ fun matcher(value: Any?, p1: Int, p2: Int, p3: Int, p4: Int): List<Int> = when (
     is like val m = A(val a, p2 + p3) -> listOf(2, a)
     is like val m = Pair(5, 7) -> listOf(3)
     is like val m = Pair(val a is Int, p1) -> listOf(4, a)
-    is like val m = List(is Int, is Int) ->listOf(5)
+    is like val m = List(Int(), Int()) ->listOf(5)
     is like val m = Pair(val a is Int, val b is Int) && a > p1 -> listOf(6, a, b)
     is like val m = Pair("some string $p4 with parameter", _) -> listOf(7)
     is like val m = Pair(Int(), Pair(val a is Int, val b is Int)) -> listOf(8, a, b)
@@ -26,7 +26,7 @@ fun matcher(p: Any?) = when (p) {
 }
 
 fun matcher(value: Any?) = when (value) {
-    is like Pair(val a = Pair(val b is Int, _), is Int) -> listOf(0, a, b)
+    is like Pair(val a = Pair(val b is Int, _), Int()) -> listOf(0, a, b)
     is like val x -> listOf(1, x)
     else -> throw java.lang.IllegalStateException("Unexpected else")
 }
@@ -37,10 +37,10 @@ fun matcher(value: Any?, p1: Int, p2: Int, p3: Int, p4: Int): List<Int> = when {
     value is like val m = A(val a, p2 + p3) -> listOf(2, a)
     value is like val m = Pair(5, 7) -> listOf(3)
     value is like val m = Pair(val a is Int, p1) -> listOf(4, a)
-    value is like val m = List(is Int, is Int) ->listOf(5)
+    value is like val m = List(Int(), Int()) ->listOf(5)
     value is like val m = Pair(val a is Int, val b is Int) && a > p1 -> listOf(6, a, b)
     value is like val m = Pair("some string $p4 with parameter", _) -> listOf(7)
-    value is like val m = Pair(is Int, Pair(val a is Int, val b is Int)) -> listOf(8, a, b)
+    value is like val m = Pair(Int(), Pair(val a is Int, val b is Int)) -> listOf(8, a, b)
     value is like val m -> listOf(9)
 }
 
@@ -50,10 +50,10 @@ fun matcher(value: Any?, p1: Int, p2: Int, p3: Int, p4: Int): List<Int> =
     else if (value is like val m = A(val a, p2 + p3)) listOf(2, a)
     else if (value is like val m = Pair(5, 7)) listOf(3)
     else if (value is like val m = Pair(val a is Int, p1)) listOf(4, a)
-    else if (value is like val m = List(is Int, is Int))listOf(5)
+    else if (value is like val m = List(Int(), Int()))listOf(5)
     else if (value is like val m = Pair(val a is Int, val b is Int) && a > p1) listOf(6, a, b)
     else if (value is like val m = Pair("some string $p4 with parameter", _)) listOf(7)
-    else if (value is like val m = Pair(is Int, Pair(val a is Int, val b is Int))) listOf(8, a, b)
+    else if (value is like val m = Pair(Int(), Pair(val a is Int, val b is Int))) listOf(8, a, b)
     else if (value is like val m) listOf(9)
     else throw java.lang.IllegalStateException("Unexpected else")
 

@@ -19,7 +19,6 @@ package org.jetbrains.kotlin.psi
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.psiUtil.collectAnnotationEntriesFromStubOrPsi
 import org.jetbrains.kotlin.psi.stubs.KotlinPlaceHolderStub
 import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes
 
@@ -40,6 +39,9 @@ class KtTypeReference : KtModifierListOwnerStub<KotlinPlaceHolderStub<KtTypeRefe
 
     val typeElement: KtTypeElement?
         get() = KtStubbedPsiUtil.getStubOrPsiChild(this, KtStubElementTypes.TYPE_ELEMENT_TYPES, KtTypeElement.ARRAY_FACTORY)
+
+    val isMarkedNullable: Boolean
+        get() = typeElement?.node?.elementType == KtStubElementTypes.NULLABLE_TYPE
 
     override fun getAnnotations(): List<KtAnnotation> {
         return modifierList?.annotations.orEmpty()

@@ -106,7 +106,8 @@ object ModifierCheckerCore {
             ENUM_CLASS,
             ANNOTATION_CLASS,
             TYPEALIAS
-        )
+        ),
+        DECONSTRUCTOR_KEYWORD to EnumSet.of(LOCAL_FUNCTION, MEMBER_FUNCTION, TOP_LEVEL_FUNCTION)
     )
 
     private val featureDependencies = mapOf(

@@ -70,7 +70,7 @@ class PatternMatchingParsing(
         if (atPatternVariableDeclaration()) {
             parsePatternVariableDeclaration(state)
         } else {
-            parsePatternConstraint(state)
+            parsePatternValueConstraint(state)
         }
         patternMarker.done(PATTERN_ENTRY)
     }
@@ -111,18 +111,10 @@ class PatternMatchingParsing(
         patternMarker.done(PATTERN_CONSTRAINT)
     }
 
-    private fun parsePatternConstraint(state: ParsingState) {
-        if (at(IS_KEYWORD)) {
-            parsePatternTypeConstraint()
-        } else {
-            parsePatternValueConstraint(state)
-        }
-    }
-
     private fun parsePatternTypedTuple(state: ParsingState) {
         val patternMarker = mark()
         if (!at(LPAR)) {
-            parsePatternTypeReference()
+            parsePatternTypeCallExpression()
         }
         parsePatternTuple(state)
         patternMarker.done(PATTERN_TYPED_TUPLE)
@@ -153,8 +145,14 @@ class PatternMatchingParsing(
 
     private fun parsePatternTypeReference() {
         val patternMarker = mark()
-        kotlinParsing.parseTypeRefNoParenthesized()
+        kotlinParsing.parseSimpleTypeRef()
         patternMarker.done(PATTERN_TYPE_REFERENCE)
+    }
+
+    private fun parsePatternTypeCallExpression() {
+        val patternMarker = mark()
+        kotlinParsing.parseSimpleTypeRef()
+        patternMarker.done(PATTERN_TYPE_CALL_EXPRESSION)
     }
 
     private fun parsePatternExpression() {
@@ -171,7 +169,7 @@ class PatternMatchingParsing(
     private fun atPatternTypedTuple(): Boolean {
         val patternMarker = mark()
         if (!at(LPAR)) {
-            parsePatternTypeReference()
+            parsePatternTypeCallExpression()
         }
         val existTuple = at(LPAR)
         patternMarker.rollbackTo()

@@ -284,7 +284,6 @@ LONELY_BACKTICK=`
 ">="         { return KtTokens.GTEQ      ; }
 "=="         { return KtTokens.EQEQ      ; }
 "!="         { return KtTokens.EXCLEQ    ; }
-"^"          { return KtTokens.HAT    ; }
 "&&"         { return KtTokens.ANDAND    ; }
 "||"         { return KtTokens.OROR      ; }
 "*="         { return KtTokens.MULTEQ    ; }

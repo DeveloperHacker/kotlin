@@ -31,7 +31,7 @@ class KtPatternTuple(node: ASTNode) : KtPatternElementImpl(node) {
     val entries: List<KtPatternEntry>
         get() = findChildrenByType(KtNodeTypes.PATTERN_ENTRY)
 
-    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D) = visitor.visitPatternTuple(this, data)
+    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternTuple(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val info = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
@@ -42,6 +42,6 @@ class KtPatternTuple(node: ASTNode) : KtPatternElementImpl(node) {
             val subject = Subject(entry, receiverValue, dataFlowValue)
             entry.getTypeInfo(resolver, state.replaceSubject(subject))
         }
-        (sequenceOf(info) + componentInfo).reduce ({ acc, it -> acc.and(it) })
+        (sequenceOf(info) + componentInfo).reduce({ acc, it -> acc.and(it) })
     }
 }

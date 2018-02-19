@@ -39,7 +39,7 @@ class KtPatternConstraint(node: ASTNode) : KtPatternElementImpl(node) {
     val element: KtPatternElement?
         get() = findChildByClass(KtPatternElement::class.java)
 
-    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D) = visitor.visitPatternConstraint(this, data)
+    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternConstraint(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val error = Errors.EXPECTED_PATTERN_CONSTRAINT_ELEMENT

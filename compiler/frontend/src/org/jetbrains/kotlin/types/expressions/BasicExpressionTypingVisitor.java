@@ -62,8 +62,8 @@ import org.jetbrains.kotlin.resolve.calls.tasks.TracingStrategy;
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker;
 import org.jetbrains.kotlin.resolve.checkers.UnderscoreChecker;
 import org.jetbrains.kotlin.resolve.constants.*;
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScopeKind;
-import org.jetbrains.kotlin.resolve.scopes.LexicalWritableScope;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver;
 import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.resolve.scopes.utils.ScopeUtilsKt;
@@ -91,6 +91,7 @@ import static org.jetbrains.kotlin.types.TypeUtils.noExpectedType;
 import static org.jetbrains.kotlin.types.expressions.ControlStructureTypingUtils.createCallForSpecialConstruction;
 import static org.jetbrains.kotlin.types.expressions.ExpressionTypingUtils.*;
 import static org.jetbrains.kotlin.types.expressions.TypeReconstructionUtil.reconstructBareType;
+import static org.jetbrains.kotlin.util.ExpressionUtilKt.getCommonForIsLikeExpression;
 
 @SuppressWarnings("SuspiciousMethodCalls")
 public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
@@ -1214,19 +1215,20 @@ public class BasicExpressionTypingVisitor extends ExpressionTypingVisitor {
     ) {
         KotlinType booleanType = components.builtIns.getBooleanType();
         KotlinTypeInfo leftTypeInfo = getTypeInfoOrNullType(left, context.replaceExpectedType(booleanType), facade);
-        DataFlowInfo dataFlowInfo = leftTypeInfo.getDataFlowInfo();
-
-        LexicalWritableScope leftScope = newWritableScopeImpl(context, LexicalScopeKind.LEFT_BOOLEAN_EXPRESSION, facade.getComponents().overloadChecker);
-        // TODO: This gets computed twice: here and in extractDataFlowInfoFromCondition() for the whole condition
-        boolean isAnd = operationType == KtTokens.ANDAND;
-        DataFlowInfo flowInfoLeft = components.dataFlowAnalyzer.extractDataFlowInfoFromCondition(left, isAnd, context).and(dataFlowInfo);
-        LexicalWritableScope rightScope = isAnd ? leftScope : newWritableScopeImpl(context, LexicalScopeKind.RIGHT_BOOLEAN_EXPRESSION,
-                                                                                   facade.getComponents().overloadChecker);
-
-        ExpressionTypingContext contextForRightExpr =
-                context.replaceDataFlowInfo(flowInfoLeft).replaceScope(rightScope).replaceExpectedType(booleanType);
         if (right != null) {
-            facade.getTypeInfo(right, contextForRightExpr);
+            boolean isAnd = operationType == KtTokens.ANDAND;
+            // TODO: This gets computed twice: here and in extractDataFlowInfoFromCondition() for the whole condition
+            DataFlowInfo dataFlowInfo = components.dataFlowAnalyzer.extractDataFlowInfoFromCondition(left, isAnd, context);
+            LexicalScopeKind scopeKind = isAnd ? LexicalScopeKind.LEFT_BOOLEAN_EXPRESSION : LexicalScopeKind.RIGHT_BOOLEAN_EXPRESSION;
+            OverloadChecker overloadChecker = facade.getComponents().overloadChecker;
+            LexicalScope scope = newWritableScopeImpl(context, scopeKind, overloadChecker);
+            KtExpression commonNode = left != null ? getCommonForIsLikeExpression(left) : null;
+            LexicalScope commonScope = commonNode != null ? context.trace.get(BindingContext.EXPRESSION_LEXICAL_SCOPE, commonNode) : null;
+            ExpressionTypingContext newContext = context
+                    .replaceDataFlowInfo(dataFlowInfo.and(leftTypeInfo.getDataFlowInfo()))
+                    .replaceScope(isAnd && commonScope != null ? commonScope : scope)
+                    .replaceExpectedType(booleanType);
+            facade.getTypeInfo(right, newContext);
         }
         return leftTypeInfo.replaceType(booleanType);
     }

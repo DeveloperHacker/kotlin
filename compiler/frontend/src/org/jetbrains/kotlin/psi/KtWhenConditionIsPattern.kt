@@ -20,6 +20,7 @@ import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.pattern.KtPattern
+import org.jetbrains.kotlin.resolve.BindingContext
 
 class KtWhenConditionIsPattern(node: ASTNode) : KtWhenCondition(node) {
 
@@ -29,17 +30,13 @@ class KtWhenConditionIsPattern(node: ASTNode) : KtWhenCondition(node) {
     val pattern: KtPattern?
         get() = findChildByType(KtNodeTypes.PATTERN)
 
-    val isSimple: Boolean
-        get() = pattern?.isSimple ?: true
+    fun isSimple(context: BindingContext) = pattern?.isSimple(context) ?: true
 
-    val isRestrictionsFree: Boolean
-        get() = typeReference == null && pattern?.isRestrictionsFree ?: true
+    fun isRestrictionsFree(context: BindingContext) = typeReference == null && pattern?.isRestrictionsFree(context) ?: true
 
-    val typeReference: KtTypeReference?
-        get() = findChildByType(KtNodeTypes.TYPE_REFERENCE)
+    val typeReference: KtTypeReference? = findChildByType(KtNodeTypes.TYPE_REFERENCE)
 
-    val fullTypeReference: KtTypeReference?
-        get() = pattern?.typeReference ?: typeReference
+    fun fullTypeReference(context: BindingContext) = pattern?.getTypeReference(context) ?: typeReference
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R {
         return visitor.visitWhenConditionIsPattern(this, data)

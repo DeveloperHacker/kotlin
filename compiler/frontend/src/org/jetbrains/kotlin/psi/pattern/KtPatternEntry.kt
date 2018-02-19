@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtVisitor
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
@@ -40,31 +41,25 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     private val expression: KtPatternExpression?
         get() = constraint?.expression
 
+    private val constraintTypeReference: KtPatternTypeReference?
+        get() = constraint?.typeReference
+
     private val typedTuple: KtPatternTypedTuple?
         get() = constraint?.typedTuple
 
-    private val tuple: KtPatternTuple?
-        get() = typedTuple?.tuple
+    fun getTypeReference(context: BindingContext): KtTypeReference? =
+        constraintTypeReference?.typeReference ?: typedTuple?.typeCallExpression?.getTypeReference(context)
 
-    private val typedTupleType: KtPatternTypeReference?
-        get() = typedTuple?.typeReference
+    fun onlyTypeRestrictions(context: BindingContext): Boolean =
+        expression == null && typedTuple?.onlyTypeRestrictions(context) ?: true
 
-    private val simpleType: KtPatternTypeReference?
-        get() = constraint?.typeReference
+    fun isSimple(context: BindingContext): Boolean =
+        expression == null && typedTuple?.isSimple(context) ?: true
 
-    val typeReference: KtTypeReference?
-        get() = (simpleType ?: typedTupleType)?.typeReference
+    fun isRestrictionsFree(context: BindingContext): Boolean =
+        expression == null && constraintTypeReference == null && typedTuple?.isRestrictionsFree(context) ?: true
 
-    val isSimple: Boolean
-        get() = expression == null && tuple?.entries?.all { it.isSimple && it.typeReference == null } ?: true
-
-    val isRestrictionsFree: Boolean
-        get() = expression == null && typeReference == null && tuple?.entries?.all { it.isRestrictionsFree } ?: true
-
-    val onlyTypeRestrictions: Boolean
-        get() = expression == null && tuple?.entries?.all { it.onlyTypeRestrictions } ?: true
-
-    val isEmptyDeclaration: Boolean
+    private val isEmptyDeclaration: Boolean
         get() = declaration?.isEmpty ?: false
 
     val isNotEmptyDeclaration: Boolean
@@ -73,7 +68,7 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     val element: KtPatternElement?
         get() = findChildByClass(KtPatternElement::class.java)
 
-    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D) = visitor.visitPatternEntry(this, data)
+    override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternEntry(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val error = Errors.EXPECTED_PATTERN_ENTRY_ELEMENT
