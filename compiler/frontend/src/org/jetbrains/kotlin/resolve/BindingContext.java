@@ -148,11 +148,11 @@ public interface BindingContext {
     WritableSlice<VariableDescriptorWithAccessors, ResolvedCall<FunctionDescriptor>> PROVIDE_DELEGATE_RESOLVED_CALL = Slices.createSimpleSlice();
     WritableSlice<VariableDescriptorWithAccessors, Call> PROVIDE_DELEGATE_CALL = Slices.createSimpleSlice();
 
-    WritableSlice<KtPatternTypedTuple, ReceiverValue> PATTERN_COMPONENTS_RECEIVER = Slices.createSimpleSlice();
-    WritableSlice<KtPatternTypeCallExpression, ResolvedCall<FunctionDescriptor>> PATTERN_DECONSTRUCT_RESOLVED_CALL = Slices.createSimpleSlice();
+    WritableSlice<KtPatternTuple, ReceiverValue> PATTERN_COMPONENTS_RECEIVER = Slices.createSimpleSlice();
+    WritableSlice<KtExpression, ResolvedCall<FunctionDescriptor>> DECONSTRUCTOR_RESOLVED_CALL = Slices.createSimpleSlice();
     WritableSlice<KtPatternEntry, ResolvedCall<FunctionDescriptor>> PATTERN_COMPONENT_RESOLVED_CALL = Slices.createSimpleSlice();
-    WritableSlice<KtPatternTypeCallExpression, Boolean> IS_PATTERN_CALL_EXPRESSION = Slices.createSimpleSetSlice();
-    WritableSlice<KtPatternTypeCallExpression, Boolean> NEEDED_PATTERN_NULL_CHECK = Slices.createSimpleSetSlice();
+    WritableSlice<KtExpression, PsiElement> RESOLVED_PSI_ELEMENT = Slices.createSimpleSlice();
+    WritableSlice<KtExpression, Boolean> NEEDED_NULL_CHECK = Slices.createSimpleSetSlice();
 
     WritableSlice<KtDestructuringDeclarationEntry, ResolvedCall<FunctionDescriptor>> COMPONENT_RESOLVED_CALL = Slices.createSimpleSlice();
 

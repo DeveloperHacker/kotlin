@@ -17,8 +17,10 @@
 package org.jetbrains.kotlin.psi.pattern
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
@@ -30,14 +32,17 @@ class KtPatternConstraint(node: ASTNode) : KtPatternElementImpl(node) {
     val typeReference: KtPatternTypeReference?
         get() = findChildByType(KtNodeTypes.PATTERN_TYPE_REFERENCE)
 
-    val typedTuple: KtPatternTypedTuple?
-        get() = findChildByType(KtNodeTypes.PATTERN_TYPED_TUPLE)
+    val typedDeconstruction: KtPatternTypedDeconstruction?
+        get() = findChildByType(KtNodeTypes.PATTERN_DECONSTRUCTION)
 
     val expression: KtPatternExpression?
         get() = findChildByType(KtNodeTypes.PATTERN_EXPRESSION)
 
     val element: KtPatternElement?
         get() = findChildByClass(KtPatternElement::class.java)
+
+    val isAsterisk: Boolean
+        get() = findChildByType<PsiElement?>(KtTokens.MUL) != null
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternConstraint(this, data)
 

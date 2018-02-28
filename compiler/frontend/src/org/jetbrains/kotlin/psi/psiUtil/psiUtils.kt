@@ -33,7 +33,17 @@ import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import java.util.*
 
+fun PsiElement.debugPrint() {
+    println("---BEGIN PSI STRUCTURE---")
+    debugPrint(0)
+    println("---END PSI STRUCTURE---")
+}
 
+fun PsiElement.debugPrint(indentation: Int) {
+    println("|".repeat(indentation) + toString())
+    for (child in children)
+        child.debugPrint(indentation + 1)
+}
 
 inline fun <reified T : PsiElement> PsiElement.getParent(strict: Boolean, predicate: (PsiElement) -> Boolean): T? {
     var node: PsiElement? = this

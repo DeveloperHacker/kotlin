@@ -66,6 +66,11 @@ import static org.jetbrains.kotlin.lexer.KtTokens.*;
         return myBuilder.rawLookup(-i);
     }
 
+    protected boolean expectIf(boolean condition, KtToken expectation, String message) {
+        if (!condition) return true;
+        return expect(expectation, message, null);
+    }
+
     protected boolean expect(KtToken expectation, String message) {
         return expect(expectation, message, null);
     }
@@ -125,7 +130,7 @@ import static org.jetbrains.kotlin.lexer.KtTokens.*;
         err.error(message);
     }
 
-    private void errorIf(boolean condition, String message) {
+    protected void errorIf(boolean condition, String message) {
         if (condition) {
             error(message);
         }
@@ -188,6 +193,10 @@ import static org.jetbrains.kotlin.lexer.KtTokens.*;
     protected boolean at(IElementType expectation) {
         if (_at(expectation)) return true;
         IElementType token = tt();
+        return at(token, expectation);
+    }
+
+    protected boolean at(IElementType token, IElementType expectation) {
         if (token == IDENTIFIER && expectation instanceof KtKeywordToken) {
             KtKeywordToken expectedKeyword = (KtKeywordToken) expectation;
             if (expectedKeyword.isSoft() && expectedKeyword.getValue().equals(myBuilder.getTokenText())) {
@@ -207,7 +216,8 @@ import static org.jetbrains.kotlin.lexer.KtTokens.*;
 
     protected boolean at(int k, IElementType expectation) {
         IElementType token = lookahead(k);
-        return tokenMatches(token, expectation);
+        if (tokenMatches(token, expectation)) return true;
+        return at(token, expectation);
     }
 
     protected boolean atSingleUnderscore() {

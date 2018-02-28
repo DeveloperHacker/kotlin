@@ -82,7 +82,6 @@ import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.SimpleType;
 import org.jetbrains.kotlin.types.TypeProjection;
 import org.jetbrains.kotlin.types.TypeUtils;
-import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo;
 import org.jetbrains.kotlin.types.expressions.DoubleColonLHS;
 import org.jetbrains.kotlin.types.typesApproximation.CapturedTypeApproximationKt;
 import org.jetbrains.kotlin.util.OperatorNameConventions;
@@ -94,8 +93,8 @@ import org.jetbrains.org.objectweb.asm.commons.InstructionAdapter;
 import org.jetbrains.org.objectweb.asm.commons.Method;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.jetbrains.kotlin.builtins.KotlinBuiltIns.isInt;
 import static org.jetbrains.kotlin.codegen.AsmUtil.*;
@@ -4420,8 +4419,8 @@ The "returned" value of try expression with no finally is either the last expres
         assert element != null : "element in constraint must be defined" + constraint.getText();
         if (element instanceof KtPatternExpression) {
             return generateMatchPatternExpression(expressionToMatch, (KtPatternExpression) element);
-        } else if (element instanceof KtPatternTypedTuple) {
-            return generateMatchTypedTuple(expressionToMatch, (KtPatternTypedTuple) element);
+        } else if (element instanceof KtPatternTypedDeconstruction) {
+            return generateMatchTypedDeconstruction(expressionToMatch, (KtPatternTypedDeconstruction) element);
         } else if (element instanceof KtPatternTypeReference) {
             return generateMatchTypeReference(expressionToMatch, (KtPatternTypeReference) element);
         }
@@ -4463,58 +4462,101 @@ The "returned" value of try expression with no finally is either the last expres
         return generateIsCheck(expressionToMatch, typeReference, false);
     }
 
+    private static <T> T elvis(@Nullable T t, @NotNull Supplier<T> fun) {
+        return t != null ? t : fun.get();
+    }
+
     @Nullable
     private static <T, R> R let(@Nullable T t, @NotNull Function<T, R> fun) {
         return t == null ? null : fun.fun(t);
     }
 
-    private StackValue generateMatchTypedTuple(StackValue expressionToMatch, KtPatternTypedTuple typedTuple) {
-        KtPatternTuple tuple = typedTuple.getTuple();
-        assert tuple != null : "pattern tuple is null for " + typedTuple.getText();
-        Stream<KtPatternEntry> entries = tuple.getEntries().stream().filter(KtPatternEntry::isNotEmptyDeclaration);
-        KtPatternTypeCallExpression typeCallExpression = typedTuple.getTypeCallExpression();
+    private StackValue generateMatchTypedDeconstruction(StackValue expressionToMatch, KtPatternTypedDeconstruction typedDeconstruction) {
+        KtPatternTypeCallExpression typeCallExpression = typedDeconstruction.getTypeCallExpression();
         KtTypeReference typeReference = let(typeCallExpression, it -> it.getTypeReference(bindingContext));
-        StackValue deconstructStackValue = let(typeCallExpression, it -> generatePatternDeconstructReceiver(expressionToMatch, it));
-        boolean hasDeconstructor = deconstructStackValue != null;
-        StackValue receiverStackValue = hasDeconstructor ? deconstructStackValue : expressionToMatch;
-        Boolean generateNullCheck = bindingContext.get(NEEDED_PATTERN_NULL_CHECK, typeCallExpression);
-        assert generateNullCheck != null : "pattern nullability info is null for " + typedTuple.getText();
+        ResolvedCall<FunctionDescriptor> deconstructCall = bindingContext.get(DECONSTRUCTOR_RESOLVED_CALL, typeCallExpression);
+        boolean hasDeconstructor = deconstructCall != null;
         boolean generateIsCheck = !hasDeconstructor && typeReference != null;
-
-        ReceiverValue receiver = bindingContext.get(PATTERN_COMPONENTS_RECEIVER, typedTuple);
-        assert receiver != null : "receiver is null for " + typedTuple.getText();
-        Type receiverType = receiverStackValue.type;
-        Call receiverCall = makeFakeCall(receiver);
-
-        return new ConstantLocalVariable(myFrameMap, receiverStackValue, receiverType, Type.BOOLEAN_TYPE, loadReceiver -> {
+        boolean generateNullCheck = elvis(bindingContext.get(NEEDED_NULL_CHECK, typeCallExpression), () -> false);
+        KtPatternDeconstruction deconstruction = typedDeconstruction.getDeconstruction();
+        assert deconstruction != null : "pattern deconstruction is null for " + typedDeconstruction.getText();
+        StackValue receiverStackValue = hasDeconstructor ? invokeFunction(deconstructCall, expressionToMatch) : expressionToMatch;
+        boolean generateVariable = generateNullCheck || generateIsCheck;
+        return ConstantLocalVariable.makeIf(generateVariable, myFrameMap, receiverStackValue, receiverStackValue.type, Type.BOOLEAN_TYPE, receiver -> {
             StackValue result = StackValue.constant(true, Type.BOOLEAN_TYPE);
             if (generateNullCheck) {
-                StackValue match = genCmpWithNull(null, KtTokens.EXCLEQ, loadReceiver);
+                StackValue match = genCmpWithNull(null, KtTokens.EXCLEQ, receiver);
                 result = StackValue.and(result, match);
             }
             if (generateIsCheck) {
-                StackValue match = generateMatchTypeReference(loadReceiver, typeReference);
+                StackValue match = generateMatchTypeReference(receiver, typeReference);
                 result = StackValue.and(result, match);
             }
-            for (KtPatternEntry entry : entries.collect(Collectors.toList())) {
+            if (deconstruction instanceof KtPatternTuple) {
+                return StackValue.and(result, generateMatchTuple(receiver, (KtPatternTuple) deconstruction));
+            }
+            else if (deconstruction instanceof KtPatternList) {
+                return StackValue.and(result, generateMatchList(receiver, (KtPatternList) deconstruction));
+            }
+            throw new IllegalArgumentException("unexpected deconstruction type " + typedDeconstruction.getText());
+        });
+    }
+
+    private StackValue generateMatchList(StackValue expressionToMatch, KtPatternList list) {
+        List<KtPatternEntry> entries = list.getEntries();
+        boolean generateVariable = entries.size() > 0;
+        ResolvedCall<FunctionDescriptor> iteratorCall = bindingContext.get(BindingContext.LOOP_RANGE_ITERATOR_RESOLVED_CALL, list);
+        assert iteratorCall != null : "iterator resolved call is null for " + list.getText();
+        ResolvedCall<FunctionDescriptor> nextCall = bindingContext.get(BindingContext.LOOP_RANGE_NEXT_RESOLVED_CALL, list);
+        assert nextCall != null : "next resolved call is null for " + list.getText();
+        ResolvedCall<FunctionDescriptor> hasNextCall = bindingContext.get(BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL, list);
+        assert hasNextCall != null : "hasNext resolved call is null for " + list.getText();
+        StackValue receiverValue = invokeFunction(iteratorCall, expressionToMatch);
+        return ConstantLocalVariable.makeIf(generateVariable, myFrameMap, receiverValue, receiverValue.type, Type.BOOLEAN_TYPE, receiver -> {
+            StackValue result = StackValue.constant(true, Type.BOOLEAN_TYPE);
+            boolean visitAsteriskEntry = false;
+            for (KtPatternEntry entry : entries) {
+                if (entry.isAsterisk()) {
+                    if (visitAsteriskEntry) {
+                        throw new IllegalArgumentException("unexpected more than one asterisk entries " + list.getText());
+                    }
+                    visitAsteriskEntry = true;
+                    StackValue match = generateMatchEntry(receiver, entry);
+                    result = StackValue.and(result, match);
+                } else {
+                    StackValue hasNextCheck = invokeFunction(hasNextCall, receiver);
+                    StackValue nextValue = invokeFunction(nextCall, receiver);
+                    StackValue match = ConstantLocalVariable.make(
+                            myFrameMap,
+                            nextValue,
+                            nextValue.type,
+                            Type.BOOLEAN_TYPE,
+                            it -> generateMatchEntry(it, entry));
+                    result = StackValue.and(result, hasNextCheck, match);
+                }
+            }
+            if (visitAsteriskEntry) {
+                return result;
+            }
+            StackValue hasNextCheck = invokeFunction(hasNextCall, receiver);
+            return StackValue.and(result, StackValue.not(hasNextCheck));
+        });
+    }
+
+    private StackValue generateMatchTuple(StackValue expressionToMatch, KtPatternTuple tuple) {
+        List<KtPatternEntry> entries = tuple.getEntries().stream().filter(KtPatternEntry::isNotEmptyDeclaration).collect(Collectors.toList());
+        boolean generateVariable = entries.size() > 1;
+        return ConstantLocalVariable.makeIf(generateVariable, myFrameMap, expressionToMatch, expressionToMatch.type, Type.BOOLEAN_TYPE, receiver -> {
+            StackValue result = StackValue.constant(true, Type.BOOLEAN_TYPE);
+            for (KtPatternEntry entry : entries) {
                 ResolvedCall<FunctionDescriptor> componentCall = bindingContext.get(PATTERN_COMPONENT_RESOLVED_CALL, entry);
                 assert componentCall != null : "resolved call is null for " + entry.getText();
-                StackValue expressionValue = invokeFunction(receiverCall, componentCall, loadReceiver);
+                StackValue expressionValue = invokeFunction(componentCall, receiver);
                 StackValue match = generateMatchEntry(expressionValue, entry);
                 result = StackValue.and(result, match);
             }
             return result;
         });
-    }
-
-    private StackValue generatePatternDeconstructReceiver(StackValue expressionToMatch, KtPatternTypeCallExpression typeCallExpression) {
-        ResolvedCall<FunctionDescriptor> deconstructCall = bindingContext.get(PATTERN_DECONSTRUCT_RESOLVED_CALL, typeCallExpression);
-        if (deconstructCall == null)  return null;
-        ConditionalTypeInfo receiverTypeInfo = bindingContext.get(BindingContext.PATTERN_ELEMENT_TYPE_INFO, typeCallExpression);
-        assert receiverTypeInfo != null : "element type info is null for " + typeCallExpression.getText();
-        ReceiverValue receiver = new TransientReceiver(receiverTypeInfo.getType());
-        Call call = makeFakeCall(receiver);
-        return invokeFunction(call, deconstructCall, expressionToMatch);
     }
 
     private StackValue generateMatchVariableDeclaration(StackValue expressionToMatch, KtPatternVariableDeclaration declaration) {

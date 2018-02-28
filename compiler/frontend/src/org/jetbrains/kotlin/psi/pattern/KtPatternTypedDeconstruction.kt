@@ -25,24 +25,30 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.expressions.*
 
-class KtPatternTypedTuple(node: ASTNode) : KtPatternElementImpl(node) {
+class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
 
     val typeCallExpression: KtPatternTypeCallExpression?
         get() = findChildByType(KtNodeTypes.PATTERN_TYPE_CALL_EXPRESSION)
 
-    val tuple: KtPatternTuple?
+    private val tuple: KtPatternTuple?
         get() = findChildByType(KtNodeTypes.PATTERN_TUPLE)
+
+    private val list: KtPatternList?
+        get() = findChildByType(KtNodeTypes.PATTERN_LIST)
+
+    val deconstruction: KtPatternDeconstruction?
+        get() = tuple ?: list
 
     private fun getCallExpression(context: BindingContext) = typeCallExpression?.getCallExpression(context)
 
     fun onlyTypeRestrictions(context: BindingContext): Boolean =
-        getCallExpression(context) == null && tuple?.entries?.all { it.onlyTypeRestrictions(context) } ?: true
+        getCallExpression(context) == null && deconstruction?.entries?.all { it.onlyTypeRestrictions(context) } ?: true
 
     fun isSimple(context: BindingContext): Boolean =
-        getCallExpression(context) == null && tuple?.entries?.all { it.isSimple(context) && it.getTypeReference(context) == null } ?: true
+        getCallExpression(context) == null && deconstruction?.entries?.all { it.isSimple(context) && it.getTypeReference(context) == null } ?: true
 
     fun isRestrictionsFree(context: BindingContext): Boolean =
-        typeCallExpression == null && tuple?.entries?.all { it.isRestrictionsFree(context) } ?: true
+        typeCallExpression == null && deconstruction?.entries?.all { it.isRestrictionsFree(context) } ?: true
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternTypedTuple(this, data)
 
@@ -50,15 +56,14 @@ class KtPatternTypedTuple(node: ASTNode) : KtPatternElementImpl(node) {
         val typeCallExpression = typeCallExpression
         val emptyInfo = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
         val info = typeCallExpression?.getTypeInfo(resolver, state.setIsTuple()) ?: emptyInfo
-        val isCallExpression = typeCallExpression?.isCallExpression(state.context.trace.bindingContext) ?: false
+        val isCallExpression = getCallExpression(state.context.trace.bindingContext) != null
         val receiverValue = TransientReceiver(info.type)
         val dataFlowValue = DataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
         val subject = Subject(this, receiverValue, dataFlowValue)
-        val componentsState = (if (isCallExpression) state.replaceSubject(subject) else state).replaceDataFlow(info.thenInfo)
-        componentsState.context.trace.record(BindingContext.PATTERN_COMPONENTS_RECEIVER, this, componentsState.subject.receiverValue)
+        val deconstructionState = (if (isCallExpression) state.replaceSubject(subject) else state).replaceDataFlow(info.thenInfo)
         val error = Errors.EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE
-        val patch = ConditionalTypeInfo.empty(componentsState.subject.type, componentsState.dataFlowInfo)
-        val tupleInfo = tuple?.getTypeInfo(resolver, componentsState).errorAndReplaceIfNull(this, componentsState, error, patch)
-        info.and(tupleInfo)
+        val patch = ConditionalTypeInfo.empty(deconstructionState.subject.type, deconstructionState.dataFlowInfo)
+        val deconstructionInfo = deconstruction?.getTypeInfo(resolver, deconstructionState).errorAndReplaceIfNull(this, deconstructionState, error, patch)
+        info.and(deconstructionInfo)
     }
 }

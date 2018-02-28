@@ -19,7 +19,6 @@ package org.jetbrains.kotlin.psi.pattern
 import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
@@ -44,20 +43,23 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     private val constraintTypeReference: KtPatternTypeReference?
         get() = constraint?.typeReference
 
-    private val typedTuple: KtPatternTypedTuple?
-        get() = constraint?.typedTuple
+    private val typedDeconstruction: KtPatternTypedDeconstruction?
+        get() = constraint?.typedDeconstruction
 
-    fun getTypeReference(context: BindingContext): KtTypeReference? =
-        constraintTypeReference?.typeReference ?: typedTuple?.typeCallExpression?.getTypeReference(context)
+    val isAsterisk: Boolean
+        get() = declaration?.isAsterisk ?: simpleConstraint?.isAsterisk ?: false
+
+    fun getTypeReference(context: BindingContext) =
+        constraintTypeReference?.typeReference ?: typedDeconstruction?.typeCallExpression?.getTypeReference(context)
 
     fun onlyTypeRestrictions(context: BindingContext): Boolean =
-        expression == null && typedTuple?.onlyTypeRestrictions(context) ?: true
+        expression == null && typedDeconstruction?.onlyTypeRestrictions(context) ?: true
 
     fun isSimple(context: BindingContext): Boolean =
-        expression == null && typedTuple?.isSimple(context) ?: true
+        expression == null && typedDeconstruction?.isSimple(context) ?: true
 
     fun isRestrictionsFree(context: BindingContext): Boolean =
-        expression == null && constraintTypeReference == null && typedTuple?.isRestrictionsFree(context) ?: true
+        expression == null && constraintTypeReference == null && typedDeconstruction?.isRestrictionsFree(context) ?: true
 
     private val isEmptyDeclaration: Boolean
         get() = declaration?.isEmpty ?: false

@@ -219,12 +219,9 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('B')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('B')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
@@ -281,12 +278,9 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('A')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('A')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
@@ -343,12 +337,9 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('Pair')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
@@ -393,12 +384,9 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('Pair')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
@@ -457,22 +445,16 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('List')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('List')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
+                          PATTERN_DECONSTRUCTION
                             PATTERN_TYPE_CALL_EXPRESSION
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('Int')
+                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                             PATTERN_TUPLE
                               PsiElement(LPAR)('(')
                               PsiElement(RPAR)(')')
@@ -480,12 +462,9 @@ KtFile: PatternMatching.kt
                       PsiWhiteSpace(' ')
                       PATTERN_ENTRY
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
+                          PATTERN_DECONSTRUCTION
                             PATTERN_TYPE_CALL_EXPRESSION
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('Int')
+                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                             PATTERN_TUPLE
                               PsiElement(LPAR)('(')
                               PsiElement(RPAR)(')')
@@ -518,12 +497,9 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('Pair')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
@@ -609,12 +585,9 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('Pair')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
@@ -666,22 +639,16 @@ KtFile: PatternMatching.kt
                 PsiElement(EQ)('=')
                 PsiWhiteSpace(' ')
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TYPE_CALL_EXPRESSION
-                      TYPE_REFERENCE
-                        USER_TYPE
-                          REFERENCE_EXPRESSION
-                            PsiElement(IDENTIFIER)('Pair')
+                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
+                          PATTERN_DECONSTRUCTION
                             PATTERN_TYPE_CALL_EXPRESSION
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('Int')
+                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                             PATTERN_TUPLE
                               PsiElement(LPAR)('(')
                               PsiElement(RPAR)(')')
@@ -689,12 +656,9 @@ KtFile: PatternMatching.kt
                       PsiWhiteSpace(' ')
                       PATTERN_ENTRY
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
+                          PATTERN_DECONSTRUCTION
                             PATTERN_TYPE_CALL_EXPRESSION
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('Pair')
+                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                             PATTERN_TUPLE
                               PsiElement(LPAR)('(')
                               PATTERN_ENTRY
@@ -868,12 +832,9 @@ KtFile: PatternMatching.kt
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
-                PATTERN_TYPED_TUPLE
+                PATTERN_DECONSTRUCTION
                   PATTERN_TYPE_CALL_EXPRESSION
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Pair')
+                    PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                   PATTERN_TUPLE
                     PsiElement(LPAR)('(')
                     PATTERN_ENTRY
@@ -885,12 +846,9 @@ KtFile: PatternMatching.kt
                     PsiWhiteSpace(' ')
                     PATTERN_ENTRY
                       PATTERN_CONSTRAINT
-                        PATTERN_TYPED_TUPLE
+                        PATTERN_DECONSTRUCTION
                           PATTERN_TYPE_CALL_EXPRESSION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Pair')
+                            PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                           PATTERN_TUPLE
                             PsiElement(LPAR)('(')
                             PATTERN_ENTRY
@@ -991,12 +949,9 @@ KtFile: PatternMatching.kt
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
-                PATTERN_TYPED_TUPLE
+                PATTERN_DECONSTRUCTION
                   PATTERN_TYPE_CALL_EXPRESSION
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Pair')
+                    PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                   PATTERN_TUPLE
                     PsiElement(LPAR)('(')
                     PATTERN_ENTRY
@@ -1008,12 +963,9 @@ KtFile: PatternMatching.kt
                         PsiElement(EQ)('=')
                         PsiWhiteSpace(' ')
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
+                          PATTERN_DECONSTRUCTION
                             PATTERN_TYPE_CALL_EXPRESSION
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('Pair')
+                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                             PATTERN_TUPLE
                               PsiElement(LPAR)('(')
                               PATTERN_ENTRY
@@ -1040,12 +992,9 @@ KtFile: PatternMatching.kt
                     PsiWhiteSpace(' ')
                     PATTERN_ENTRY
                       PATTERN_CONSTRAINT
-                        PATTERN_TYPED_TUPLE
+                        PATTERN_DECONSTRUCTION
                           PATTERN_TYPE_CALL_EXPRESSION
-                            TYPE_REFERENCE
-                              USER_TYPE
-                                REFERENCE_EXPRESSION
-                                  PsiElement(IDENTIFIER)('Int')
+                            PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                           PATTERN_TUPLE
                             PsiElement(LPAR)('(')
                             PsiElement(RPAR)(')')
@@ -1260,12 +1209,9 @@ KtFile: PatternMatching.kt
                   PsiElement(EQ)('=')
                   PsiWhiteSpace(' ')
                   PATTERN_CONSTRAINT
-                    PATTERN_TYPED_TUPLE
+                    PATTERN_DECONSTRUCTION
                       PATTERN_TYPE_CALL_EXPRESSION
-                        TYPE_REFERENCE
-                          USER_TYPE
-                            REFERENCE_EXPRESSION
-                              PsiElement(IDENTIFIER)('B')
+                        PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('B')
                       PATTERN_TUPLE
                         PsiElement(LPAR)('(')
                         PATTERN_ENTRY
@@ -1327,12 +1273,9 @@ KtFile: PatternMatching.kt
                   PsiElement(EQ)('=')
                   PsiWhiteSpace(' ')
                   PATTERN_CONSTRAINT
-                    PATTERN_TYPED_TUPLE
+                    PATTERN_DECONSTRUCTION
                       PATTERN_TYPE_CALL_EXPRESSION
-                        TYPE_REFERENCE
-                          USER_TYPE
-                            REFERENCE_EXPRESSION
-                              PsiElement(IDENTIFIER)('A')
+                        PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('A')
                       PATTERN_TUPLE
                         PsiElement(LPAR)('(')
                         PATTERN_ENTRY
@@ -1394,12 +1337,9 @@ KtFile: PatternMatching.kt
                   PsiElement(EQ)('=')
                   PsiWhiteSpace(' ')
                   PATTERN_CONSTRAINT
-                    PATTERN_TYPED_TUPLE
+                    PATTERN_DECONSTRUCTION
                       PATTERN_TYPE_CALL_EXPRESSION
-                        TYPE_REFERENCE
-                          USER_TYPE
-                            REFERENCE_EXPRESSION
-                              PsiElement(IDENTIFIER)('Pair')
+                        PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                       PATTERN_TUPLE
                         PsiElement(LPAR)('(')
                         PATTERN_ENTRY
@@ -1449,12 +1389,9 @@ KtFile: PatternMatching.kt
                   PsiElement(EQ)('=')
                   PsiWhiteSpace(' ')
                   PATTERN_CONSTRAINT
-                    PATTERN_TYPED_TUPLE
+                    PATTERN_DECONSTRUCTION
                       PATTERN_TYPE_CALL_EXPRESSION
-                        TYPE_REFERENCE
-                          USER_TYPE
-                            REFERENCE_EXPRESSION
-                              PsiElement(IDENTIFIER)('Pair')
+                        PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                       PATTERN_TUPLE
                         PsiElement(LPAR)('(')
                         PATTERN_ENTRY
@@ -1518,22 +1455,16 @@ KtFile: PatternMatching.kt
                   PsiElement(EQ)('=')
                   PsiWhiteSpace(' ')
                   PATTERN_CONSTRAINT
-                    PATTERN_TYPED_TUPLE
+                    PATTERN_DECONSTRUCTION
                       PATTERN_TYPE_CALL_EXPRESSION
-                        TYPE_REFERENCE
-                          USER_TYPE
-                            REFERENCE_EXPRESSION
-                              PsiElement(IDENTIFIER)('List')
+                        PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('List')
                       PATTERN_TUPLE
                         PsiElement(LPAR)('(')
                         PATTERN_ENTRY
                           PATTERN_CONSTRAINT
-                            PATTERN_TYPED_TUPLE
+                            PATTERN_DECONSTRUCTION
                               PATTERN_TYPE_CALL_EXPRESSION
-                                TYPE_REFERENCE
-                                  USER_TYPE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(IDENTIFIER)('Int')
+                                PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                               PATTERN_TUPLE
                                 PsiElement(LPAR)('(')
                                 PsiElement(RPAR)(')')
@@ -1541,12 +1472,9 @@ KtFile: PatternMatching.kt
                         PsiWhiteSpace(' ')
                         PATTERN_ENTRY
                           PATTERN_CONSTRAINT
-                            PATTERN_TYPED_TUPLE
+                            PATTERN_DECONSTRUCTION
                               PATTERN_TYPE_CALL_EXPRESSION
-                                TYPE_REFERENCE
-                                  USER_TYPE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(IDENTIFIER)('Int')
+                                PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                               PATTERN_TUPLE
                                 PsiElement(LPAR)('(')
                                 PsiElement(RPAR)(')')
@@ -1585,12 +1513,9 @@ KtFile: PatternMatching.kt
                     PsiElement(EQ)('=')
                     PsiWhiteSpace(' ')
                     PATTERN_CONSTRAINT
-                      PATTERN_TYPED_TUPLE
+                      PATTERN_DECONSTRUCTION
                         PATTERN_TYPE_CALL_EXPRESSION
-                          TYPE_REFERENCE
-                            USER_TYPE
-                              REFERENCE_EXPRESSION
-                                PsiElement(IDENTIFIER)('Pair')
+                          PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                         PATTERN_TUPLE
                           PsiElement(LPAR)('(')
                           PATTERN_ENTRY
@@ -1681,12 +1606,9 @@ KtFile: PatternMatching.kt
                   PsiElement(EQ)('=')
                   PsiWhiteSpace(' ')
                   PATTERN_CONSTRAINT
-                    PATTERN_TYPED_TUPLE
+                    PATTERN_DECONSTRUCTION
                       PATTERN_TYPE_CALL_EXPRESSION
-                        TYPE_REFERENCE
-                          USER_TYPE
-                            REFERENCE_EXPRESSION
-                              PsiElement(IDENTIFIER)('Pair')
+                        PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                       PATTERN_TUPLE
                         PsiElement(LPAR)('(')
                         PATTERN_ENTRY
@@ -1743,22 +1665,16 @@ KtFile: PatternMatching.kt
                   PsiElement(EQ)('=')
                   PsiWhiteSpace(' ')
                   PATTERN_CONSTRAINT
-                    PATTERN_TYPED_TUPLE
+                    PATTERN_DECONSTRUCTION
                       PATTERN_TYPE_CALL_EXPRESSION
-                        TYPE_REFERENCE
-                          USER_TYPE
-                            REFERENCE_EXPRESSION
-                              PsiElement(IDENTIFIER)('Pair')
+                        PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                       PATTERN_TUPLE
                         PsiElement(LPAR)('(')
                         PATTERN_ENTRY
                           PATTERN_CONSTRAINT
-                            PATTERN_TYPED_TUPLE
+                            PATTERN_DECONSTRUCTION
                               PATTERN_TYPE_CALL_EXPRESSION
-                                TYPE_REFERENCE
-                                  USER_TYPE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(IDENTIFIER)('Int')
+                                PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                               PATTERN_TUPLE
                                 PsiElement(LPAR)('(')
                                 PsiElement(RPAR)(')')
@@ -1766,12 +1682,9 @@ KtFile: PatternMatching.kt
                         PsiWhiteSpace(' ')
                         PATTERN_ENTRY
                           PATTERN_CONSTRAINT
-                            PATTERN_TYPED_TUPLE
+                            PATTERN_DECONSTRUCTION
                               PATTERN_TYPE_CALL_EXPRESSION
-                                TYPE_REFERENCE
-                                  USER_TYPE
-                                    REFERENCE_EXPRESSION
-                                      PsiElement(IDENTIFIER)('Pair')
+                                PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                               PATTERN_TUPLE
                                 PsiElement(LPAR)('(')
                                 PATTERN_ENTRY
@@ -1991,12 +1904,9 @@ KtFile: PatternMatching.kt
                     PsiElement(EQ)('=')
                     PsiWhiteSpace(' ')
                     PATTERN_CONSTRAINT
-                      PATTERN_TYPED_TUPLE
+                      PATTERN_DECONSTRUCTION
                         PATTERN_TYPE_CALL_EXPRESSION
-                          TYPE_REFERENCE
-                            USER_TYPE
-                              REFERENCE_EXPRESSION
-                                PsiElement(IDENTIFIER)('B')
+                          PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('B')
                         PATTERN_TUPLE
                           PsiElement(LPAR)('(')
                           PATTERN_ENTRY
@@ -2064,12 +1974,9 @@ KtFile: PatternMatching.kt
                         PsiElement(EQ)('=')
                         PsiWhiteSpace(' ')
                         PATTERN_CONSTRAINT
-                          PATTERN_TYPED_TUPLE
+                          PATTERN_DECONSTRUCTION
                             PATTERN_TYPE_CALL_EXPRESSION
-                              TYPE_REFERENCE
-                                USER_TYPE
-                                  REFERENCE_EXPRESSION
-                                    PsiElement(IDENTIFIER)('A')
+                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('A')
                             PATTERN_TUPLE
                               PsiElement(LPAR)('(')
                               PATTERN_ENTRY
@@ -2137,12 +2044,9 @@ KtFile: PatternMatching.kt
                             PsiElement(EQ)('=')
                             PsiWhiteSpace(' ')
                             PATTERN_CONSTRAINT
-                              PATTERN_TYPED_TUPLE
+                              PATTERN_DECONSTRUCTION
                                 PATTERN_TYPE_CALL_EXPRESSION
-                                  TYPE_REFERENCE
-                                    USER_TYPE
-                                      REFERENCE_EXPRESSION
-                                        PsiElement(IDENTIFIER)('Pair')
+                                  PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                                 PATTERN_TUPLE
                                   PsiElement(LPAR)('(')
                                   PATTERN_ENTRY
@@ -2198,12 +2102,9 @@ KtFile: PatternMatching.kt
                                 PsiElement(EQ)('=')
                                 PsiWhiteSpace(' ')
                                 PATTERN_CONSTRAINT
-                                  PATTERN_TYPED_TUPLE
+                                  PATTERN_DECONSTRUCTION
                                     PATTERN_TYPE_CALL_EXPRESSION
-                                      TYPE_REFERENCE
-                                        USER_TYPE
-                                          REFERENCE_EXPRESSION
-                                            PsiElement(IDENTIFIER)('Pair')
+                                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                                     PATTERN_TUPLE
                                       PsiElement(LPAR)('(')
                                       PATTERN_ENTRY
@@ -2273,22 +2174,16 @@ KtFile: PatternMatching.kt
                                     PsiElement(EQ)('=')
                                     PsiWhiteSpace(' ')
                                     PATTERN_CONSTRAINT
-                                      PATTERN_TYPED_TUPLE
+                                      PATTERN_DECONSTRUCTION
                                         PATTERN_TYPE_CALL_EXPRESSION
-                                          TYPE_REFERENCE
-                                            USER_TYPE
-                                              REFERENCE_EXPRESSION
-                                                PsiElement(IDENTIFIER)('List')
+                                          PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('List')
                                         PATTERN_TUPLE
                                           PsiElement(LPAR)('(')
                                           PATTERN_ENTRY
                                             PATTERN_CONSTRAINT
-                                              PATTERN_TYPED_TUPLE
+                                              PATTERN_DECONSTRUCTION
                                                 PATTERN_TYPE_CALL_EXPRESSION
-                                                  TYPE_REFERENCE
-                                                    USER_TYPE
-                                                      REFERENCE_EXPRESSION
-                                                        PsiElement(IDENTIFIER)('Int')
+                                                  PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                                                 PATTERN_TUPLE
                                                   PsiElement(LPAR)('(')
                                                   PsiElement(RPAR)(')')
@@ -2296,12 +2191,9 @@ KtFile: PatternMatching.kt
                                           PsiWhiteSpace(' ')
                                           PATTERN_ENTRY
                                             PATTERN_CONSTRAINT
-                                              PATTERN_TYPED_TUPLE
+                                              PATTERN_DECONSTRUCTION
                                                 PATTERN_TYPE_CALL_EXPRESSION
-                                                  TYPE_REFERENCE
-                                                    USER_TYPE
-                                                      REFERENCE_EXPRESSION
-                                                        PsiElement(IDENTIFIER)('Int')
+                                                  PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                                                 PATTERN_TUPLE
                                                   PsiElement(LPAR)('(')
                                                   PsiElement(RPAR)(')')
@@ -2346,12 +2238,9 @@ KtFile: PatternMatching.kt
                                           PsiElement(EQ)('=')
                                           PsiWhiteSpace(' ')
                                           PATTERN_CONSTRAINT
-                                            PATTERN_TYPED_TUPLE
+                                            PATTERN_DECONSTRUCTION
                                               PATTERN_TYPE_CALL_EXPRESSION
-                                                TYPE_REFERENCE
-                                                  USER_TYPE
-                                                    REFERENCE_EXPRESSION
-                                                      PsiElement(IDENTIFIER)('Pair')
+                                                PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                                               PATTERN_TUPLE
                                                 PsiElement(LPAR)('(')
                                                 PATTERN_ENTRY
@@ -2448,12 +2337,9 @@ KtFile: PatternMatching.kt
                                             PsiElement(EQ)('=')
                                             PsiWhiteSpace(' ')
                                             PATTERN_CONSTRAINT
-                                              PATTERN_TYPED_TUPLE
+                                              PATTERN_DECONSTRUCTION
                                                 PATTERN_TYPE_CALL_EXPRESSION
-                                                  TYPE_REFERENCE
-                                                    USER_TYPE
-                                                      REFERENCE_EXPRESSION
-                                                        PsiElement(IDENTIFIER)('Pair')
+                                                  PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                                                 PATTERN_TUPLE
                                                   PsiElement(LPAR)('(')
                                                   PATTERN_ENTRY
@@ -2516,22 +2402,16 @@ KtFile: PatternMatching.kt
                                                 PsiElement(EQ)('=')
                                                 PsiWhiteSpace(' ')
                                                 PATTERN_CONSTRAINT
-                                                  PATTERN_TYPED_TUPLE
+                                                  PATTERN_DECONSTRUCTION
                                                     PATTERN_TYPE_CALL_EXPRESSION
-                                                      TYPE_REFERENCE
-                                                        USER_TYPE
-                                                          REFERENCE_EXPRESSION
-                                                            PsiElement(IDENTIFIER)('Pair')
+                                                      PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                                                     PATTERN_TUPLE
                                                       PsiElement(LPAR)('(')
                                                       PATTERN_ENTRY
                                                         PATTERN_CONSTRAINT
-                                                          PATTERN_TYPED_TUPLE
+                                                          PATTERN_DECONSTRUCTION
                                                             PATTERN_TYPE_CALL_EXPRESSION
-                                                              TYPE_REFERENCE
-                                                                USER_TYPE
-                                                                  REFERENCE_EXPRESSION
-                                                                    PsiElement(IDENTIFIER)('Int')
+                                                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Int')
                                                             PATTERN_TUPLE
                                                               PsiElement(LPAR)('(')
                                                               PsiElement(RPAR)(')')
@@ -2539,12 +2419,9 @@ KtFile: PatternMatching.kt
                                                       PsiWhiteSpace(' ')
                                                       PATTERN_ENTRY
                                                         PATTERN_CONSTRAINT
-                                                          PATTERN_TYPED_TUPLE
+                                                          PATTERN_DECONSTRUCTION
                                                             PATTERN_TYPE_CALL_EXPRESSION
-                                                              TYPE_REFERENCE
-                                                                USER_TYPE
-                                                                  REFERENCE_EXPRESSION
-                                                                    PsiElement(IDENTIFIER)('Pair')
+                                                              PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                                                             PATTERN_TUPLE
                                                               PsiElement(LPAR)('(')
                                                               PATTERN_ENTRY
@@ -3071,7 +2948,7 @@ KtFile: PatternMatching.kt
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
-                PATTERN_TYPED_TUPLE
+                PATTERN_DECONSTRUCTION
                   PATTERN_TUPLE
                     PsiElement(LPAR)('(')
                     PATTERN_ENTRY
@@ -3287,7 +3164,7 @@ KtFile: PatternMatching.kt
             PATTERN
               PATTERN_ENTRY
                 PATTERN_CONSTRAINT
-                  PATTERN_TYPED_TUPLE
+                  PATTERN_DECONSTRUCTION
                     PATTERN_TUPLE
                       PsiElement(LPAR)('(')
                       PATTERN_ENTRY
@@ -3450,12 +3327,9 @@ KtFile: PatternMatching.kt
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
-                PATTERN_TYPED_TUPLE
+                PATTERN_DECONSTRUCTION
                   PATTERN_TYPE_CALL_EXPRESSION
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Pair')
+                    PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                   PATTERN_TUPLE
                     PsiElement(LPAR)('(')
                     PATTERN_ENTRY
@@ -3479,12 +3353,9 @@ KtFile: PatternMatching.kt
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
-                PATTERN_TYPED_TUPLE
+                PATTERN_DECONSTRUCTION
                   PATTERN_TYPE_CALL_EXPRESSION
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Pair')
+                    PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                   PATTERN_TUPLE
                     PsiElement(LPAR)('(')
                     PATTERN_ENTRY
@@ -3516,12 +3387,9 @@ KtFile: PatternMatching.kt
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
-                PATTERN_TYPED_TUPLE
+                PATTERN_DECONSTRUCTION
                   PATTERN_TYPE_CALL_EXPRESSION
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Pair')
+                    PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                   PATTERN_TUPLE
                     PsiElement(LPAR)('(')
                     PATTERN_ENTRY
@@ -3573,12 +3441,9 @@ KtFile: PatternMatching.kt
           PATTERN
             PATTERN_ENTRY
               PATTERN_CONSTRAINT
-                PATTERN_TYPED_TUPLE
+                PATTERN_DECONSTRUCTION
                   PATTERN_TYPE_CALL_EXPRESSION
-                    TYPE_REFERENCE
-                      USER_TYPE
-                        REFERENCE_EXPRESSION
-                          PsiElement(IDENTIFIER)('Pair')
+                    PsiElement(PATTERN_TYPE_CALL_EXPRESSION)('Pair')
                   PATTERN_TUPLE
                     PsiElement(LPAR)('(')
                     PATTERN_ENTRY

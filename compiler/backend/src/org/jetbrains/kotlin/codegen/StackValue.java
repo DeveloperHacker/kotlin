@@ -270,6 +270,14 @@ public abstract class StackValue {
         return new And(left, right);
     }
 
+    public static StackValue and(@NotNull StackValue left, @NotNull StackValue... other) {
+        StackValue result = left;
+        for (StackValue right : other) {
+            result = and(result, right);
+        }
+        return result;
+    }
+
     public static StackValue compareIntWithZero(@NotNull StackValue argument, int operation) {
         return new BranchedValue(argument, null, Type.INT_TYPE, operation);
     }

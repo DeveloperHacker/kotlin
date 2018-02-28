@@ -162,8 +162,9 @@ public interface KtNodeTypes {
     KtNodeType PATTERN_ENTRY= new KtNodeType("PATTERN_ENTRY", KtPatternEntry.class);
     KtNodeType PATTERN_VARIABLE_DECLARATION = new KtNodeType("PATTERN_VARIABLE_DECLARATION", KtPatternVariableDeclaration.class);
     KtNodeType PATTERN_CONSTRAINT = new KtNodeType("PATTERN_CONSTRAINT", KtPatternConstraint.class);
-    KtNodeType PATTERN_TYPED_TUPLE = new KtNodeType("PATTERN_TYPED_TUPLE", KtPatternTypedTuple.class);
+    KtNodeType PATTERN_DECONSTRUCTION = new KtNodeType("PATTERN_DECONSTRUCTION", KtPatternTypedDeconstruction.class);
     KtNodeType PATTERN_TUPLE = new KtNodeType("PATTERN_TUPLE", KtPatternTuple.class);
+    KtNodeType PATTERN_LIST = new KtNodeType("PATTERN_LIST", KtPatternList.class);
     KtNodeType PATTERN_GUARD = new KtNodeType("PATTERN_GUARD", KtPatternGuard.class);
 
     KtNodeType COLLECTION_LITERAL_EXPRESSION = new KtNodeType("COLLECTION_LITERAL_EXPRESSION", KtCollectionLiteralExpression.class);
