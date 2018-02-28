@@ -155,6 +155,10 @@ public class KtVisitor<R, D> extends PsiElementVisitor {
         return visitPatternElement(node, data);
     }
 
+    public R visitPatternList(@NotNull KtPatternList node, D data) {
+        return visitPatternElement(node, data);
+    }
+
     public R visitPatternTypeReference(@NotNull KtPatternTypeReference node, D data) {
         return visitPatternElement(node, data);
     }
@@ -167,7 +171,7 @@ public class KtVisitor<R, D> extends PsiElementVisitor {
         return visitPatternElement(node, data);
     }
 
-    public R visitPatternTypedTuple(@NotNull KtPatternTypedTuple node, D data) {
+    public R visitPatternTypedTuple(@NotNull KtPatternTypedDeconstruction node, D data) {
         return visitPatternElement(node, data);
     }
 

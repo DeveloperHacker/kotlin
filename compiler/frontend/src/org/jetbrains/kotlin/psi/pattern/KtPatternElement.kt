@@ -22,6 +22,5 @@ import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
 
 interface KtPatternElement : KtExpression {
-
     fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState): ConditionalTypeInfo
 }

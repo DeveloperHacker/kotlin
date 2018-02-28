@@ -98,6 +98,8 @@ public interface Errors {
     DiagnosticFactory1<KtReferenceExpression, KtReferenceExpression> UNRESOLVED_REFERENCE =
             DiagnosticFactory1.create(ERROR, FOR_UNRESOLVED_REFERENCE);
 
+    DiagnosticFactory1<PsiElement, PsiElement> UNRESOLVED_PATTERN_TYPE_CALL_EXPRESSION = DiagnosticFactory1.create(ERROR);
+
     DiagnosticFactory2<PsiElement, DeclarationDescriptor, String> DEPRECATION = DiagnosticFactory2.create(WARNING);
     DiagnosticFactory2<PsiElement, DeclarationDescriptor, String> DEPRECATION_ERROR = DiagnosticFactory2.create(ERROR);
     DiagnosticFactory3<PsiElement, TypeAliasDescriptor, DeclarationDescriptor, String> TYPEALIAS_EXPANSION_DEPRECATION = DiagnosticFactory3.create(WARNING);
@@ -903,10 +905,10 @@ public interface Errors {
     DiagnosticFactory0<KtPattern> EXPECTED_PATTERN_ENTRY = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternConstraint> EXPECTED_PATTERN_CONSTRAINT_ELEMENT = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternEntry> EXPECTED_PATTERN_ENTRY_ELEMENT = DiagnosticFactory0.create(ERROR);
-    DiagnosticFactory0<KtPatternTypedTuple> EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE = DiagnosticFactory0.create(ERROR);
+    DiagnosticFactory0<KtPatternTypedDeconstruction> EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternExpression> EXPECTED_PATTERN_EXPRESSION_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternTypeReference> EXPECTED_PATTERN_TYPE_REFERENCE_INSTANCE = DiagnosticFactory0.create(ERROR);
-    DiagnosticFactory0<KtPatternTypeCallExpression> EXPECTED_TYPE_REFERENCE_INSTANCE = DiagnosticFactory0.create(ERROR);
+    DiagnosticFactory0<KtPatternTypeCallExpression> EXPECTED_TYPE_CALL_EXPRESSION_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory1<KtElement, KtElement> NOT_ALLOW_PROPERTY_DEFINITION = DiagnosticFactory1.create(ERROR);
 
 

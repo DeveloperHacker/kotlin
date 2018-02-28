@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.psi.pattern
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -20,39 +21,42 @@ import org.jetbrains.kotlin.types.expressions.errorAndReplaceIfNull
 
 class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node) {
 
-    // To workaround abstract PSI getter test touching us
-    @get:JvmName("asCallExpression")
-    val asCallExpression: KtCallExpression?
-        get() = callExpression
-
-    private val typeReference: KtTypeReference?
-        get() = findChildByType(KtNodeTypes.TYPE_REFERENCE)
-
-    private val callExpression: KtCallExpression?
-        get() = run {
-            val isNotPossibleCallExpression = typeReference?.isMarkedNullable ?: return null
-            if (isNotPossibleCallExpression) return null
-            val psiFactory = KtPsiFactory(project, markGenerated = false)
-            psiFactory.createExpression(text + "()") as? KtCallExpression
+    private fun <T> createOrNull(text: String?, creator: KtPsiFactory.(String) -> T) =
+        try {
+            text?.let { KtPsiFactory(project).creator(it) }
+        } catch (ex: Exception) {
+            null
+        } catch (ex: AssertionError) {
+            null
         }
 
-    fun isTypeReference(context: BindingContext) = !(context.get(BindingContext.IS_PATTERN_CALL_EXPRESSION, this) ?: false)
+    private fun resolvePsiElement(element: PsiElement, state: PatternResolveState) {
+        state.context.trace.record(BindingContext.RESOLVED_PSI_ELEMENT, this, element)
+//        add(element)
+    }
 
-    fun isCallExpression(context: BindingContext) = context.get(BindingContext.IS_PATTERN_CALL_EXPRESSION, this) ?: false
+    fun getTypeReference(context: BindingContext) = context.get(BindingContext.RESOLVED_PSI_ELEMENT, this) as? KtTypeReference
 
-    fun getTypeReference(context: BindingContext) = if (isTypeReference(context)) typeReference else null
-
-    fun getCallExpression(context: BindingContext) = if (isCallExpression(context)) callExpression else null
+    fun getCallExpression(context: BindingContext) = context.get(BindingContext.RESOLVED_PSI_ELEMENT, this) as? KtCallExpression
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternTypeCallExpression(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
-        val error = Errors.EXPECTED_TYPE_REFERENCE_INSTANCE
+        val error = Errors.EXPECTED_TYPE_CALL_EXPRESSION_INSTANCE
         val patch = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
-        val info = resolver.getDeconstructType(this, state)?.let {
-            ConditionalTypeInfo.empty(it, state.dataFlowInfo)
-        } ?: getTypeReference(state.context.trace.bindingContext)?.let {
-            resolver.getTypeInfo(it, state)
+        val instance = findChildByType<PsiElement?>(KtNodeTypes.PATTERN_TYPE_CALL_EXPRESSION)
+        val callExpression = createOrNull(instance?.text) { createExpression("$it()") as? KtCallExpression }
+        val typeReference = createOrNull(instance?.text) { createType(it) }
+        val callInfo = callExpression
+            ?.let { resolver.getDeconstructType(this, it, state) }
+            ?.let { ConditionalTypeInfo.empty(it, state.dataFlowInfo) }
+            ?.also { resolvePsiElement(callExpression, state) }
+        val info = callInfo ?: typeReference
+            ?.let { resolver.getTypeInfo(it, state) }
+            ?.also { resolvePsiElement(typeReference, state) }
+        info ?: instance?.let {
+            state.context.trace.report(Errors.UNRESOLVED_PATTERN_TYPE_CALL_EXPRESSION.on(this, it))
+            resolvePsiElement(it, state)
         }
         info.errorAndReplaceIfNull(this, state, error, patch)
     }

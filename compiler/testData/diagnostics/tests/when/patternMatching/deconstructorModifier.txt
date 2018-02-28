@@ -1,0 +1,31 @@
+package
+
+public fun foo1(/*0*/ a: kotlin.Any?): kotlin.Int
+public fun foo2(/*0*/ a: A<*>): kotlin.Int
+public fun kotlin.Any?.AOfFloat(): A<kotlin.Float>?
+public fun kotlin.Any?.AOfInt(): A<kotlin.Int>?
+public fun kotlin.Any?.PairOfFloat(): Pair<kotlin.Float, kotlin.Float>?
+public fun kotlin.Any?.PairOfInt(): Pair<kotlin.Int, kotlin.Int>?
+
+public final class A</*0*/ T> {
+    public constructor A</*0*/ T>(/*0*/ value: T)
+    public final val value: T
+    public final fun AOfFloat(): A<kotlin.Float>?
+    public final fun AOfInt(): A<kotlin.Int>?
+    public final operator fun component1(): T
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+public final data class Pair</*0*/ F, /*1*/ S> {
+    public constructor Pair</*0*/ F, /*1*/ S>(/*0*/ first: F, /*1*/ second: S)
+    public final val first: F
+    public final val second: S
+    public final operator /*synthesized*/ fun component1(): F
+    public final operator /*synthesized*/ fun component2(): S
+    public final /*synthesized*/ fun copy(/*0*/ first: F = ..., /*1*/ second: S = ...): Pair<F, S>
+    public open override /*1*/ /*synthesized*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*synthesized*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*synthesized*/ fun toString(): kotlin.String
+}

@@ -200,13 +200,10 @@ class ConstantLocalVariable(
         v.load(storage, variableType)
     }
 
-    private fun execute(v: InstructionAdapter): StackValue {
+    private fun process(v: InstructionAdapter): StackValue {
         val storage = store(v)
         val load = load(storage)
-        val blockValue = block(load)
-        if (blockValue.type != blockType)
-            throw IllegalArgumentException("The claimed type doesn't correspond to the actual type")
-        return blockValue
+        return process(load, blockType, block)
     }
 
     private fun free() {
@@ -214,15 +211,44 @@ class ConstantLocalVariable(
     }
 
     override fun putSelector(type: Type, v: InstructionAdapter) {
-        val blockValue = execute(v)
+        val blockValue = process(v)
         blockValue.put(type, v)
         free()
     }
 
     override fun condJump(jumpLabel: Label, v: InstructionAdapter, jumpIfFalse: Boolean) {
-        val blockValue = execute(v)
+        val blockValue = process(v)
         BranchedValue.condJump(blockValue).condJump(jumpLabel, v, jumpIfFalse)
         free()
+    }
+
+    companion object {
+        private fun process(load: StackValue, blockType: Type, block: (StackValue) -> StackValue): StackValue {
+            val blockValue = block(load)
+            if (blockValue.type != blockType)
+                throw IllegalArgumentException("The claimed type doesn't correspond to the actual type")
+            return blockValue
+        }
+
+        @JvmStatic
+        fun make(
+            frameMap: FrameMap,
+            variableValue: StackValue,
+            variableType: Type,
+            blockType: Type,
+            block: (StackValue) -> StackValue
+        ): ConstantLocalVariable = ConstantLocalVariable(frameMap, variableValue, variableType, blockType, block)
+
+        @JvmStatic
+        fun makeIf(
+            condition: Boolean,
+            frameMap: FrameMap,
+            variableValue: StackValue,
+            variableType: Type,
+            blockType: Type,
+            block: (StackValue) -> StackValue
+        ): StackValue =
+            if (condition) make(frameMap, variableValue, variableType, blockType, block) else process(variableValue, blockType, block)
     }
 }
 

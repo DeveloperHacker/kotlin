@@ -5,12 +5,24 @@
 
 package org.jetbrains.kotlin.parsing
 
+import com.intellij.psi.tree.TokenSet
 import org.jetbrains.kotlin.KtNodeTypes.*
 import org.jetbrains.kotlin.lexer.KtTokens.*
 
 private val GUARD_PREFIX = ANDAND!!
 
-data class ParsingState(val isExpression: Boolean)
+enum class ParsingLocation {
+    TUPLE,
+    LIST
+}
+
+data class ParsingState(val isExpression: Boolean, val location: ParsingLocation, val isAsterisk: Boolean) {
+    val inList get() = location == ParsingLocation.LIST
+    fun goToList() = ParsingState(isExpression, ParsingLocation.LIST, isAsterisk)
+    fun goToTuple() = ParsingState(isExpression, ParsingLocation.TUPLE, isAsterisk)
+    fun replaceAsterisk(isAsterisk: Boolean) = ParsingState(isExpression, location, isAsterisk)
+    fun resetAsterisk() = ParsingState(isExpression, location, false)
+}
 
 class PatternMatchingParsing(
     builder: SemanticWhitespaceAwarePsiBuilder,
@@ -25,9 +37,15 @@ class PatternMatchingParsing(
      * patternEntry
      * : patternVariableDeclaration
      * : patternTypedTuple
-     * : patternTuple
-     * : "is" patternTypeReference
+     * : patternTypedList
      * : patternExpression
+     * ;
+     *
+     * patternAsteriskEntry
+     * : patternVariableDeclaration-asterisk
+     * : "*" patternTypedTuple
+     * : "*" patternTypedList
+     * : "*" patternExpression
      * ;
      *
      * patternVariableDeclaration
@@ -35,20 +53,30 @@ class PatternMatchingParsing(
      * : "val" identifier ("=" patternExpression | patternTypedTuple)?
      * ;
      *
-     * patternExpression
-     * : ("^")? expression)
+     * patternVariableDeclaration-asterisk
+     * : "val" "*" identifier ("is" patternTypeReference)?
+     * : "val" "*" identifier ("=" patternExpression | patternTypedTuple)?
      * ;
      *
-     * patternTypedTuple
-     * : patternTypeReference patternTuple
+     * patternExpression
+     * : ("eq")? expression)
      * ;
      *
      * patternTypeReference
      * : typeRef
      * ;
      *
+     * patternDeconstruction
+     * : patternTypeReference? patternTuple
+     * : patternTypeReference? patternList
+     * ;
+     *
      * patternTuple
      * : "(" patternEntry{","}? ")"
+     * ;
+     *
+     * patternList
+     * : "[" patternEntry{","}? ("," patternAsteriskEntry)? "]"
      * ;
      *
      * patternGuard
@@ -56,7 +84,7 @@ class PatternMatchingParsing(
      * ;
      */
     fun parsePattern(isExpression: Boolean) {
-        val state = ParsingState(isExpression)
+        val state = ParsingState(isExpression, ParsingLocation.TUPLE, false)
         val patternMarker = mark()
         parsePatternEntry(state)
         if (atGuard(state)) {
@@ -77,17 +105,16 @@ class PatternMatchingParsing(
 
     private fun parsePatternVariableDeclaration(state: ParsingState) {
         val patternMarker = mark()
-        if (atSingleUnderscore()) {
-            advance() // IDENTIFIER
-        } else {
+        if (!atSingleUnderscore() && !atAsteriskSingleUnderscore()) {
             expect(VAL_KEYWORD, "expected val keyword in begin of variable declaration")
-            expect(IDENTIFIER, "expected identifier after val keyword")
-            if (at(EQ)) {
-                advance() // EQ
-                parsePatternValueConstraint(state)
-            } else if (at(IS_KEYWORD)) {
-                parsePatternTypeConstraint()
-            }
+        }
+        expectIf(state.isAsterisk, MUL, "expected '*' token in asterisk pattern variable declaration")
+        expect(IDENTIFIER, "expected identifier in variable declaration")
+        if (at(EQ)) {
+            advance() // EQ
+            parsePatternValueConstraint(state.resetAsterisk())
+        } else if (at(IS_KEYWORD)) {
+            parsePatternTypeConstraint()
         }
         patternMarker.done(PATTERN_VARIABLE_DECLARATION)
     }
@@ -101,39 +128,46 @@ class PatternMatchingParsing(
 
     private fun parsePatternValueConstraint(state: ParsingState) {
         val patternMarker = mark()
-        if (atTruePatternExpression()) {
-            parsePatternExpression()
-        } else if (atPatternTypedTuple()) {
-            parsePatternTypedTuple(state)
-        } else {
-            parsePatternExpression()
+        expectIf(state.isAsterisk, MUL, "expected '*' token in asterisk pattern constraint")
+        when {
+            atTruePatternExpression() -> parsePatternExpression()
+            atPatternDeconstruction() -> parsePatternDeconstruction(state)
+            else -> parsePatternExpression()
         }
         patternMarker.done(PATTERN_CONSTRAINT)
     }
 
-    private fun parsePatternTypedTuple(state: ParsingState) {
+    private fun parsePatternDeconstruction(state: ParsingState) {
         val patternMarker = mark()
-        if (!at(LPAR)) {
+        if (!at(LPAR) && !at(LBRACKET)) {
             parsePatternTypeCallExpression()
         }
-        parsePatternTuple(state)
-        patternMarker.done(PATTERN_TYPED_TUPLE)
+        when {
+            at(LPAR) -> parsePatternTuple(state.goToTuple())
+            at(LBRACKET) -> parsePatternTuple(state.goToList())
+            else -> error("expected start token of deconstruction")
+        }
+        patternMarker.done(PATTERN_DECONSTRUCTION)
     }
 
     private fun parsePatternTuple(state: ParsingState) {
-        val tupleMarker = mark()
-        expect(LPAR, "expected '(' in begin of tuple")
-        while (at(COMMA)) errorAndAdvance("expected pattern parameter before ','")
-        while (!at(RPAR)) {
-            parsePatternEntry(state)
-            if (at(COMMA)) {
-                advance() // COMMA
-            } else {
-                break
-            }
+        val (startToken, endToken, nodeType) = when (state.location) {
+            ParsingLocation.TUPLE -> Triple(LPAR, RPAR, PATTERN_TUPLE)
+            ParsingLocation.LIST -> Triple(LBRACKET, RBRACKET, PATTERN_LIST)
         }
-        expect(RPAR, "expected ')' token at end of destructing tuple")
-        tupleMarker.done(PATTERN_TUPLE)
+        val tupleMarker = mark()
+        expect(startToken, "expected '${startToken.value}' token at start of deconstruction")
+        while (at(COMMA)) errorAndAdvance("expected pattern parameter before ','")
+        while (!at(endToken)) {
+            val isAsterisk = at(MUL) || at(VAL_KEYWORD) && at(1, MUL)
+            errorIf(isAsterisk && !state.inList, "asterisk entry supported only in pattern deconstruction list")
+            parsePatternEntry(state.replaceAsterisk(isAsterisk))
+            if (!at(COMMA)) break
+            advance() // COMMA
+            errorIf(isAsterisk, "unexpected pattern entry, after asterisk-entry")
+        }
+        expect(endToken, "expected '${endToken.value}' token at end of deconstruction")
+        tupleMarker.done(nodeType)
     }
 
     private fun parsePatternGuard() {
@@ -151,27 +185,27 @@ class PatternMatchingParsing(
 
     private fun parsePatternTypeCallExpression() {
         val patternMarker = mark()
+        val collapseMarker = mark()
         kotlinParsing.parseSimpleTypeRef()
+        collapseMarker.collapse(PATTERN_TYPE_CALL_EXPRESSION)
         patternMarker.done(PATTERN_TYPE_CALL_EXPRESSION)
     }
 
     private fun parsePatternExpression() {
         val patternMarker = mark()
-        if (atTruePatternExpression()) {
-            if (at(EQ_KEYWORD)) {
-                advance() // EQ_KEYWORD
-            }
+        if (atDistinguishablePatternExpression()) {
+            advance() // EQ_KEYWORD
         }
         kotlinParsing.myExpressionParsing.parseExpression()
         patternMarker.done(PATTERN_EXPRESSION)
     }
 
-    private fun atPatternTypedTuple(): Boolean {
+    private fun atPatternDeconstruction(): Boolean {
         val patternMarker = mark()
-        if (!at(LPAR)) {
+        if (!atSet(TokenSet.create(LPAR, LBRACKET))) {
             parsePatternTypeCallExpression()
         }
-        val existTuple = at(LPAR)
+        val existTuple = atSet(TokenSet.create(LPAR, LBRACKET))
         patternMarker.rollbackTo()
         return existTuple
     }
@@ -180,14 +214,20 @@ class PatternMatchingParsing(
         return !state.isExpression && at(GUARD_PREFIX)
     }
 
-    private fun atPatternVariableDeclaration(): Boolean {
-        return at(VAL_KEYWORD) || atSingleUnderscore()
+    private fun atAsteriskSingleUnderscore(): Boolean {
+        if (!at(MUL)) {
+            return false
+        }
+        val marker = mark()
+        advance() // MUL
+        val isAsteriskUnderscore = atSingleUnderscore()
+        marker.rollbackTo()
+        return isAsteriskUnderscore
     }
 
-    private fun atTruePatternExpression(): Boolean {
-        if (atSet(KotlinExpressionParsing.LITERAL_CONSTANT_FIRST)) {
-            return true
-        }
+    private fun atPatternVariableDeclaration() = at(VAL_KEYWORD) || atSingleUnderscore() || atAsteriskSingleUnderscore()
+
+    private fun atDistinguishablePatternExpression(): Boolean {
         if (!at(EQ_KEYWORD)) {
             return false
         }
@@ -197,6 +237,8 @@ class PatternMatchingParsing(
         marker.rollbackTo()
         return result
     }
+
+    private fun atTruePatternExpression() = atSet(KotlinExpressionParsing.LITERAL_CONSTANT_FIRST) || atDistinguishablePatternExpression()
 
     override fun create(builder: SemanticWhitespaceAwarePsiBuilder) = KotlinParsing.createForTopLevel(builder)!!
 }
