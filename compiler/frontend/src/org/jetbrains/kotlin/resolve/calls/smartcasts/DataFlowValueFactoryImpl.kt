@@ -51,16 +51,16 @@ class DataFlowValueFactoryImpl : DataFlowValueFactory {
         DataFlowValue(IdentifierInfo.Receiver(receiver), receiver.type)
 
 
-    // Property
-    override fun createDataFlowValueForProperty(
-        property: KtProperty,
+    // Declaration
+    override fun createDataFlowValue(
+        variableDeclaration: KtVariableDeclaration,
         variableDescriptor: VariableDescriptor,
         bindingContext: BindingContext,
         usageContainingModule: ModuleDescriptor?
     ): DataFlowValue {
         val identifierInfo = IdentifierInfo.Variable(
             variableDescriptor,
-            variableDescriptor.variableKind(usageContainingModule, bindingContext, property),
+            variableDescriptor.variableKind(usageContainingModule, bindingContext, variableDeclaration),
             bindingContext[BindingContext.BOUND_INITIALIZER_VALUE, variableDescriptor]
         )
         return DataFlowValue(identifierInfo, variableDescriptor.type)

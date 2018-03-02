@@ -4665,7 +4665,7 @@ The "returned" value of try expression with no finally is either the last expres
     }
 
     private StackValue genEqualsForStackValueWithNoExpressionPreferIEEE754Arithmetic(
-            @Nullable KtExpression right,
+            @NotNull KtExpression right,
             @NotNull IElementType opToken,
             @NotNull Type leftType,
             @NotNull Type rightType,
@@ -4677,7 +4677,7 @@ The "returned" value of try expression with no finally is either the last expres
         final KtExpression fakeLeft = null; // is used as we don't actually need left
 
         TypeAndNullability left754Type = new TypeAndNullability(leftType, pregeneratedType.isMarkedNullable());
-        TypeAndNullability right754Type = calcTypeForIEEE754ArithmeticIfNeeded(right);
+        TypeAndNullability right754Type = calcTypeForIeee754ArithmeticIfNeeded(right, bindingContext.getType(right));
 
         if (right754Type != null && left754Type.type.equals(right754Type.type)) {
             // check nullability cause there is some optimizations in codegen for non-nullable case

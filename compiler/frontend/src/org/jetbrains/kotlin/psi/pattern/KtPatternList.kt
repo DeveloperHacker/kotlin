@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.psi.pattern
 import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtVisitor
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
@@ -28,7 +27,7 @@ class KtPatternList(node: ASTNode) : KtPatternElementImpl(node), KtPatternDecons
         val elementsInfo = entries.map {
             val type = if (it.isAsterisk) iteratorType else elementType
             val receiverValue = TransientReceiver(type)
-            val dataFlowValue = DataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
+            val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
             val subject = Subject(it, receiverValue, dataFlowValue)
             it.getTypeInfo(resolver, state.replaceSubject(subject))
         }

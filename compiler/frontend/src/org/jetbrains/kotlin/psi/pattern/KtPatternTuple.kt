@@ -20,7 +20,6 @@ import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
@@ -40,7 +39,7 @@ class KtPatternTuple(node: ASTNode) : KtPatternElementImpl(node), KtPatternDecon
         val componentInfo = entries.mapIndexed { i, entry ->
             val type = resolver.getComponentType(i, entry, state)
             val receiverValue = TransientReceiver(type)
-            val dataFlowValue = DataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
+            val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
             val subject = Subject(entry, receiverValue, dataFlowValue)
             entry.getTypeInfo(resolver, state.replaceSubject(subject))
         }

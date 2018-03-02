@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
 import org.jetbrains.kotlin.types.expressions.*
 
@@ -58,7 +57,7 @@ class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
         val info = typeCallExpression?.getTypeInfo(resolver, state.setIsTuple()) ?: emptyInfo
         val isCallExpression = getCallExpression(state.context.trace.bindingContext) != null
         val receiverValue = TransientReceiver(info.type)
-        val dataFlowValue = DataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
+        val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
         val subject = Subject(this, receiverValue, dataFlowValue)
         val deconstructionState = (if (isCallExpression) state.replaceSubject(subject) else state).replaceDataFlow(info.thenInfo)
         val error = Errors.EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE

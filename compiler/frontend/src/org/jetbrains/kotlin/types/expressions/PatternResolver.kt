@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.types.expressions
 
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1
@@ -69,7 +70,11 @@ class PatternResolver(
     private val components: ExpressionTypingComponents,
     private val facade: ExpressionTypingInternals
 ) {
-    val builtIns = components.builtIns!!
+    val builtIns: KotlinBuiltIns
+        get() = components.builtIns!!
+
+    val dataFlowValueFactory: DataFlowValueFactory
+        get() = facade.components.dataFlowValueFactory!!
 
     companion object {
         fun getComponentName(index: Int) = DataClassDescriptorResolver.createComponentName(index + 1)
@@ -210,9 +215,8 @@ class PatternResolver(
         ExpressionTypingUtils.checkVariableShadowing(scope, trace, descriptor)
         scope.addVariableDescriptor(descriptor)
         val usageModuleDescriptor = DescriptorUtils.getContainingModuleOrNull(scope.ownerDescriptor)
-        val variableDataFlowValue = DataFlowValueFactory.createDataFlowValue(
-            declaration, descriptor, trace.bindingContext, usageModuleDescriptor
-        )
+        val variableDataFlowValue =
+            dataFlowValueFactory.createDataFlowValue(declaration, descriptor, trace.bindingContext, usageModuleDescriptor)
         val subjectDataFlowValue = state.subject.dataFlowValue
         return state.dataFlowInfo.assign(variableDataFlowValue, subjectDataFlowValue, components.languageVersionSettings)
     }
