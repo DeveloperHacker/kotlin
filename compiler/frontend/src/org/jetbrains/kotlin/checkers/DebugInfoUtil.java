@@ -73,7 +73,8 @@ public class DebugInfoUtil {
             @NotNull DebugInfoReporter debugInfoReporter
     ) {
         Map<KtReferenceExpression, DiagnosticFactory<?>> markedWithErrorElements = Maps.newHashMap();
-        for (Diagnostic diagnostic : bindingContext.getDiagnostics()) {
+        for (Diagnostic d : bindingContext.getDiagnostics()) {
+            Diagnostic diagnostic = d.getOriginal();
             DiagnosticFactory<?> factory = diagnostic.getFactory();
             if (Errors.UNRESOLVED_REFERENCE_DIAGNOSTICS.contains(diagnostic.getFactory())) {
                 markedWithErrorElements.put((KtReferenceExpression) diagnostic.getPsiElement(), factory);

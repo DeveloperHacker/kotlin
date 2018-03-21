@@ -1,8 +1,15 @@
 package
 
+public fun bar1(/*0*/ x: kotlin.Any?): kotlin.Int
+public fun bar2(/*0*/ x: Pair<kotlin.Int, kotlin.Int>): kotlin.Int
+public fun bar3(/*0*/ x: Pair<kotlin.Int, kotlin.Int>): kotlin.Int
+public fun bar4(/*0*/ x: kotlin.collections.List<kotlin.Int>): kotlin.Int
+public fun bar5(/*0*/ x: kotlin.collections.List<kotlin.Int>): kotlin.Int
 public fun foo1(/*0*/ x: kotlin.Any?): kotlin.Int
 public fun foo2(/*0*/ x: Pair<kotlin.Int, kotlin.Int>): kotlin.Int
 public fun foo3(/*0*/ x: Pair<kotlin.Int, kotlin.Int>): kotlin.Int
+public fun foo4(/*0*/ x: kotlin.collections.List<kotlin.Int>): kotlin.Int
+public fun foo5(/*0*/ x: kotlin.collections.List<kotlin.Int>): kotlin.Int
 
 public final data class Pair</*0*/ F, /*1*/ S> {
     public constructor Pair</*0*/ F, /*1*/ S>(/*0*/ first: F, /*1*/ second: S)

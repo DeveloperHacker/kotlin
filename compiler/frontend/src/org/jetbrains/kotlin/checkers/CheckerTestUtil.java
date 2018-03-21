@@ -871,7 +871,7 @@ public class CheckerTestUtil {
 
         @NotNull
         public static TextDiagnostic asTextDiagnostic(@NotNull ActualDiagnostic actualDiagnostic) {
-            Diagnostic diagnostic = actualDiagnostic.diagnostic;
+            Diagnostic diagnostic = actualDiagnostic.diagnostic.getOriginal();
             //noinspection TestOnlyProblems
             DiagnosticRenderer renderer = DefaultErrorMessages.getRendererForDiagnostic(diagnostic);
             String diagnosticName = actualDiagnostic.getName();

@@ -41,4 +41,54 @@ public interface Diagnostic {
     PsiFile getPsiFile();
 
     boolean isValid();
+
+    default Diagnostic getOriginal() {
+        return this;
+    }
+
+    @NotNull
+    default Diagnostic transfer(@NotNull PsiElement element, @NotNull List<TextRange> textRanges) {
+        Diagnostic self = this;
+        return new Diagnostic() {
+            @NotNull
+            @Override
+            public DiagnosticFactory<?> getFactory() {
+                return self.getFactory();
+            }
+
+            @NotNull
+            @Override
+            public Severity getSeverity() {
+                return self.getSeverity();
+            }
+
+            @NotNull
+            @Override
+            public PsiElement getPsiElement() {
+                return element;
+            }
+
+            @NotNull
+            @Override
+            public List<TextRange> getTextRanges() {
+                return textRanges;
+            }
+
+            @NotNull
+            @Override
+            public PsiFile getPsiFile() {
+                return element.getContainingFile();
+            }
+
+            @Override
+            public boolean isValid() {
+                return element.isValid();
+            }
+
+            @Override
+            public Diagnostic getOriginal() {
+                return self.getOriginal();
+            }
+        };
+    }
 }

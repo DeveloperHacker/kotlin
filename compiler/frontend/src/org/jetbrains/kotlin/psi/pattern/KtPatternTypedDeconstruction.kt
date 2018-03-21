@@ -41,13 +41,13 @@ class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
     private fun getCallExpression(context: BindingContext) = typeCallExpression?.getCallExpression(context)
 
     fun onlyTypeRestrictions(context: BindingContext): Boolean =
-        getCallExpression(context) == null && deconstruction?.entries?.all { it.onlyTypeRestrictions(context) } ?: true
+        getCallExpression(context) == null && list == null && tuple?.entries?.all { it.onlyTypeRestrictions(context) } ?: true
 
     fun isSimple(context: BindingContext): Boolean =
-        getCallExpression(context) == null && deconstruction?.entries?.all { it.isSimple(context) && it.getTypeReference(context) == null } ?: true
+        getCallExpression(context) == null && list == null && tuple?.entries?.all { it.isSimple(context) && it.getTypeReference(context) == null } ?: true
 
     fun isRestrictionsFree(context: BindingContext): Boolean =
-        typeCallExpression == null && deconstruction?.entries?.all { it.isRestrictionsFree(context) } ?: true
+        typeCallExpression == null && list == null && tuple?.entries?.all { it.isRestrictionsFree(context) } ?: true
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternTypedTuple(this, data)
 

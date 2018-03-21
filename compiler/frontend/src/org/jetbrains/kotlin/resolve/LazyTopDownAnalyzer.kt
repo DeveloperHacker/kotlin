@@ -230,6 +230,11 @@ class LazyTopDownAnalyzer(
             ClassifierUsageCheckerContext(trace, languageVersionSettings, deprecationResolver, moduleDescriptor)
         )
 
+
+        trace.bindingContext.getKeys(BindingContext.POST_PROCESSABLE_ELEMENT).forEach {
+            it.postProcess(trace)
+        }
+
         return c
     }
 
