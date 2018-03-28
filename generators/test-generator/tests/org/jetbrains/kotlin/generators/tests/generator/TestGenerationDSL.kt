@@ -17,10 +17,12 @@
 package org.jetbrains.kotlin.generators.tests.generator
 
 import junit.framework.TestCase
+import org.jetbrains.kotlin.generators.tests.generator.random.RandomKotlinWithPatternMatching
+import org.jetbrains.kotlin.generators.tests.generator.random.RandomParsingTestGenerator
 import org.jetbrains.kotlin.test.TargetBackend
 import java.io.File
 import java.lang.IllegalArgumentException
-import java.util.ArrayList
+import java.util.*
 import java.util.regex.Pattern
 
 class TestGroup(private val testsRoot: String, val testDataRoot: String) {
@@ -76,6 +78,12 @@ class TestGroup(private val testsRoot: String, val testDataRoot: String) {
                                              targetBackend, excludeDirs, skipIgnored)
                     }
             )
+        }
+
+        fun random(relativeRootPath: String) {
+            val rootPath = File("$testDataRoot/$relativeRootPath").path
+            val generator = RandomParsingTestGenerator(rootPath)
+            generator.process(100, RandomKotlinWithPatternMatching())
         }
     }
 }

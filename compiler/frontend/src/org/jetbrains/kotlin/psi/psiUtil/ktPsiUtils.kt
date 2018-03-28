@@ -7,9 +7,9 @@ package org.jetbrains.kotlin.psi.psiUtil
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.tree.IElementType
-import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.psi.KtPsiUtil.findChildByType
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.diagnostics.MutableDiagnosticsWithSuppression
 
 fun PsiElement.debugPrint() {
@@ -26,6 +26,38 @@ fun PsiElement.debugPrint(indentation: Int) {
         println("|".repeat(indentation + 1) + "'$text'")
 }
 
+fun <T : PsiElement> KtPsiFactory.collapseWhiteSpaces(element: T): T {
+    var firstWhiteSpace: PsiWhiteSpace? = null
+    var currentWhiteSpace = StringBuilder()
+    for (child in element.allChildren) {
+        if (child is PsiWhiteSpace) {
+            val isFirst = firstWhiteSpace == null
+            if (isFirst) firstWhiteSpace = child
+            currentWhiteSpace.append(child.text)
+            if (!isFirst) element.remove(child)
+        } else {
+            val text = if (currentWhiteSpace.contains('\n')) "\n" else " "
+            val whiteSpace = createWhiteSpace(text)
+            firstWhiteSpace?.let { element.replace(it, whiteSpace) }
+            firstWhiteSpace = null
+            currentWhiteSpace = StringBuilder()
+            collapseWhiteSpaces(child)
+        }
+    }
+    val text = if (currentWhiteSpace.contains('\n')) "\n" else " "
+    val whiteSpace = createWhiteSpace(text)
+    firstWhiteSpace?.let { element.replace(it, whiteSpace) }
+    return element
+}
+
+fun PsiElement.replace(oldChild: PsiElement, newChild: PsiElement) {
+    node.replaceChild(oldChild.node, newChild.node)
+}
+
+fun PsiElement.remove(child: PsiElement) {
+    node.removeChild(child.node)
+}
+
 fun PsiElement.contains(other: PsiElement): Boolean {
     var node: PsiElement? = other
     while (node != null) {
@@ -35,9 +67,19 @@ fun PsiElement.contains(other: PsiElement): Boolean {
     return false
 }
 
+fun <T> PsiElement.findByClass(elementClass: Class<T>): T? {
+    @Suppress("UNCHECKED_CAST")
+    if (elementClass.isInstance(this)) return this as T
+    for (child in allChildren) {
+        val element = child.findByClass(elementClass)
+        if (element != null) return element
+    }
+    return null
+}
+
 fun PsiElement.elementsIn(range: TextRange): List<PsiElement> {
     if (range.contains(textRange)) return listOf(this)
-    return children.asSequence()
+    return allChildren.asSequence()
         .filterNot { it.textRange.intersects(range) }
         .map { it.elementsIn(range) }
         .flatten()
@@ -58,25 +100,11 @@ fun transferDiagnostics(diagnostics: MutableDiagnosticsWithSuppression, fromTree
 }
 
 inline fun <reified T : PsiElement> PsiElement.getParent(strict: Boolean, predicate: (PsiElement) -> Boolean): T? {
-    var node: PsiElement? = this
-    if (strict) {
-        node = node?.parent
-    }
-    while (node != null && !predicate(node)) {
+    var node: PsiElement? = if (strict) parent else this
+    while (node != null && !predicate(node))
         node = node.parent
-    }
     return node as? T
 }
 
-inline fun <reified T : PsiElement> PsiElement.getParentByType(strict: Boolean, type: IElementType): T? {
-    var node: PsiElement? = this
-    if (strict) {
-        node = node?.parent
-    }
-    while (node != null && node.node.elementType != type) {
-        node = node.parent
-    }
-    return node as? T
-}
-
-fun PsiElement.getInstanceReference() = findChildByType(this, KtNodeTypes.REFERENCE_EXPRESSION)
+inline fun <reified T : PsiElement> PsiElement.getParentByType(strict: Boolean, type: IElementType): T? =
+    getParent(strict) { it.node.elementType == type }
