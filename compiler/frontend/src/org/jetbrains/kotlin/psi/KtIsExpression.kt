@@ -21,6 +21,9 @@ class KtIsExpression(node: ASTNode) : KtExpressionImpl(node), KtOperationExpress
     val typeReference: KtTypeReference?
         get() = findChildByType(KtNodeTypes.TYPE_REFERENCE)
 
+    val isPatternExpression: Boolean
+        get() = pattern != null
+
     val isNegated: Boolean
         get() = operationReference.getReferencedNameElementType() === KtTokens.NOT_IS
 

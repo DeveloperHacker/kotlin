@@ -95,7 +95,6 @@ fun box() : String {
 }
 
 fun matcher(any: Any?, y: Any?) = when(any) {
-    is like eq y -> "is like eq y"
     is String -> "is String"
     !is like Pair(1, _), !is like Pair(_, 2) -> "!is like Pair(1, _), !is like Pair(_, 2)"
     is like Pair(_, eq 2) -> throw java.lang.UnsupportedOperationException("unexpected case")

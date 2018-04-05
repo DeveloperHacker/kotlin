@@ -5,22 +5,23 @@
 
 package org.jetbrains.kotlin.generators.tests.generator.random
 
+import com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.pattern.KtPattern
 import org.jetbrains.kotlin.psi.psiUtil.findByClass
 
 
-class RandomKotlinWithPatternMatching : Generator(RandomKotlin()) {
+class RandomKotlinWithPatternMatching(seed: Long, project: Project) : RandomKotlin(seed, project) {
 
-    private val maxFileRollingSteps = 1000
+    private val maxFileRollingSteps = 100
 
     override fun generate(name: String): KtFile {
         for (i in 1..maxFileRollingSteps) {
-            val file = parent!!.generate(name)
+            val file = super.generate(name)
             val pattern = file.findByClass(KtPattern::class.java)
             if (pattern != null) return file
         }
         System.err.println("e: pattern rolling timeout!!!")
-        return parent!!.generate(name)
+        return super.generate(name)
     }
 }

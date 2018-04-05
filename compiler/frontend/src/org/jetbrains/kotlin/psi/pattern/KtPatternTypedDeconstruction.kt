@@ -29,10 +29,10 @@ class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
     val typeCallExpression: KtPatternTypeCallExpression?
         get() = findChildByType(KtNodeTypes.PATTERN_TYPE_CALL_EXPRESSION)
 
-    private val tuple: KtPatternTuple?
+    val tuple: KtPatternTuple?
         get() = findChildByType(KtNodeTypes.PATTERN_TUPLE)
 
-    private val list: KtPatternList?
+    val list: KtPatternList?
         get() = findChildByType(KtNodeTypes.PATTERN_LIST)
 
     val deconstruction: KtPatternDeconstruction?

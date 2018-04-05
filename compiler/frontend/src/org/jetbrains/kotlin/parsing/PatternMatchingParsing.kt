@@ -16,12 +16,13 @@ enum class ParsingLocation {
     LIST
 }
 
-data class ParsingState(val isExpression: Boolean, val location: ParsingLocation, val isAsterisk: Boolean) {
+data class ParsingState(val isTopLevel: Boolean, val isExpression: Boolean, val location: ParsingLocation, val isAsterisk: Boolean) {
     val inList get() = location == ParsingLocation.LIST
-    fun goToList() = ParsingState(isExpression, ParsingLocation.LIST, isAsterisk)
-    fun goToTuple() = ParsingState(isExpression, ParsingLocation.TUPLE, isAsterisk)
-    fun replaceAsterisk(isAsterisk: Boolean) = ParsingState(isExpression, location, isAsterisk)
-    fun resetAsterisk() = ParsingState(isExpression, location, false)
+    fun stepToDepth() = ParsingState(false, isExpression, location, isAsterisk)
+    fun goToList() = ParsingState(isTopLevel, isExpression, ParsingLocation.LIST, isAsterisk)
+    fun goToTuple() = ParsingState(isTopLevel, isExpression, ParsingLocation.TUPLE, isAsterisk)
+    fun replaceAsterisk(isAsterisk: Boolean) = ParsingState(isTopLevel, isExpression, location, isAsterisk)
+    fun resetAsterisk() = ParsingState(isTopLevel, isExpression, location, false)
 }
 
 class PatternMatchingParsing(
@@ -84,7 +85,7 @@ class PatternMatchingParsing(
      * ;
      */
     fun parsePattern(isExpression: Boolean) {
-        val state = ParsingState(isExpression, ParsingLocation.TUPLE, false)
+        val state = ParsingState(true, isExpression, ParsingLocation.TUPLE, false)
         val patternMarker = mark()
         parsePatternEntry(state)
         if (atGuard(state)) {
@@ -114,6 +115,7 @@ class PatternMatchingParsing(
             advance() // EQ
             parsePatternValueConstraint(state.resetAsterisk())
         } else if (at(IS_KEYWORD)) {
+            advance() // IS
             parsePatternTypeConstraint()
         }
         patternMarker.done(PATTERN_VARIABLE_DECLARATION)
@@ -121,7 +123,6 @@ class PatternMatchingParsing(
 
     private fun parsePatternTypeConstraint() {
         val patternMarker = mark()
-        expect(IS_KEYWORD, "expected is keyword before type reference")
         parsePatternTypeReference()
         patternMarker.done(PATTERN_CONSTRAINT)
     }
@@ -130,27 +131,27 @@ class PatternMatchingParsing(
         val patternMarker = mark()
         expectIf(state.isAsterisk, MUL, "expected '*' token in asterisk pattern constraint")
         when {
-            atTruePatternExpression() -> parsePatternExpression()
-            atPatternDeconstruction() -> parsePatternDeconstruction(state)
-            else -> parsePatternExpression()
+            atTruePatternExpression() -> parsePatternExpression(state)
+            atPatternDeconstruction() -> parsePatternTypedDeconstruction(state)
+            else -> parsePatternExpression(state)
         }
         patternMarker.done(PATTERN_CONSTRAINT)
     }
 
-    private fun parsePatternDeconstruction(state: ParsingState) {
+    private fun parsePatternTypedDeconstruction(state: ParsingState) {
         val patternMarker = mark()
         if (!at(LPAR) && !at(LBRACKET)) {
             parsePatternTypeCallExpression()
         }
         when {
-            at(LPAR) -> parsePatternTuple(state.goToTuple())
-            at(LBRACKET) -> parsePatternTuple(state.goToList())
+            at(LPAR) -> parsePatternDeconstruction(state.goToTuple())
+            at(LBRACKET) -> parsePatternDeconstruction(state.goToList())
             else -> error("expected start token of deconstruction")
         }
         patternMarker.done(PATTERN_DECONSTRUCTION)
     }
 
-    private fun parsePatternTuple(state: ParsingState) {
+    private fun parsePatternDeconstruction(state: ParsingState) {
         val (startToken, endToken, nodeType) = when (state.location) {
             ParsingLocation.TUPLE -> Triple(LPAR, RPAR, PATTERN_TUPLE)
             ParsingLocation.LIST -> Triple(LBRACKET, RBRACKET, PATTERN_LIST)
@@ -161,7 +162,7 @@ class PatternMatchingParsing(
         while (!at(endToken)) {
             val isAsterisk = at(MUL) || at(VAL_KEYWORD) && at(1, MUL)
             errorIf(isAsterisk && !state.inList, "asterisk entry supported only in pattern deconstruction list")
-            parsePatternEntry(state.replaceAsterisk(isAsterisk))
+            parsePatternEntry(state.replaceAsterisk(isAsterisk).stepToDepth())
             if (!at(COMMA)) break
             advance() // COMMA
             errorIf(isAsterisk, "unexpected pattern entry, after asterisk-entry")
@@ -187,12 +188,13 @@ class PatternMatchingParsing(
         val patternMarker = mark()
         val collapseMarker = mark()
         kotlinParsing.parseSimpleTypeRef()
-        collapseMarker.collapse(PATTERN_TYPE_CALL_EXPRESSION)
+        collapseMarker.collapse(PATTERN_TYPE_CALL_INSTANCE)
         patternMarker.done(PATTERN_TYPE_CALL_EXPRESSION)
     }
 
-    private fun parsePatternExpression() {
+    private fun parsePatternExpression(state: ParsingState) {
         val patternMarker = mark()
+        errorIf(state.isTopLevel, "pattern expression not allowed in this position")
         if (atDistinguishablePatternExpression()) {
             advance() // EQ_KEYWORD
         }

@@ -83,7 +83,7 @@ class TestGroup(private val testsRoot: String, val testDataRoot: String) {
         fun random(relativeRootPath: String) {
             val rootPath = File("$testDataRoot/$relativeRootPath").path
             val generator = RandomParsingTestGenerator(rootPath)
-            generator.process(100, RandomKotlinWithPatternMatching())
+            generator.process(100, ::RandomKotlinWithPatternMatching)
         }
     }
 }

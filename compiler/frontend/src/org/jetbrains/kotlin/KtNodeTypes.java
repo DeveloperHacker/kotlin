@@ -158,6 +158,7 @@ public interface KtNodeTypes {
     KtNodeType PATTERN = new KtNodeType("PATTERN", KtPattern.class);
     KtNodeType PATTERN_TYPE_REFERENCE = new KtNodeType("PATTERN_TYPE_REFERENCE", KtPatternTypeReference.class);
     KtNodeType PATTERN_TYPE_CALL_EXPRESSION = new KtNodeType("PATTERN_TYPE_CALL_EXPRESSION", KtPatternTypeCallExpression.class);
+    KtNodeType PATTERN_TYPE_CALL_INSTANCE = new KtNodeType("PATTERN_TYPE_CALL_INSTANCE", KtPatternTypeCallExpression.class);
     KtNodeType PATTERN_EXPRESSION = new KtNodeType("PATTERN_EXPRESSION", KtPatternExpression.class);
     KtNodeType PATTERN_ENTRY= new KtNodeType("PATTERN_ENTRY", KtPatternEntry.class);
     KtNodeType PATTERN_VARIABLE_DECLARATION = new KtNodeType("PATTERN_VARIABLE_DECLARATION", KtPatternVariableDeclaration.class);

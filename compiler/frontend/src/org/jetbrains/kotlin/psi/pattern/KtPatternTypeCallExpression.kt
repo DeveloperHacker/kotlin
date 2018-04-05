@@ -36,8 +36,8 @@ class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node),
         state.context.trace.record(BindingContext.POST_PROCESSABLE_ELEMENT, this)
     }
 
-    private val instance: PsiElement?
-        get() = findChildByType(KtNodeTypes.PATTERN_TYPE_CALL_EXPRESSION)
+    val instance: PsiElement?
+        get() = findChildByType(KtNodeTypes.PATTERN_TYPE_CALL_INSTANCE)
 
     override fun postProcess(trace: BindingTrace) {
         val resolvedElement = trace.get(BindingContext.RESOLVED_PSI_ELEMENT, this) ?: return

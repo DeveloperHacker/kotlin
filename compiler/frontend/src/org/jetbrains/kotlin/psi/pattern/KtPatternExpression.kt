@@ -17,7 +17,9 @@
 package org.jetbrains.kotlin.psi.pattern
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
@@ -29,6 +31,9 @@ class KtPatternExpression(node: ASTNode) : KtPatternElementImpl(node) {
 
     val expression: KtExpression?
         get() = findChildByClass(KtExpression::class.java)
+
+    val eqToken: PsiElement?
+        get() = findChildByType(KtTokens.EQ_KEYWORD)
 
     val isNegated: Boolean
         get() = false

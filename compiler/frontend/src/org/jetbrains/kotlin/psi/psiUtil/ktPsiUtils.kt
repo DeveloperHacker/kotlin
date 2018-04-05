@@ -50,8 +50,19 @@ fun <T : PsiElement> KtPsiFactory.collapseWhiteSpaces(element: T): T {
     return element
 }
 
+inline fun <reified T> PsiElement.mapWhile(map: (T) -> PsiElement): PsiElement {
+    var node = this
+    while (node is T)
+        node = map(node)
+    return node
+}
+
 fun PsiElement.replace(oldChild: PsiElement, newChild: PsiElement) {
     node.replaceChild(oldChild.node, newChild.node)
+}
+
+fun PsiElement.replaceSelf(newSelf: PsiElement) {
+    parent!!.replace(this, newSelf)
 }
 
 fun PsiElement.remove(child: PsiElement) {

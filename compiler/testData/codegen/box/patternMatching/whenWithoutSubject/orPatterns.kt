@@ -3,7 +3,6 @@
 import kotlin.test.assertEquals
 
 fun matcher(any: Any?, y: Any?) = when {
-    any is like eq y -> "is like eq y"
     any is String -> "is String"
     any !is like Pair(1, _) || any !is like Pair(_, 2) -> "!is like Pair(1, _), !is like Pair(_, 2)"
     any is like Pair(1, 2) -> "is like Pair(1, 2)"
@@ -11,7 +10,6 @@ fun matcher(any: Any?, y: Any?) = when {
 }
 
 fun box(): String {
-    assertEquals(matcher("10", "10"), "is like eq y")
     assertEquals(matcher("10", "20"), "is String")
     assertEquals(matcher(1, 4), "!is like Pair(1, _), !is like Pair(_, 2)")
     assertEquals(matcher(1, 2), "!is like Pair(1, _), !is like Pair(_, 2)")

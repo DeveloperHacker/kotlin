@@ -9,6 +9,7 @@ import com.intellij.mock.MockProject
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.extensions.ExtensionPoint
 import com.intellij.openapi.extensions.Extensions
+import com.intellij.openapi.project.Project
 import com.intellij.pom.PomModel
 import com.intellij.pom.PomTransaction
 import com.intellij.pom.core.impl.PomModelImpl
@@ -20,6 +21,9 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.test.KotlinTestUtils
 import java.io.File
 import java.io.PrintWriter
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
 
 class RandomParsingTestGenerator(private val rootPath: String) {
 
@@ -30,7 +34,7 @@ class RandomParsingTestGenerator(private val rootPath: String) {
         printWriter.use { it.write(data) }
     }
 
-    fun process(numSamples: Int, generator: Generator) {
+    fun process(numSamples: Int, createGenerator: (Long, Project) -> Generator) {
         File(rootPath).mkdirs()
         val disposable = object : Disposable {
             override fun dispose() {}
@@ -52,14 +56,21 @@ class RandomParsingTestGenerator(private val rootPath: String) {
             TreeCopyHandler::class.java.canonicalName,
             ExtensionPoint.Kind.INTERFACE
         )
-        generator.setProject(project)
+        val tasks = ArrayList<Callable<Unit>>()
         for (i in 0 until numSamples) {
-            val fileName = "test$i.kt"
-            val file = generator.generate(fileName)
-            val ast = DebugUtil.psiToString(file, false, false)
-            val code = file.text
-            writeToFile(code, rootPath, fileName)
-            writeToFile(ast, rootPath, fileName.replace(".kt", ".txt"))
+            val fileName = "rnd$i.kt"
+            val generator = createGenerator(912301L + i, project)
+            tasks.add(Callable {
+                val file = generator.generate(fileName)
+                println("done generation $fileName")
+                val ast = DebugUtil.psiToString(file, false, false)
+                val code = file.text
+                writeToFile(code, rootPath, fileName)
+                writeToFile(ast, rootPath, fileName.replace(".kt", ".txt"))
+            })
         }
+        val service = Executors.newFixedThreadPool(8)
+        service.invokeAll(tasks).forEach(Future<Unit>::get)
+        service.shutdownNow()
     }
 }

@@ -18,6 +18,7 @@ fun Any?.PairOfFloat(): Pair<Float, Float>? = if (<!DEBUG_INFO_SMARTCAST!>this<!
 
 fun foo1(a: Any?) = when(a) {
     is like AOfInt(val value) -> value * 2
+    is like AOfInt(a is Any) -> 2
     is like <!DECONSTRUCTOR_MODIFIER_REQUIRED!>AOfFloat<!>(val value) -> value.toInt() * 2
     is like PairOfInt(val first, val second) -> first * second
     is like <!DECONSTRUCTOR_MODIFIER_REQUIRED!>PairOfFloat<!>(val first, val second) -> (first * second).toInt()

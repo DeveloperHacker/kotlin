@@ -2048,603 +2048,603 @@ public class ParsingTestGenerated extends AbstractParsingTest {
                 KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/psi/random"), Pattern.compile("^(.*)\\.kts?$"), TargetBackend.ANY, true);
             }
 
-            @TestMetadata("test0.kt")
-            public void testTest0() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test0.kt");
+            @TestMetadata("rnd0.kt")
+            public void testRnd0() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd0.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test1.kt")
-            public void testTest1() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test1.kt");
+            @TestMetadata("rnd1.kt")
+            public void testRnd1() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd1.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test10.kt")
-            public void testTest10() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test10.kt");
+            @TestMetadata("rnd10.kt")
+            public void testRnd10() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd10.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test11.kt")
-            public void testTest11() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test11.kt");
+            @TestMetadata("rnd11.kt")
+            public void testRnd11() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd11.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test12.kt")
-            public void testTest12() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test12.kt");
+            @TestMetadata("rnd12.kt")
+            public void testRnd12() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd12.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test13.kt")
-            public void testTest13() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test13.kt");
+            @TestMetadata("rnd13.kt")
+            public void testRnd13() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd13.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test14.kt")
-            public void testTest14() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test14.kt");
+            @TestMetadata("rnd14.kt")
+            public void testRnd14() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd14.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test15.kt")
-            public void testTest15() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test15.kt");
+            @TestMetadata("rnd15.kt")
+            public void testRnd15() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd15.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test16.kt")
-            public void testTest16() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test16.kt");
+            @TestMetadata("rnd16.kt")
+            public void testRnd16() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd16.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test17.kt")
-            public void testTest17() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test17.kt");
+            @TestMetadata("rnd17.kt")
+            public void testRnd17() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd17.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test18.kt")
-            public void testTest18() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test18.kt");
+            @TestMetadata("rnd18.kt")
+            public void testRnd18() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd18.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test19.kt")
-            public void testTest19() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test19.kt");
+            @TestMetadata("rnd19.kt")
+            public void testRnd19() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd19.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test2.kt")
-            public void testTest2() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test2.kt");
+            @TestMetadata("rnd2.kt")
+            public void testRnd2() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd2.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test20.kt")
-            public void testTest20() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test20.kt");
+            @TestMetadata("rnd20.kt")
+            public void testRnd20() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd20.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test21.kt")
-            public void testTest21() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test21.kt");
+            @TestMetadata("rnd21.kt")
+            public void testRnd21() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd21.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test22.kt")
-            public void testTest22() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test22.kt");
+            @TestMetadata("rnd22.kt")
+            public void testRnd22() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd22.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test23.kt")
-            public void testTest23() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test23.kt");
+            @TestMetadata("rnd23.kt")
+            public void testRnd23() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd23.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test24.kt")
-            public void testTest24() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test24.kt");
+            @TestMetadata("rnd24.kt")
+            public void testRnd24() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd24.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test25.kt")
-            public void testTest25() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test25.kt");
+            @TestMetadata("rnd25.kt")
+            public void testRnd25() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd25.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test26.kt")
-            public void testTest26() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test26.kt");
+            @TestMetadata("rnd26.kt")
+            public void testRnd26() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd26.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test27.kt")
-            public void testTest27() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test27.kt");
+            @TestMetadata("rnd27.kt")
+            public void testRnd27() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd27.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test28.kt")
-            public void testTest28() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test28.kt");
+            @TestMetadata("rnd28.kt")
+            public void testRnd28() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd28.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test29.kt")
-            public void testTest29() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test29.kt");
+            @TestMetadata("rnd29.kt")
+            public void testRnd29() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd29.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test3.kt")
-            public void testTest3() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test3.kt");
+            @TestMetadata("rnd3.kt")
+            public void testRnd3() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd3.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test30.kt")
-            public void testTest30() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test30.kt");
+            @TestMetadata("rnd30.kt")
+            public void testRnd30() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd30.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test31.kt")
-            public void testTest31() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test31.kt");
+            @TestMetadata("rnd31.kt")
+            public void testRnd31() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd31.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test32.kt")
-            public void testTest32() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test32.kt");
+            @TestMetadata("rnd32.kt")
+            public void testRnd32() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd32.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test33.kt")
-            public void testTest33() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test33.kt");
+            @TestMetadata("rnd33.kt")
+            public void testRnd33() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd33.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test34.kt")
-            public void testTest34() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test34.kt");
+            @TestMetadata("rnd34.kt")
+            public void testRnd34() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd34.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test35.kt")
-            public void testTest35() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test35.kt");
+            @TestMetadata("rnd35.kt")
+            public void testRnd35() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd35.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test36.kt")
-            public void testTest36() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test36.kt");
+            @TestMetadata("rnd36.kt")
+            public void testRnd36() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd36.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test37.kt")
-            public void testTest37() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test37.kt");
+            @TestMetadata("rnd37.kt")
+            public void testRnd37() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd37.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test38.kt")
-            public void testTest38() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test38.kt");
+            @TestMetadata("rnd38.kt")
+            public void testRnd38() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd38.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test39.kt")
-            public void testTest39() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test39.kt");
+            @TestMetadata("rnd39.kt")
+            public void testRnd39() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd39.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test4.kt")
-            public void testTest4() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test4.kt");
+            @TestMetadata("rnd4.kt")
+            public void testRnd4() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd4.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test40.kt")
-            public void testTest40() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test40.kt");
+            @TestMetadata("rnd40.kt")
+            public void testRnd40() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd40.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test41.kt")
-            public void testTest41() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test41.kt");
+            @TestMetadata("rnd41.kt")
+            public void testRnd41() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd41.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test42.kt")
-            public void testTest42() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test42.kt");
+            @TestMetadata("rnd42.kt")
+            public void testRnd42() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd42.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test43.kt")
-            public void testTest43() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test43.kt");
+            @TestMetadata("rnd43.kt")
+            public void testRnd43() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd43.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test44.kt")
-            public void testTest44() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test44.kt");
+            @TestMetadata("rnd44.kt")
+            public void testRnd44() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd44.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test45.kt")
-            public void testTest45() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test45.kt");
+            @TestMetadata("rnd45.kt")
+            public void testRnd45() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd45.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test46.kt")
-            public void testTest46() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test46.kt");
+            @TestMetadata("rnd46.kt")
+            public void testRnd46() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd46.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test47.kt")
-            public void testTest47() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test47.kt");
+            @TestMetadata("rnd47.kt")
+            public void testRnd47() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd47.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test48.kt")
-            public void testTest48() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test48.kt");
+            @TestMetadata("rnd48.kt")
+            public void testRnd48() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd48.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test49.kt")
-            public void testTest49() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test49.kt");
+            @TestMetadata("rnd49.kt")
+            public void testRnd49() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd49.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test5.kt")
-            public void testTest5() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test5.kt");
+            @TestMetadata("rnd5.kt")
+            public void testRnd5() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd5.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test50.kt")
-            public void testTest50() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test50.kt");
+            @TestMetadata("rnd50.kt")
+            public void testRnd50() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd50.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test51.kt")
-            public void testTest51() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test51.kt");
+            @TestMetadata("rnd51.kt")
+            public void testRnd51() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd51.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test52.kt")
-            public void testTest52() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test52.kt");
+            @TestMetadata("rnd52.kt")
+            public void testRnd52() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd52.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test53.kt")
-            public void testTest53() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test53.kt");
+            @TestMetadata("rnd53.kt")
+            public void testRnd53() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd53.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test54.kt")
-            public void testTest54() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test54.kt");
+            @TestMetadata("rnd54.kt")
+            public void testRnd54() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd54.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test55.kt")
-            public void testTest55() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test55.kt");
+            @TestMetadata("rnd55.kt")
+            public void testRnd55() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd55.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test56.kt")
-            public void testTest56() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test56.kt");
+            @TestMetadata("rnd56.kt")
+            public void testRnd56() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd56.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test57.kt")
-            public void testTest57() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test57.kt");
+            @TestMetadata("rnd57.kt")
+            public void testRnd57() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd57.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test58.kt")
-            public void testTest58() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test58.kt");
+            @TestMetadata("rnd58.kt")
+            public void testRnd58() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd58.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test59.kt")
-            public void testTest59() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test59.kt");
+            @TestMetadata("rnd59.kt")
+            public void testRnd59() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd59.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test6.kt")
-            public void testTest6() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test6.kt");
+            @TestMetadata("rnd6.kt")
+            public void testRnd6() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd6.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test60.kt")
-            public void testTest60() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test60.kt");
+            @TestMetadata("rnd60.kt")
+            public void testRnd60() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd60.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test61.kt")
-            public void testTest61() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test61.kt");
+            @TestMetadata("rnd61.kt")
+            public void testRnd61() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd61.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test62.kt")
-            public void testTest62() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test62.kt");
+            @TestMetadata("rnd62.kt")
+            public void testRnd62() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd62.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test63.kt")
-            public void testTest63() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test63.kt");
+            @TestMetadata("rnd63.kt")
+            public void testRnd63() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd63.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test64.kt")
-            public void testTest64() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test64.kt");
+            @TestMetadata("rnd64.kt")
+            public void testRnd64() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd64.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test65.kt")
-            public void testTest65() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test65.kt");
+            @TestMetadata("rnd65.kt")
+            public void testRnd65() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd65.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test66.kt")
-            public void testTest66() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test66.kt");
+            @TestMetadata("rnd66.kt")
+            public void testRnd66() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd66.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test67.kt")
-            public void testTest67() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test67.kt");
+            @TestMetadata("rnd67.kt")
+            public void testRnd67() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd67.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test68.kt")
-            public void testTest68() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test68.kt");
+            @TestMetadata("rnd68.kt")
+            public void testRnd68() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd68.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test69.kt")
-            public void testTest69() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test69.kt");
+            @TestMetadata("rnd69.kt")
+            public void testRnd69() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd69.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test7.kt")
-            public void testTest7() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test7.kt");
+            @TestMetadata("rnd7.kt")
+            public void testRnd7() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd7.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test70.kt")
-            public void testTest70() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test70.kt");
+            @TestMetadata("rnd70.kt")
+            public void testRnd70() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd70.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test71.kt")
-            public void testTest71() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test71.kt");
+            @TestMetadata("rnd71.kt")
+            public void testRnd71() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd71.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test72.kt")
-            public void testTest72() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test72.kt");
+            @TestMetadata("rnd72.kt")
+            public void testRnd72() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd72.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test73.kt")
-            public void testTest73() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test73.kt");
+            @TestMetadata("rnd73.kt")
+            public void testRnd73() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd73.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test74.kt")
-            public void testTest74() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test74.kt");
+            @TestMetadata("rnd74.kt")
+            public void testRnd74() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd74.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test75.kt")
-            public void testTest75() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test75.kt");
+            @TestMetadata("rnd75.kt")
+            public void testRnd75() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd75.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test76.kt")
-            public void testTest76() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test76.kt");
+            @TestMetadata("rnd76.kt")
+            public void testRnd76() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd76.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test77.kt")
-            public void testTest77() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test77.kt");
+            @TestMetadata("rnd77.kt")
+            public void testRnd77() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd77.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test78.kt")
-            public void testTest78() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test78.kt");
+            @TestMetadata("rnd78.kt")
+            public void testRnd78() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd78.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test79.kt")
-            public void testTest79() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test79.kt");
+            @TestMetadata("rnd79.kt")
+            public void testRnd79() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd79.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test8.kt")
-            public void testTest8() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test8.kt");
+            @TestMetadata("rnd8.kt")
+            public void testRnd8() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd8.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test80.kt")
-            public void testTest80() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test80.kt");
+            @TestMetadata("rnd80.kt")
+            public void testRnd80() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd80.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test81.kt")
-            public void testTest81() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test81.kt");
+            @TestMetadata("rnd81.kt")
+            public void testRnd81() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd81.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test82.kt")
-            public void testTest82() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test82.kt");
+            @TestMetadata("rnd82.kt")
+            public void testRnd82() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd82.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test83.kt")
-            public void testTest83() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test83.kt");
+            @TestMetadata("rnd83.kt")
+            public void testRnd83() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd83.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test84.kt")
-            public void testTest84() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test84.kt");
+            @TestMetadata("rnd84.kt")
+            public void testRnd84() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd84.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test85.kt")
-            public void testTest85() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test85.kt");
+            @TestMetadata("rnd85.kt")
+            public void testRnd85() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd85.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test86.kt")
-            public void testTest86() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test86.kt");
+            @TestMetadata("rnd86.kt")
+            public void testRnd86() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd86.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test87.kt")
-            public void testTest87() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test87.kt");
+            @TestMetadata("rnd87.kt")
+            public void testRnd87() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd87.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test88.kt")
-            public void testTest88() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test88.kt");
+            @TestMetadata("rnd88.kt")
+            public void testRnd88() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd88.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test89.kt")
-            public void testTest89() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test89.kt");
+            @TestMetadata("rnd89.kt")
+            public void testRnd89() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd89.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test9.kt")
-            public void testTest9() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test9.kt");
+            @TestMetadata("rnd9.kt")
+            public void testRnd9() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd9.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test90.kt")
-            public void testTest90() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test90.kt");
+            @TestMetadata("rnd90.kt")
+            public void testRnd90() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd90.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test91.kt")
-            public void testTest91() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test91.kt");
+            @TestMetadata("rnd91.kt")
+            public void testRnd91() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd91.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test92.kt")
-            public void testTest92() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test92.kt");
+            @TestMetadata("rnd92.kt")
+            public void testRnd92() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd92.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test93.kt")
-            public void testTest93() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test93.kt");
+            @TestMetadata("rnd93.kt")
+            public void testRnd93() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd93.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test94.kt")
-            public void testTest94() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test94.kt");
+            @TestMetadata("rnd94.kt")
+            public void testRnd94() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd94.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test95.kt")
-            public void testTest95() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test95.kt");
+            @TestMetadata("rnd95.kt")
+            public void testRnd95() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd95.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test96.kt")
-            public void testTest96() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test96.kt");
+            @TestMetadata("rnd96.kt")
+            public void testRnd96() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd96.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test97.kt")
-            public void testTest97() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test97.kt");
+            @TestMetadata("rnd97.kt")
+            public void testRnd97() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd97.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test98.kt")
-            public void testTest98() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test98.kt");
+            @TestMetadata("rnd98.kt")
+            public void testRnd98() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd98.kt");
                 doParsingTest(fileName);
             }
 
-            @TestMetadata("test99.kt")
-            public void testTest99() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/test99.kt");
+            @TestMetadata("rnd99.kt")
+            public void testRnd99() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/random/rnd99.kt");
                 doParsingTest(fileName);
             }
         }

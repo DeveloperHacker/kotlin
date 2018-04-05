@@ -10,24 +10,15 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.psi.KtPureElement
 
-abstract class Generator(val parent: Generator?) {
+abstract class Generator(project: Project) {
 
-    constructor() : this(null)
-
-    var psiFactory: KtPsiFactory? = null
-
-    fun setProject(project: Project) {
-        psiFactory = KtPsiFactory(project)
-        parent?.setProject(project)
-    }
+    protected val psiFactory = KtPsiFactory(project)
 
     protected fun <T : KtPureElement> create(initializer: KtPsiFactory.() -> T): T {
-        val element = psiFactory!!.initializer()
+        val element = psiFactory.initializer()
         element.containingKtFile.beforeAstChange()
         return element
     }
-
-    protected fun createNewLine() = psiFactory!!.createNewLine(1)
 
     abstract fun generate(name: String): KtFile
 }

@@ -31,19 +31,19 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     private val simpleConstraint: KtPatternConstraint?
         get() = findChildByType(KtNodeTypes.PATTERN_CONSTRAINT)
 
-    private val declaration: KtPatternVariableDeclaration?
+    val declaration: KtPatternVariableDeclaration?
         get() = findChildByType(KtNodeTypes.PATTERN_VARIABLE_DECLARATION)
 
-    private val constraint: KtPatternConstraint?
+    val constraint: KtPatternConstraint?
         get() = declaration?.constraint ?: simpleConstraint
 
-    private val expression: KtPatternExpression?
+    val expression: KtPatternExpression?
         get() = constraint?.expression
 
     private val constraintTypeReference: KtPatternTypeReference?
         get() = constraint?.typeReference
 
-    private val typedDeconstruction: KtPatternTypedDeconstruction?
+    val typedDeconstruction: KtPatternTypedDeconstruction?
         get() = constraint?.typedDeconstruction
 
     val isAsterisk: Boolean
