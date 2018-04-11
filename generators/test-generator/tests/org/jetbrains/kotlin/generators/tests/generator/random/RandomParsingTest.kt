@@ -65,16 +65,21 @@ class RandomParsingTest : KtParsingTestCase(".", "kt", KotlinParserDefinition())
         printWriter.use { it.write(data) }
     }
 
-    fun generateFailedTestCodes(maxNumberFailedTests: Int, dataPath: String, createGenerator: (Long, Project) -> Generator) {
+    fun generateFailedTestCodes(
+        startWith: Int,
+        maxNumberFailedTests: Int,
+        dataPath: String,
+        createGenerator: (Long, Project) -> Generator
+    ) {
         val dataDirectory = File(dataPath)
         dataDirectory.mkdirs()
         dataDirectory.listFiles().map(File::delete)
         var numberFailedTests = 0
         val pool = Executors.newFixedThreadPool(8)
         val service = ExecutorCompletionService<Boolean>(pool)
-        for (i in 0..9)
+        for (i in startWith..(startWith + 8))
             service.submit { generateSingleParsingTest(i, dataPath, createGenerator) }
-        for (i in 10..Int.MAX_VALUE) {
+        for (i in (startWith + 9)..Int.MAX_VALUE) {
             val isFail = service.take().get()
             if (i % 1000 == 0)
                 println("test $i generation started")

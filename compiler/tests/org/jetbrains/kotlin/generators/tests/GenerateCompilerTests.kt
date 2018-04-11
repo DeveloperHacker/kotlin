@@ -142,7 +142,7 @@ fun main(args: Array<String>) {
         }
 
         testClass<AbstractParsingTest> {
-//            random(100, "psi/patternMatching/random", ::RandomKotlinWithPatternMatching)
+//            random(0, 100, "psi/patternMatching/random", ::RandomKotlinWithPatternMatching)
             model("psi", testMethod = "doParsingTest", pattern = "^(.*)\\.kts?$")
             model("parseCodeFragment/expression", testMethod = "doExpressionCodeFragmentParsingTest", extension = "kt")
             model("parseCodeFragment/block", testMethod = "doBlockCodeFragmentParsingTest", extension = "kt")

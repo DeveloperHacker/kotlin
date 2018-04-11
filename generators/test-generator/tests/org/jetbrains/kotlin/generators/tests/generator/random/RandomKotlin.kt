@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project
 import com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.lexer.KtTokens.KEYWORDS
+import org.jetbrains.kotlin.lexer.KtTokens.SOFT_KEYWORDS
 import org.jetbrains.kotlin.parsing.KotlinExpressionParsing
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.pattern.*
@@ -135,7 +136,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         0 -> generateAssignment()
         1 -> generateWhileLoop()
         2 -> generateForLoop()
-        else -> parenthesizedWrapIf(generateExpression()) { it is KtPrefixExpression && it.operationToken == KtTokens.EXCL }
+        else -> parenthesizedWrapIf(generateExpression()) { it.text.trim().startsWith("!") }
     }
 
     private fun generateProperty(): KtProperty {
@@ -191,7 +192,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
             generateSimpleNameExpression()
         }
         --expressionDepth
-        return expression
+        return parenthesizedWrapIf(expression) { it is KtBinaryExpression && it.operationToken == KtTokens.LT }
     }
 
     private fun parenthesizedWrap(expression: KtExpression): KtParenthesizedExpression {
@@ -209,9 +210,10 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
                 it is KtIfExpression -> location == ExpressionLocation.LEFT
                 it is KtIsExpression && it.isPatternExpression && parentExpression is KtIsExpression -> true
                 it is KtIsExpression && parentExpression is KtBinaryExpression && parentExpression.operationToken == KtTokens.LT -> true
-                it is KtBinaryExpression && parentExpression is KtBinaryExpression && it.operationToken == KtTokens.LT && parentExpression.operationToken == KtTokens.GT -> true
-                location == ExpressionLocation.LEFT -> it.precedence > parentExpression.precedence
-                else -> it.precedence >= parentExpression.precedence
+                else -> when (location) {
+                    ExpressionLocation.LEFT -> it.precedence > parentExpression.precedence
+                    ExpressionLocation.RIGHT -> it.precedence >= parentExpression.precedence
+                }
             }
         }
 
@@ -556,12 +558,12 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     private fun isValidIdentifier(identifier: String): Boolean {
         if (identifier.isEmpty()) return false
         if (identifier.first() == '`' && identifier.last() == '`')
-            if (!identifier.substring(1, identifier.lastIndex - 1).contains('`'))
-                return true
+            return identifier.count { it == '`' } == 2
         if ("_".repeat(identifier.length) == identifier) return false
         if (identifier.contains("[^$alphanum]".toRegex())) return false
         if (digits.contains(identifier.first())) return false
         if (identifier in KEYWORDS.types.map(IElementType::toString)) return false
+        if (identifier in SOFT_KEYWORDS.types.map(IElementType::toString)) return false
         return true
     }
 

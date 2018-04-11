@@ -82,10 +82,10 @@ class TestGroup(private val testsRoot: String, val testDataRoot: String) {
         }
 
 
-        fun random(maxNumberFailedTests: Int, relativeRootPath: String, createGenerator: (Long, Project) -> Generator) {
+        fun random(startWith: Int, maxNumberFailedTests: Int, relativeRootPath: String, createGenerator: (Long, Project) -> Generator) {
             val randomTest = RandomParsingTest()
             val dataPath = File("$testDataRoot/$relativeRootPath").path
-            randomTest.generateFailedTestCodes(maxNumberFailedTests, dataPath, createGenerator)
+            randomTest.generateFailedTestCodes(startWith, maxNumberFailedTests, dataPath, createGenerator)
         }
     }
 }
