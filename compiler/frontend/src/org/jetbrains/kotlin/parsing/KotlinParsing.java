@@ -1942,18 +1942,6 @@ public class KotlinParsing extends AbstractKotlinParsing {
         typeRefMarker.done(TYPE_REFERENCE);
     }
 
-    void parseSimpleTypeRef() {
-        PsiBuilder.Marker typeRefMarker = mark();
-        PsiBuilder.Marker typeElementMarker = mark();
-        expectWithoutAdvance(IDENTIFIER, "Expected identifier in start simple type reference");
-        parseUserType();
-        myBuilder.disableJoiningComplexTokens();
-        typeElementMarker = parseNullableTypeSuffix(typeElementMarker);
-        myBuilder.restoreJoiningComplexTokensState();
-        typeElementMarker.drop();
-        typeRefMarker.done(TYPE_REFERENCE);
-    }
-
     // The extraRecoverySet is needed for the foo(bar<x, 1, y>(z)) case, to tell whether we should stop
     // on expression-indicating symbols or not
     private PsiBuilder.Marker parseTypeRefContents(TokenSet extraRecoverySet) {
@@ -2048,7 +2036,7 @@ public class KotlinParsing extends AbstractKotlinParsing {
     }
 
     @NotNull
-    private PsiBuilder.Marker parseNullableTypeSuffix(@NotNull PsiBuilder.Marker typeElementMarker) {
+    PsiBuilder.Marker parseNullableTypeSuffix(@NotNull PsiBuilder.Marker typeElementMarker) {
         // ?: is joined regardless of joining state
         while (at(QUEST) && myBuilder.rawLookup(1) != COLON) {
             PsiBuilder.Marker precede = typeElementMarker.precede();

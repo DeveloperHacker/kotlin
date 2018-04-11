@@ -142,7 +142,7 @@ fun main(args: Array<String>) {
         }
 
         testClass<AbstractParsingTest> {
-            random("psi/random")
+//            random(100, "psi/patternMatching/random", ::RandomKotlinWithPatternMatching)
             model("psi", testMethod = "doParsingTest", pattern = "^(.*)\\.kts?$")
             model("parseCodeFragment/expression", testMethod = "doExpressionCodeFragmentParsingTest", extension = "kt")
             model("parseCodeFragment/block", testMethod = "doBlockCodeFragmentParsingTest", extension = "kt")
@@ -229,7 +229,12 @@ fun main(args: Array<String>) {
             model("loadJava/compiledKotlin", testMethod = "doTestCompiledKotlin")
             model("loadJava/compiledKotlinWithStdlib", testMethod = "doTestCompiledKotlinWithStdlib")
             model("loadJava/javaAgainstKotlin", extension = "txt", testMethod = "doTestJavaAgainstKotlin")
-            model("loadJava/kotlinAgainstCompiledJavaWithKotlin", extension = "kt", testMethod = "doTestKotlinAgainstCompiledJavaWithKotlin", recursive = false)
+            model(
+                "loadJava/kotlinAgainstCompiledJavaWithKotlin",
+                extension = "kt",
+                testMethod = "doTestKotlinAgainstCompiledJavaWithKotlin",
+                recursive = false
+            )
             model("loadJava/sourceJava", extension = "java", testMethod = "doTestSourceJava")
         }
 
@@ -240,7 +245,12 @@ fun main(args: Array<String>) {
             model("loadJava/compiledKotlin", testMethod = "doTestCompiledKotlin")
             model("loadJava/compiledKotlinWithStdlib", testMethod = "doTestCompiledKotlinWithStdlib")
             model("loadJava/javaAgainstKotlin", extension = "txt", testMethod = "doTestJavaAgainstKotlin")
-            model("loadJava/kotlinAgainstCompiledJavaWithKotlin", extension = "kt", testMethod = "doTestKotlinAgainstCompiledJavaWithKotlin", recursive = false)
+            model(
+                "loadJava/kotlinAgainstCompiledJavaWithKotlin",
+                extension = "kt",
+                testMethod = "doTestKotlinAgainstCompiledJavaWithKotlin",
+                recursive = false
+            )
             model("loadJava/sourceJava", extension = "java", testMethod = "doTestSourceJava")
         }
 

@@ -96,10 +96,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     private var expressionDepth = 0
     private var blockDepth = 0
 
-    var name = ""
-
     override fun generate(name: String): KtFile {
-        this.name = name
         val file: KtFile = create { createFile(name, "") }
         file.add(generateNamedFunction())
         return psiFactory.collapseWhiteSpaces(file)
@@ -138,7 +135,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         0 -> generateAssignment()
         1 -> generateWhileLoop()
         2 -> generateForLoop()
-        else -> generateExpression()
+        else -> parenthesizedWrapIf(generateExpression()) { it is KtPrefixExpression && it.operationToken == KtTokens.EXCL }
     }
 
     private fun generateProperty(): KtProperty {
@@ -212,6 +209,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
                 it is KtIfExpression -> location == ExpressionLocation.LEFT
                 it is KtIsExpression && it.isPatternExpression && parentExpression is KtIsExpression -> true
                 it is KtIsExpression && parentExpression is KtBinaryExpression && parentExpression.operationToken == KtTokens.LT -> true
+                it is KtBinaryExpression && parentExpression is KtBinaryExpression && it.operationToken == KtTokens.LT && parentExpression.operationToken == KtTokens.GT -> true
                 location == ExpressionLocation.LEFT -> it.precedence > parentExpression.precedence
                 else -> it.precedence >= parentExpression.precedence
             }

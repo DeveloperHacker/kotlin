@@ -1,10 +1,3 @@
-
-data class A(val a: Int, val b: Int)
-
-class B(val a: Int, val b: Int) {
-    fun deconstruct() = A(a, b)
-}
-
 fun matcher(value: Any?, p1: Int, p2: Int, p3: Int, p4: Int): List<Int> = when (value) {
     is String -> listOf(0)
     is like val m = B(val a, p2 + p3) -> listOf(1, a)

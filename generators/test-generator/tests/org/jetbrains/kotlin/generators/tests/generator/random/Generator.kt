@@ -20,5 +20,7 @@ abstract class Generator(project: Project) {
         return element
     }
 
+    fun createFile(name: String, text: String) = create { createFile(name, text) }
+
     abstract fun generate(name: String): KtFile
 }

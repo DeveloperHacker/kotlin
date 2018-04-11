@@ -141,7 +141,7 @@ class PatternMatchingParsing(
     private fun parsePatternTypedDeconstruction(state: ParsingState) {
         val patternMarker = mark()
         if (!at(LPAR) && !at(LBRACKET)) {
-            parsePatternTypeCallExpression()
+            tryPatternTypeCallExpression()
         }
         when {
             at(LPAR) -> parsePatternDeconstruction(state.goToTuple())
@@ -180,36 +180,81 @@ class PatternMatchingParsing(
 
     private fun parsePatternTypeReference() {
         val patternMarker = mark()
-        kotlinParsing.parseSimpleTypeRef()
+        tryParsePatternTypeReference()
         patternMarker.done(PATTERN_TYPE_REFERENCE)
     }
 
-    private fun parsePatternTypeCallExpression() {
+    private fun tryPatternTypeCallExpression(): Boolean {
         val patternMarker = mark()
         val collapseMarker = mark()
-        kotlinParsing.parseSimpleTypeRef()
+        val isSuccess = tryParsePatternTypeReference()
         collapseMarker.collapse(PATTERN_TYPE_CALL_INSTANCE)
         patternMarker.done(PATTERN_TYPE_CALL_EXPRESSION)
+        return isSuccess
+    }
+
+    private fun tryParsePatternTypeReference(): Boolean {
+        val typeRefMarker = mark()
+        var typeElementMarker = mark()
+        val isSuccess = tryParseUserType()
+        myBuilder.disableJoiningComplexTokens()
+        typeElementMarker = kotlinParsing.parseNullableTypeSuffix(typeElementMarker)
+        myBuilder.restoreJoiningComplexTokensState()
+        typeElementMarker.drop()
+        typeRefMarker.done(TYPE_REFERENCE)
+        return isSuccess
+    }
+
+    private fun tryParseUserType(): Boolean {
+        var userType = mark()
+        var reference = mark()
+        var isSuccess = true
+        while (true) {
+            isSuccess = isSuccess && expect(IDENTIFIER, "Expecting type name")
+            if (!isSuccess) {
+                reference.drop()
+                break
+            }
+            reference.done(REFERENCE_EXPRESSION)
+
+            isSuccess = isSuccess && tryParseTypeArgumentList()
+
+            if (!at(DOT)) break
+
+            val precede = userType.precede()
+            userType.done(USER_TYPE)
+            userType = precede
+
+            advance() // DOT
+            reference = mark()
+        }
+        userType.done(USER_TYPE)
+        return isSuccess
+    }
+
+    private fun tryParseTypeArgumentList(): Boolean {
+        if (!at(LT)) return true
+        val list = mark()
+        val isSuccess = kotlinParsing.tryParseTypeArgumentList(TokenSet.EMPTY)
+        list.done(TYPE_ARGUMENT_LIST)
+        return isSuccess
     }
 
     private fun parsePatternExpression(state: ParsingState) {
         val patternMarker = mark()
         errorIf(state.isTopLevel, "pattern expression not allowed in this position")
-        if (atDistinguishablePatternExpression()) {
+        if (atDistinguishablePatternExpression())
             advance() // EQ_KEYWORD
-        }
         kotlinParsing.myExpressionParsing.parseExpression()
         patternMarker.done(PATTERN_EXPRESSION)
     }
 
     private fun atPatternDeconstruction(): Boolean {
         val patternMarker = mark()
-        if (!atSet(TokenSet.create(LPAR, LBRACKET))) {
-            parsePatternTypeCallExpression()
-        }
+        val isSuccessTypeParsing = if (!atSet(TokenSet.create(LPAR, LBRACKET))) tryPatternTypeCallExpression() else true
         val existTuple = atSet(TokenSet.create(LPAR, LBRACKET))
         patternMarker.rollbackTo()
-        return existTuple
+        return isSuccessTypeParsing && existTuple
     }
 
     private fun atGuard(state: ParsingState): Boolean {
