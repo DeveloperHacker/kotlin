@@ -65,6 +65,14 @@ fun PsiElement.replaceSelf(newSelf: PsiElement) {
     parent!!.replace(this, newSelf)
 }
 
+fun PsiElement.addAfterSelf(newElement: PsiElement) {
+    parent!!.addAfter(newElement, this)
+}
+
+fun PsiElement.removeSelf() {
+    parent!!.remove(this)
+}
+
 fun PsiElement.remove(child: PsiElement) {
     node.removeChild(child.node)
 }

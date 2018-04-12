@@ -180,20 +180,20 @@ class PatternMatchingParsing(
 
     private fun parsePatternTypeReference() {
         val patternMarker = mark()
-        tryParsePatternTypeReference()
+        tryParseTypeReference()
         patternMarker.done(PATTERN_TYPE_REFERENCE)
     }
 
     private fun tryPatternTypeCallExpression(): Boolean {
         val patternMarker = mark()
         val collapseMarker = mark()
-        val isSuccess = tryParsePatternTypeReference()
+        val isSuccess = tryParseTypeReference()
         collapseMarker.collapse(PATTERN_TYPE_CALL_INSTANCE)
         patternMarker.done(PATTERN_TYPE_CALL_EXPRESSION)
         return isSuccess
     }
 
-    private fun tryParsePatternTypeReference(): Boolean {
+    private fun tryParseTypeReference(): Boolean {
         val typeRefMarker = mark()
         var typeElementMarker = mark()
         val isSuccess = tryParseUserType()
@@ -234,8 +234,28 @@ class PatternMatchingParsing(
 
     private fun tryParseTypeArgumentList(): Boolean {
         if (!at(LT)) return true
+        var isSuccess = true
         val list = mark()
-        val isSuccess = kotlinParsing.tryParseTypeArgumentList(TokenSet.EMPTY)
+        myBuilder.disableNewlines()
+        advance() // LT
+        while (true) {
+            val projection = mark()
+            kotlinParsing.parseTypeArgumentModifierList()
+            if (at(MUL))
+                advance() // MUL
+            else
+                isSuccess = isSuccess && tryParseTypeReference()
+            projection.done(TYPE_PROJECTION)
+            if (!at(COMMA)) break
+            advance() // COMMA
+        }
+        val atGT = at(GT)
+        isSuccess = isSuccess && atGT
+        if (!atGT)
+            error("Expecting a '>'")
+        else
+            advance() // GT
+        myBuilder.restoreNewlinesState()
         list.done(TYPE_ARGUMENT_LIST)
         return isSuccess
     }

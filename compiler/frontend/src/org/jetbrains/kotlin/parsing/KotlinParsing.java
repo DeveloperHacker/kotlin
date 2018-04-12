@@ -489,7 +489,7 @@ public class KotlinParsing extends AbstractKotlinParsing {
         return doParseModifierList(null, TYPE_MODIFIER_KEYWORDS, DEFAULT, TokenSet.EMPTY);
     }
 
-    private boolean parseTypeArgumentModifierList() {
+    boolean parseTypeArgumentModifierList() {
         return doParseModifierList(null, TYPE_ARGUMENT_MODIFIER_KEYWORDS, NO_ANNOTATIONS, TokenSet.create(COMMA, COLON, GT));
     }
 

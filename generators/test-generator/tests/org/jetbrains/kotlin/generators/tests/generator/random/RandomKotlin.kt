@@ -136,7 +136,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         0 -> generateAssignment()
         1 -> generateWhileLoop()
         2 -> generateForLoop()
-        else -> parenthesizedWrapIf(generateExpression()) { it.text.trim().startsWith("!") }
+        else -> parenthesizedWrapIf(generateExpression()) { it.text.trim().let { it.startsWith("!") || it.startsWith("{") } }
     }
 
     private fun generateProperty(): KtProperty {
@@ -156,7 +156,10 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     private fun generateWhileLoop(): KtWhileExpression {
         val loop = create { createExpression("while (a) { }") as KtWhileExpression }
         loop.condition!!.replaceSelf(generateExpression())
-        val block = if (random.nextBoolean()) generateBlockExpression() else generateStatement()
+        val block = when {
+            random.nextBoolean() -> generateBlockExpression()
+            else -> generateStatement()
+        }
         loop.body!!.replaceSelf(block)
         return loop
     }
@@ -165,7 +168,10 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         val identifier = generateIdentifier()
         val loop = create { createExpression("for ($identifier in b) { }") as KtForExpression }
         loop.loopRange!!.replaceSelf(generateExpression())
-        val block = if (random.nextBoolean()) generateBlockExpression() else generateStatement()
+        val block = when {
+            random.nextBoolean() -> generateBlockExpression()
+            else -> generateStatement()
+        }
         loop.body!!.replaceSelf(block)
         return loop
     }
@@ -173,7 +179,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     private fun generateExpression(): KtExpression {
         ++expressionDepth
         val expression = if (expressionDepth < maxExpressionGenerationDepth) {
-            when (random.nextInt(13)) {
+            when (random.nextInt(15)) {
                 0 -> generateSimpleNameExpression()
                 1 -> generateIsLikeExpression()
                 2 -> generateIsExpression()
@@ -186,6 +192,8 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
                 9 -> generateWhenExpression()
                 10 -> generateDotExpression()
                 11 -> generateSafeExpression()
+                12 -> generateLambdaExpression()
+                13 -> generateThisExpression()
                 else -> generateParenthesizedExpression()
             }
         } else {
@@ -514,29 +522,54 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         val elseText = if (existElse) " else {}" else ""
         val expression = create { createExpression("if (a) {} $elseText") as KtIfExpression }
         expression.condition!!.replaceSelf(generateExpression())
-        val thenExpression = if (random.nextBoolean()) generateBlockExpression() else generateExpression()
-        val thenBlock = parenthesizedWrapIf(thenExpression) { it is KtIfExpression && existElse }
-        expression.then!!.replaceSelf(thenBlock)
+        val thenExpression = when {
+            random.nextBoolean() -> generateBlockExpression()
+            else -> parenthesizedWrapIf(generateExpression()) { it.text.trim().startsWith('{') || it is KtIfExpression && existElse }
+        }
+        expression.then!!.replaceSelf(thenExpression)
         if (existElse) {
-            val elseExpression = if (random.nextBoolean()) generateBlockExpression() else generateStatement()
+            val elseExpression = when {
+                random.nextBoolean() -> generateBlockExpression()
+                else -> generateStatement()
+            }
             expression.`else`!!.replaceSelf(elseExpression)
         }
         return expression
     }
 
     private fun generateCallExpression(): KtCallExpression {
-        val identifier = generateIdentifier()
         val valueArguments = if (random.nextBoolean()) "a${", a".repeat(random.nextInt(maxNumberValueArguments))}" else ""
         val typeArguments = if (random.nextBoolean()) "<T${", T".repeat(random.nextInt(maxNumberTypeArguments))}>" else ""
-        val expression = create { createExpression("$identifier$typeArguments($valueArguments)") as KtCallExpression }
+        val lambdaArgument = if (random.nextBoolean()) "{}" else ""
+        val expression = create { createExpression("a$typeArguments($valueArguments)$lambdaArgument") as KtCallExpression }
+        val calleeExpression = parenthesizedWrapIf(generateExpression()) {
+            it !is KtSimpleNameExpression &&
+                    it !is KtThisExpression &&
+                    it !is KtWhenExpression &&
+                    it !is KtStringTemplateExpression &&
+                    it !is KtConstantExpression
+        }
+        expression.replace(expression.calleeExpression!!, calleeExpression)
         expression.typeArgumentList?.arguments?.forEach {
             it.replace(it.typeReference!!, generateTypeReference())
         }
         expression.valueArgumentList!!.arguments.forEach {
             it.replace(it.getArgumentExpression()!!, generateExpression())
         }
+        expression.lambdaArguments.firstOrNull()?.getLambdaExpression()?.replaceSelf(generateLambdaExpression())
         return expression
     }
+
+    private fun generateLambdaExpression(): KtLambdaExpression {
+        val valueArguments = if (random.nextBoolean()) "(a${", a".repeat(random.nextInt(maxNumberValueArguments))}) ->" else ""
+        val expression = create { createExpression("{${valueArguments}a}") as KtLambdaExpression }
+        val inner = expression.bodyExpression!!.statements.first()
+        generateBlockExpression().contentRange().asIterable().reversed().forEach(inner::addAfterSelf)
+        inner.removeSelf()
+        return expression
+    }
+
+    private fun generateThisExpression() = create { createThisExpression() }
 
     private fun generateParenthesizedExpression() = parenthesizedWrap(generateExpression())
 
