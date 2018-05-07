@@ -65,7 +65,7 @@ public class DefaultErrorMessages {
         MAP.put(EXPECTED_PATTERN_ENTRY, "Expected pattern entry");
         MAP.put(EXPECTED_PATTERN_CONSTRAINT_ELEMENT, "Expected pattern element");
         MAP.put(EXPECTED_PATTERN_ENTRY_ELEMENT, "Expected pattern entry element");
-        MAP.put(EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE, "Expected pattern tuple in pattern typed tuple");
+        MAP.put(EXPECTED_PATTERN_TYPED_DECONSTRUCTION_INSTANCE, "Expected pattern typed deconstruction element");
         MAP.put(EXPECTED_PATTERN_TYPE_REFERENCE_INSTANCE, "Expected type reference in pattern type reference");
         MAP.put(EXPECTED_TYPE_CALL_EXPRESSION_INSTANCE, "Expected type reference or call expression in pattern type call expression");
         MAP.put(EXPECTED_PATTERN_GUARD_INSTANCE, "Expected guard element");
