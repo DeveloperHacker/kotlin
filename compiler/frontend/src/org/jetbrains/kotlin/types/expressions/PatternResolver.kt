@@ -195,7 +195,7 @@ class PatternResolver(
         return info
     }
 
-    fun checkCondition(expression: KtExpression?, state: PatternResolveState): ConditionalDataFlowInfo {
+    fun checkCondition(expression: KtExpression, state: PatternResolveState): ConditionalDataFlowInfo {
         val context = state.context.replaceScope(state.scope)
         val visitor = ControlStructureTypingVisitor(facade)
         val conditionalInfo = visitor.checkCondition(expression, context)

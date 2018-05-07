@@ -919,6 +919,7 @@ public interface Errors {
     DiagnosticFactory0<KtPatternConstraint> EXPECTED_PATTERN_CONSTRAINT_ELEMENT = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternEntry> EXPECTED_PATTERN_ENTRY_ELEMENT = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternTypedDeconstruction> EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE = DiagnosticFactory0.create(ERROR);
+    DiagnosticFactory0<KtPatternGuard> EXPECTED_PATTERN_GUARD_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternExpression> EXPECTED_PATTERN_EXPRESSION_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternTypeReference> EXPECTED_PATTERN_TYPE_REFERENCE_INSTANCE = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternTypeCallExpression> EXPECTED_TYPE_CALL_EXPRESSION_INSTANCE = DiagnosticFactory0.create(ERROR);

@@ -68,6 +68,7 @@ public class DefaultErrorMessages {
         MAP.put(EXPECTED_PATTERN_TYPED_TUPLE_INSTANCE, "Expected pattern tuple in pattern typed tuple");
         MAP.put(EXPECTED_PATTERN_TYPE_REFERENCE_INSTANCE, "Expected type reference in pattern type reference");
         MAP.put(EXPECTED_TYPE_CALL_EXPRESSION_INSTANCE, "Expected type reference or call expression in pattern type call expression");
+        MAP.put(EXPECTED_PATTERN_GUARD_INSTANCE, "Expected guard element");
         MAP.put(EXPECTED_PATTERN_EXPRESSION_INSTANCE, "Expected expression element");
         MAP.put(NOT_ALLOW_PROPERTY_DEFINITION, "Not allow property definition: {0}", ELEMENT_TEXT);
         MAP.put(UNRESOLVED_PATTERN_TYPE_CALL_EXPRESSION, "Unresolved pattern type call expression: {0}", ELEMENT_TEXT);
