@@ -4561,18 +4561,19 @@ The "returned" value of try expression with no finally is either the last expres
 
     private StackValue generateMatchVariableDeclaration(StackValue expressionToMatch, KtPatternVariableDeclaration declaration) {
         KtPatternConstraint constraint = declaration.getConstraint();
+        boolean isNotSingleUnderscore = UnderscoreUtilKt.isNotSingleUnderscore(declaration);
         if (constraint == null) {
             StackValue constant = StackValue.constant(true, Type.BOOLEAN_TYPE);
             return Trigger.Companion.make(constant, Type.BOOLEAN_TYPE, v -> {
-                if (UnderscoreUtilKt.isNotSingleUnderscore(declaration))
+                if (isNotSingleUnderscore)
                     initializeLocalVariable(declaration, expressionToMatch);
                 return null;
             });
         }
-        return new ConstantLocalVariable(myFrameMap, expressionToMatch, expressionToMatch.type, Type.BOOLEAN_TYPE, loadExpression -> {
-            StackValue matchConstraint = generateMatchConstraint(loadExpression, constraint);
-            if (UnderscoreUtilKt.isNotSingleUnderscore(declaration))
-                initializeLocalVariable(declaration, loadExpression);
+        return ConstantLocalVariable.makeIf(isNotSingleUnderscore, myFrameMap, expressionToMatch, expressionToMatch.type, Type.BOOLEAN_TYPE, receiver -> {
+            StackValue matchConstraint = generateMatchConstraint(receiver, constraint);
+            if (isNotSingleUnderscore)
+                initializeLocalVariable(declaration, receiver);
             return matchConstraint;
         });
     }
