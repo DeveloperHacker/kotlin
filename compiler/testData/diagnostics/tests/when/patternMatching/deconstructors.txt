@@ -1,0 +1,27 @@
+package
+
+public fun </*0*/ F, /*1*/ S> foo(/*0*/ a: A<F?, S?>): kotlin.Boolean
+public fun </*0*/ F, /*1*/ S> A<F?, S?>.NotNull(): Pair<F, S>?
+public fun </*0*/ F, /*1*/ S> A<F, S>.Unapply(): Pair<F, S>
+
+public final class A</*0*/ F, /*1*/ S> {
+    public constructor A</*0*/ F, /*1*/ S>(/*0*/ a: F, /*1*/ b: S)
+    public final val a: F
+    public final val b: S
+    public final fun SameValues(): Pair<F, S>?
+    public open override /*1*/ /*fake_override*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*fake_override*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*fake_override*/ fun toString(): kotlin.String
+}
+
+public final data class Pair</*0*/ F, /*1*/ S> {
+    public constructor Pair</*0*/ F, /*1*/ S>(/*0*/ first: F, /*1*/ second: S)
+    public final val first: F
+    public final val second: S
+    public final operator /*synthesized*/ fun component1(): F
+    public final operator /*synthesized*/ fun component2(): S
+    public final /*synthesized*/ fun copy(/*0*/ first: F = ..., /*1*/ second: S = ...): Pair<F, S>
+    public open override /*1*/ /*synthesized*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*synthesized*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*synthesized*/ fun toString(): kotlin.String
+}

@@ -25183,6 +25183,12 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
                     doTest(fileName);
                 }
 
+                @TestMetadata("deconstructors.kt")
+                public void testDeconstructors() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/deconstructors.kt");
+                    doTest(fileName);
+                }
+
                 @TestMetadata("equalsHell.kt")
                 public void testEqualsHell() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/equalsHell.kt");
