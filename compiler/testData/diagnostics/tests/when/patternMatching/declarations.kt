@@ -23,3 +23,8 @@ fun foo(x: Any?, a: Int) = when (<!DEBUG_INFO_SMARTCAST!>x<!>) {
     is like val <!NAME_SHADOWING!>a<!> is Int -> <!DEBUG_INFO_SMARTCAST!>a<!>
     else -> 1
 }
+
+fun foo2(x: Any) = when (x) {
+    is Boolean, <!DEBUG_INFO_SMARTCAST!>x<!> is like Pair(<!NOT_ALLOW_PROPERTY_DEFINITION!>val a<!>) -> 1
+    else -> 1
+}

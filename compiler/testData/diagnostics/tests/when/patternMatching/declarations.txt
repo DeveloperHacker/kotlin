@@ -1,6 +1,7 @@
 package
 
 public fun foo(/*0*/ x: kotlin.Any?, /*1*/ a: kotlin.Int): kotlin.Int
+public fun foo2(/*0*/ x: kotlin.Any): kotlin.Int
 
 public final data class A {
     public constructor A(/*0*/ f: kotlin.Int, /*1*/ s: kotlin.Int)

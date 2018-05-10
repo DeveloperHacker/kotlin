@@ -36,8 +36,8 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.ConditionalDataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker
-import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.checkers.PrimitiveNumericComparisonCallChecker
+import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.TypeUtils.NO_EXPECTED_TYPE
@@ -129,8 +129,8 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
         val ownerIsIf = condition.matchPredecessors(KtNodeTypes.CONDITION, KtNodeTypes.IF)
         val ownerIsWhen = condition.matchPredecessors(KtNodeTypes.WHEN_CONDITION_EXPRESSION, KtNodeTypes.WHEN_ENTRY)
         val ownerIsWhile = condition.matchPredecessors(KtNodeTypes.CONDITION, KtNodeTypes.WHILE)
-        val ownerWithScope = ownerIsIf || ownerIsWhen || ownerIsWhile
-        val allowDefinition = !isNegated && ownerWithScope
+        val allowInWhen = ownerIsWhen && (condition.parent.parent as KtWhenEntry).conditions.size == 1
+        val allowDefinition = !isNegated && (ownerIsIf || allowInWhen || ownerIsWhile)
         val (conditionalDataFlowInfo, scope) = analyseIsMatch(
             expression.pattern,
             expression.typeReference,
@@ -180,9 +180,16 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
         ) ?: emptySet()
         checkSmartCastsInSubjectIfRequired(expression, contextBeforeSubject, subjectType, possibleTypesForSubject)
 
-        val (dataFlowInfoForEntries, scopeForEntries) = analyzeConditionsInWhenEntries(expression, contextAfterSubject, subjectDataFlowValue, subjectType)
-        val whenReturnType = inferTypeForWhenExpression(expression, contextWithExpectedType, contextAfterSubject, dataFlowInfoForEntries, scopeForEntries)
-        val whenResultValue = whenReturnType?.let { facade.components.dataFlowValueFactory.createDataFlowValue(expression, it, contextAfterSubject) }
+        val (dataFlowInfoForEntries, scopeForEntries) = analyzeConditionsInWhenEntries(
+            expression,
+            contextAfterSubject,
+            subjectDataFlowValue,
+            subjectType
+        )
+        val whenReturnType =
+            inferTypeForWhenExpression(expression, contextWithExpectedType, contextAfterSubject, dataFlowInfoForEntries, scopeForEntries)
+        val whenResultValue =
+            whenReturnType?.let { facade.components.dataFlowValueFactory.createDataFlowValue(expression, it, contextAfterSubject) }
 
         val branchesTypeInfo =
             joinWhenExpressionBranches(expression, contextAfterSubject, whenReturnType, jumpOutPossibleInSubject, whenResultValue)
@@ -294,7 +301,8 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
 
             val entryDataFlowInfo =
                 if (whenResultValue != null && entryType != null) {
-                    val entryValue = facade.components.dataFlowValueFactory.createDataFlowValue(entryExpression, entryType, contextAfterSubject)
+                    val entryValue =
+                        facade.components.dataFlowValueFactory.createDataFlowValue(entryExpression, entryType, contextAfterSubject)
                     entryTypeInfo.dataFlowInfo.assign(whenResultValue, entryValue, components.languageVersionSettings)
                 } else {
                     entryTypeInfo.dataFlowInfo
@@ -593,10 +601,10 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
          * (a: SubjectType) is Type
          */
         fun checkTypeCompatibility(
-                context: ExpressionTypingContext,
-                type: KotlinType,
-                subjectType: KotlinType,
-                reportErrorOn: KtElement
+            context: ExpressionTypingContext,
+            type: KotlinType,
+            subjectType: KotlinType,
+            reportErrorOn: KtElement
         ) {
             // TODO : Take smart casts into account?
             if (TypeIntersector.isIntersectionEmpty(type, subjectType)) {
