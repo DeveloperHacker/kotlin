@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.diagnostics.Errors.*
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.pattern.KtPattern
+import org.jetbrains.kotlin.psi.pattern.*
 import org.jetbrains.kotlin.resolve.*
 import org.jetbrains.kotlin.resolve.calls.checkers.RttiExpressionInformation
 import org.jetbrains.kotlin.resolve.calls.checkers.RttiOperation
@@ -36,6 +36,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.ConditionalDataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValue
 import org.jetbrains.kotlin.resolve.calls.util.CallMaker
+import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 import org.jetbrains.kotlin.resolve.checkers.PrimitiveNumericComparisonCallChecker
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExpressionReceiver
@@ -53,6 +54,47 @@ import kotlin.collections.ArrayList
 
 
 class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTypingInternals) : ExpressionTypingVisitor(facade) {
+
+    private fun uselessDeclaration(context: BindingContext, declaration: KtPatternVariableDeclaration): Boolean {
+        if (declaration.isEmpty) return true
+        val typeReference = declaration.constraint?.typeReference?.typeReference
+        val deconstruction = declaration.constraint?.typedDeconstruction
+        val expression = declaration.constraint?.expression
+        val uselessName = declaration.isSingleUnderscore
+        val uselessTypeCheck = typeReference?.let { uselessTypeCheck(context, it) } ?: true
+        val uselessDeconstruction = deconstruction?.let { uselessTypedDeconstruction(context, it) } ?: true
+        val uselessExpression = expression == null
+        return uselessName && uselessTypeCheck && uselessDeconstruction && uselessExpression
+    }
+
+    private fun uselessTypedDeconstruction(context: BindingContext, typedDeconstruction: KtPatternTypedDeconstruction): Boolean {
+        val typeCallExpression = typedDeconstruction.typeCallExpression
+        val typeReference = typeCallExpression?.getTypeReference(context)
+        val instanceTypeCallExpression = typeCallExpression?.instance
+        val uselessDeconstructor = typeReference?.let { uselessTypeCheck(context, it) } ?: (instanceTypeCallExpression == null)
+        val deconstruction = typedDeconstruction.deconstruction
+        val uselessDeconstruction = deconstruction?.let { uselessDeconstruction(it) } ?: true
+        return uselessDeconstructor && uselessDeconstruction
+    }
+
+    private fun uselessDeconstruction(deconstruction: KtPatternDeconstruction): Boolean {
+        if (deconstruction !is KtPatternTuple) return false
+        val entries = deconstruction.entries
+        if (entries.isEmpty()) return true
+        return entries.all { it.isEmptyDeclaration }
+    }
+
+    private fun uselessTypeCheck(context: BindingContext, typeReference: KtTypeReference): Boolean {
+        return context.get(BindingContext.USELESS_TYPE_CHECK, typeReference)!!
+    }
+
+    private fun uselessPattern(context: BindingContext, pattern: KtPattern): Boolean {
+        val declaration = pattern.declaration
+        val deconstruction = pattern.deconstruction
+        val uselessDeclaration = declaration?.let { uselessDeclaration(context, it) } ?: true
+        val uselessDeconstruction = deconstruction?.let { uselessTypedDeconstruction(context, it) } ?: true
+        return uselessDeclaration && uselessDeconstruction
+    }
 
     private fun analyseIsMatch(
         pattern: KtPattern?,
@@ -78,8 +120,8 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
             val resolver = PatternResolver(visitor, components, facade)
             val subjectReceiverValue = ExpressionReceiver.create(subjectExpression ?: it, subjectType, context.trace.bindingContext)
             val subject = Subject(subjectExpression ?: it, subjectReceiverValue, subjectDataFlowValue)
-            val (typeInfo, scope, useless) = resolver.resolve(context, it, subject, allowDefinition, isNegated)
-            uselessIsCheck = useless
+            val (typeInfo, scope) = resolver.resolve(context, it, subject, allowDefinition, isNegated)
+            uselessIsCheck = uselessPattern(context.trace.bindingContext, it)
             conditionalDataFlowInfo = typeInfo.dataFlowInfo
             resultScope = scope
         }

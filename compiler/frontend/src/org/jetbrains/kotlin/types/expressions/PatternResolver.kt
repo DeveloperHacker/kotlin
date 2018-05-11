@@ -85,10 +85,7 @@ class PatternResolver(
             val scope = ExpressionTypingUtils.newWritableScopeImpl(context, LexicalScopeKind.MATCH_EXPRESSION, components.overloadChecker)
             val state = PatternResolveState(scope, context, allowDefinition, isNegated, false, subject)
             val typeInfo = pattern.getTypeInfo(this, state)
-            val isExpressionRestrictionsFree = pattern.isExpressionRestrictionsFree
-            val isVariableDeclarationsFree = pattern.isVariableDeclarationsFree
-            val useless = state.getUsefulCheckCounter() == 0 && isVariableDeclarationsFree && isExpressionRestrictionsFree
-            typeInfo to scope to useless
+            typeInfo to scope
         }
 
     fun checkIterableConvention(reportOnExpression: KtExpression, state: PatternResolveState): Pair<KotlinType, KotlinType> {
@@ -170,10 +167,9 @@ class PatternResolver(
             !isTuple,
             dataFlowValue
         )
+        context.trace.record(BindingContext.USELESS_TYPE_CHECK, typeReference, useless)
         if (useless) {
             context.trace.report(Errors.USELESS_TYPE_CHECK.on(typeReference, !isNegated))
-        } else {
-            state.incrementUsefulCheckCounter()
         }
         return ConditionalTypeInfo.empty(type, dataFlowInfo)
     }
@@ -264,13 +260,6 @@ class PatternResolveState private constructor(
 
     val dataFlowInfo: DataFlowInfo
         get() = context.dataFlowInfo
-
-    fun incrementUsefulCheckCounter() {
-        val value = usefulCheckCounter.get()
-        usefulCheckCounter.set(value + 1)
-    }
-
-    fun getUsefulCheckCounter() = usefulCheckCounter.get()!!
 
     fun setIsTuple(): PatternResolveState {
         return PatternResolveState(scope, context, allowDefinition, isNegated, true, subject, usefulCheckCounter)

@@ -154,6 +154,7 @@ public interface BindingContext {
     WritableSlice<KtExpression, PsiElement> RESOLVED_PSI_ELEMENT = Slices.createSimpleSlice();
     WritableSlice<KtPostProcessableElement, Boolean> POST_PROCESSABLE_ELEMENT = Slices.createCollectiveSetSlice();
     WritableSlice<KtExpression, Boolean> NEEDED_NULL_CHECK = Slices.createSimpleSetSlice();
+    WritableSlice<KtTypeReference, Boolean> USELESS_TYPE_CHECK = Slices.createSimpleSetSlice();
 
     WritableSlice<KtDestructuringDeclarationEntry, ResolvedCall<FunctionDescriptor>> COMPONENT_RESOLVED_CALL = Slices.createSimpleSlice();
 

@@ -61,7 +61,7 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     fun isRestrictionsFree(context: BindingContext): Boolean =
         expression == null && constraintTypeReference == null && typedDeconstruction?.isRestrictionsFree(context) ?: true
 
-    private val isEmptyDeclaration: Boolean
+    val isEmptyDeclaration: Boolean
         get() = declaration?.isEmpty ?: false
 
     val isNotEmptyDeclaration: Boolean

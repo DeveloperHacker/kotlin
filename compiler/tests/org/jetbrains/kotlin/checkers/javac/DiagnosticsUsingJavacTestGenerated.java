@@ -25207,6 +25207,12 @@ public class DiagnosticsUsingJavacTestGenerated extends AbstractDiagnosticsUsing
                     doTest(fileName);
                 }
 
+                @TestMetadata("uselessConditions.kt")
+                public void testUselessConditions() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/uselessConditions.kt");
+                    doTest(fileName);
+                }
+
                 @TestMetadata("validityCheck.kt")
                 public void testValidityCheck() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/validityCheck.kt");

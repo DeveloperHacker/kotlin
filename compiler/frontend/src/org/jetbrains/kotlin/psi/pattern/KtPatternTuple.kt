@@ -18,6 +18,7 @@ package org.jetbrains.kotlin.psi.pattern
 
 import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
@@ -36,13 +37,18 @@ class KtPatternTuple(node: ASTNode) : KtPatternElementImpl(node), KtPatternDecon
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         state.context.trace.record(BindingContext.PATTERN_COMPONENTS_RECEIVER, this, state.subject.receiverValue)
         val info = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
+        val entries = entries
+        var hasNonSingleUnderscoreEntries = false
         val componentInfo = entries.mapIndexed { i, entry ->
+            hasNonSingleUnderscoreEntries = hasNonSingleUnderscoreEntries || entry.isNotEmptyDeclaration
             val type = resolver.getComponentType(i, entry, state)
             val receiverValue = TransientReceiver(type)
             val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
             val subject = Subject(entry, receiverValue, dataFlowValue)
             entry.getTypeInfo(resolver, state.replaceSubject(subject))
         }
+        if (!hasNonSingleUnderscoreEntries && !entries.isEmpty())
+            state.context.trace.report(Errors.USELESS_TUPLE_DECONSTRUCTION.on(this, this))
         (sequenceOf(info) + componentInfo).reduce({ acc, it -> acc.and(it) })
     }
 }

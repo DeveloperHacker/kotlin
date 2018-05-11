@@ -895,7 +895,7 @@ public interface Errors {
     DiagnosticFactory0<KtNullableType> USELESS_NULLABLE_CHECK = DiagnosticFactory0.create(WARNING, NULLABLE_TYPE);
     DiagnosticFactory1<KtElement, Boolean> USELESS_IS_CHECK = DiagnosticFactory1.create(WARNING);
     DiagnosticFactory1<KtTypeReference, Boolean> USELESS_TYPE_CHECK = DiagnosticFactory1.create(WARNING);
-
+    DiagnosticFactory1<KtPatternTuple, KtPatternTuple> USELESS_TUPLE_DECONSTRUCTION = DiagnosticFactory1.create(WARNING);
 
     // Properties / locals
 

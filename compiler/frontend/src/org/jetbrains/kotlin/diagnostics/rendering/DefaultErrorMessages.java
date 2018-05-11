@@ -440,6 +440,7 @@ public class DefaultErrorMessages {
         MAP.put(USELESS_NULLABLE_CHECK, "Non-null type is checked for instance of nullable type");
         MAP.put(USELESS_IS_CHECK, "Check for instance is always ''{0}''", TO_STRING);
         MAP.put(USELESS_TYPE_CHECK, "Check for instance is always ''{0}''", TO_STRING);
+        MAP.put(USELESS_TUPLE_DECONSTRUCTION, "Useless tuple deconstruction: ", ELEMENT_TEXT);
         MAP.put(WRONG_SETTER_PARAMETER_TYPE, "Setter parameter type must be equal to the type of the property, i.e. ''{0}''", RENDER_TYPE, RENDER_TYPE);
         MAP.put(WRONG_GETTER_RETURN_TYPE, "Getter return type must be equal to the type of the property, i.e. ''{0}''", RENDER_TYPE, RENDER_TYPE);
         MAP.put(WRONG_SETTER_RETURN_TYPE, "Setter return type must be Unit");

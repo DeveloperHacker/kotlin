@@ -42,17 +42,15 @@ class KtPattern(node: ASTNode) : KtPatternElementImpl(node) {
     val guard: KtPatternGuard?
         get() = findChildByType(KtNodeTypes.PATTERN_GUARD)
 
-    val isExpressionRestrictionsFree
-        get() = innerNotPatternExpressions.isEmpty()
+    val deconstruction: KtPatternTypedDeconstruction?
+        get() = entry?.typedDeconstruction
 
-    val isVariableDeclarationsFree
-        get() = innerVariableDeclarations.isEmpty()
+    val declaration: KtPatternVariableDeclaration?
+        get() = entry?.declaration
 
     fun isSimple(context: BindingContext) = guard == null && entry?.isSimple(context) ?: true
 
     fun isRestrictionsFree(context: BindingContext) = guard == null && entry?.isRestrictionsFree(context) ?: true
-
-    fun onlyTypeRestrictions(context: BindingContext) = guard == null && entry?.onlyTypeRestrictions(context) ?: true
 
     fun getTypeReference(context: BindingContext) = entry?.getTypeReference(context)
 
