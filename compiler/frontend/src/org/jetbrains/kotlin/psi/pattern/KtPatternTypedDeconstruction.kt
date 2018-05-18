@@ -38,16 +38,31 @@ class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
     val deconstruction: KtPatternDeconstruction?
         get() = tuple ?: list
 
+    val entries: List<KtPatternEntry>?
+        get() = deconstruction?.entries
+
+    fun getTypeReference(context: BindingContext) = typeCallExpression?.getTypeReference(context)
+
     private fun getCallExpression(context: BindingContext) = typeCallExpression?.getCallExpression(context)
 
-    fun onlyTypeRestrictions(context: BindingContext): Boolean =
-        getCallExpression(context) == null && list == null && tuple?.entries?.all { it.onlyTypeRestrictions(context) } ?: true
+    private fun hasTypeReference(context: BindingContext) = getTypeReference(context) != null
+
+    private fun hasCallExpression(context: BindingContext) = getCallExpression(context) != null
+
+    private fun hasList() = list != null
+
+    private fun hasEntriesDynamicLimits(context: BindingContext) = tuple?.entries?.all { it.hasDynamicLimits(context) } ?: true
+
+    private fun hasNullableCheck(context: BindingContext) = typeCallExpression?.hasNullableCheck(context) ?: false
+
+    private fun isSimpleEntries(context: BindingContext) =
+        entries?.all { !it.hasTypeReference(context) && it.isSimple(context) } ?: true
 
     fun isSimple(context: BindingContext): Boolean =
-        getCallExpression(context) == null && list == null && tuple?.entries?.all { it.isSimple(context) && it.getTypeReference(context) == null } ?: true
+        !hasCallExpression(context) && !hasList() && isSimpleEntries(context)
 
-    fun isRestrictionsFree(context: BindingContext): Boolean =
-        typeCallExpression == null && list == null && tuple?.entries?.all { it.isRestrictionsFree(context) } ?: true
+    fun hasDynamicLimits(context: BindingContext): Boolean =
+        hasTypeReference(context) || hasNullableCheck(context) || hasList() || hasEntriesDynamicLimits(context)
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternTypedTuple(this, data)
 
@@ -62,7 +77,8 @@ class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
         val deconstructionState = (if (isCallExpression) state.replaceSubject(subject) else state).replaceDataFlow(info.thenInfo)
         val error = Errors.EXPECTED_PATTERN_TYPED_DECONSTRUCTION_INSTANCE
         val patch = ConditionalTypeInfo.empty(deconstructionState.subject.type, deconstructionState.dataFlowInfo)
-        val deconstructionInfo = deconstruction?.getTypeInfo(resolver, deconstructionState).errorAndReplaceIfNull(this, deconstructionState, error, patch)
+        val deconstructionInfo =
+            deconstruction?.getTypeInfo(resolver, deconstructionState).errorAndReplaceIfNull(this, deconstructionState, error, patch)
         info.and(deconstructionInfo)
     }
 }

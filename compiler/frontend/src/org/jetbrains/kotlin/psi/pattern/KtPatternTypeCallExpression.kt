@@ -49,6 +49,8 @@ class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node),
 
     fun getCallExpression(context: BindingContext) = context.get(BindingContext.RESOLVED_PSI_ELEMENT, this) as? KtCallExpression
 
+    fun hasNullableCheck(context: BindingContext) = context.get(BindingContext.NEEDED_NULL_CHECK, this) ?: false
+
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternTypeCallExpression(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {

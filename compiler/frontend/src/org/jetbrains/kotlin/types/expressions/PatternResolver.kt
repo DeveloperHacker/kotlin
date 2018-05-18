@@ -117,7 +117,7 @@ class PatternResolver(
             state.context.trace.report(Errors.DECONSTRUCTOR_MODIFIER_REQUIRED.on(reportOnExpression, descriptor, containingDeclarationName))
         }
         val type = results.resultingDescriptor.returnType
-        state.context.trace.record(BindingContext.NEEDED_NULL_CHECK, reportOnExpression, type?.isMarkedNullable == true)
+        state.context.trace.record(BindingContext.NEEDED_NULL_CHECK, reportOnExpression, type?.isMarkedNullable ?: false)
         state.context.trace.record(BindingContext.DECONSTRUCTOR_RESOLVED_CALL, reportOnExpression, resolvedCall)
         return type?.makeNotNullable()
     }

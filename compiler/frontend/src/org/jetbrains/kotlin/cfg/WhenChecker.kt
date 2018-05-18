@@ -270,7 +270,7 @@ object WhenSimpleIsMatchesMissingCasesResolver : MissingCasesResolver {
             .map { it.conditions.asSequence() }.flatten()
             .filterIsInstance<KtWhenConditionIsPattern>()
             .filterNot { it.isNegated }
-            .any { it.isRestrictionsFree(context) }
+            .any { !it.hasDynamicLimits(context) }
 
     override fun resolve(unresolvedMissingCases: List<WhenMissingCase>, expression: KtWhenExpression, context: BindingContext) =
         listOf<WhenMissingCase>()
@@ -285,7 +285,7 @@ object WhenWithoutSubjectSimpleIsMatchesMissingCasesResolver : MissingCasesResol
             .filterIsInstance<KtIsExpression>()
             .filterNot { it.isNegated }
             .mapNotNull { it.pattern }
-            .any { it.isRestrictionsFree(context) }
+            .any { !it.hasDynamicLimits(context) }
 
     override fun resolve(unresolvedMissingCases: List<WhenMissingCase>, expression: KtWhenExpression, context: BindingContext) =
         listOf<WhenMissingCase>()

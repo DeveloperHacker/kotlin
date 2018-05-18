@@ -81,7 +81,7 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
         if (deconstruction !is KtPatternTuple) return false
         val entries = deconstruction.entries
         if (entries.isEmpty()) return true
-        return entries.all { it.isEmptyDeclaration }
+        return entries.all { it.isEmptyDeclaration() }
     }
 
     private fun uselessTypeCheck(context: BindingContext, typeReference: KtTypeReference): Boolean {

@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.psi.pattern
 import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
@@ -40,8 +41,8 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     val expression: KtPatternExpression?
         get() = constraint?.expression
 
-    private val constraintTypeReference: KtPatternTypeReference?
-        get() = constraint?.typeReference
+    private val constraintTypeReference: KtTypeReference?
+        get() = constraint?.typeReference?.typeReference
 
     val typedDeconstruction: KtPatternTypedDeconstruction?
         get() = constraint?.typedDeconstruction
@@ -49,26 +50,31 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     val isAsterisk: Boolean
         get() = declaration?.isAsterisk ?: simpleConstraint?.isAsterisk ?: false
 
-    fun getTypeReference(context: BindingContext) =
-        constraintTypeReference?.typeReference ?: typedDeconstruction?.typeCallExpression?.getTypeReference(context)
-
-    fun onlyTypeRestrictions(context: BindingContext): Boolean =
-        expression == null && typedDeconstruction?.onlyTypeRestrictions(context) ?: true
-
-    fun isSimple(context: BindingContext): Boolean =
-        expression == null && typedDeconstruction?.isSimple(context) ?: true
-
-    fun isRestrictionsFree(context: BindingContext): Boolean =
-        expression == null && constraintTypeReference == null && typedDeconstruction?.isRestrictionsFree(context) ?: true
-
-    val isEmptyDeclaration: Boolean
-        get() = declaration?.isEmpty ?: false
-
-    val isNotEmptyDeclaration: Boolean
-        get() = !isEmptyDeclaration
-
     val element: KtPatternElement?
         get() = findChildByClass(KtPatternElement::class.java)
+
+    fun hasTypeReference(context: BindingContext) = getTypeReference(context) != null
+
+    private fun hasDeconstructionDynamicLimits(context: BindingContext) = typedDeconstruction?.hasDynamicLimits(context) ?: false
+
+    private fun isSimpleDeconstruction(context: BindingContext) = typedDeconstruction?.isSimple(context) ?: true
+
+    private fun hasConstraintTypeReference() = constraintTypeReference != null
+
+    private fun hasExpression() = expression != null
+
+    fun getTypeReference(context: BindingContext) =
+        constraintTypeReference ?: typedDeconstruction?.getTypeReference(context)
+
+    fun isSimple(context: BindingContext): Boolean =
+        !hasExpression() && isSimpleDeconstruction(context)
+
+    fun hasDynamicLimits(context: BindingContext): Boolean =
+        hasExpression() || hasConstraintTypeReference() || hasDeconstructionDynamicLimits(context)
+
+    fun isEmptyDeclaration() = declaration?.isEmpty ?: false
+
+    fun isNotEmptyDeclaration() = !isEmptyDeclaration()
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternEntry(this, data)
 

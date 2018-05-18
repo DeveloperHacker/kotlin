@@ -35,7 +35,7 @@ class KtWhenConditionIsPattern(node: ASTNode) : KtWhenCondition(node) {
 
     fun isSimple(context: BindingContext) = pattern?.isSimple(context) ?: true
 
-    fun isRestrictionsFree(context: BindingContext) = typeReference == null && pattern?.isRestrictionsFree(context) ?: true
+    fun hasDynamicLimits(context: BindingContext) = pattern?.hasDynamicLimits(context) ?: true
 
     fun fullTypeReference(context: BindingContext) = pattern?.getTypeReference(context) ?: typeReference
 

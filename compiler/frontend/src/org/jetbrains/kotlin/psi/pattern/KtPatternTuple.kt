@@ -40,7 +40,7 @@ class KtPatternTuple(node: ASTNode) : KtPatternElementImpl(node), KtPatternDecon
         val entries = entries
         var hasNonSingleUnderscoreEntries = false
         val componentInfo = entries.mapIndexed { i, entry ->
-            hasNonSingleUnderscoreEntries = hasNonSingleUnderscoreEntries || entry.isNotEmptyDeclaration
+            hasNonSingleUnderscoreEntries = hasNonSingleUnderscoreEntries || entry.isNotEmptyDeclaration()
             val type = resolver.getComponentType(i, entry, state)
             val receiverValue = TransientReceiver(type)
             val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
