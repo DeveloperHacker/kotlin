@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.types.expressions
 import com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.diagnostics.Severity
 import org.jetbrains.kotlin.name.Name
@@ -30,7 +31,6 @@ import org.jetbrains.kotlin.resolve.calls.context.BasicCallResolutionContext
 import org.jetbrains.kotlin.resolve.calls.context.CheckArgumentTypesMode
 import org.jetbrains.kotlin.resolve.calls.context.ResolutionContext
 import org.jetbrains.kotlin.resolve.calls.inference.InferenceErrorData
-import org.jetbrains.kotlin.resolve.calls.model.DataFlowInfoForArgumentsImpl
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.results.OverloadResolutionResults
 import org.jetbrains.kotlin.resolve.calls.tasks.AbstractTracingStrategy
@@ -91,20 +91,37 @@ class FakeCallResolver(
         return resolutionResults
     }
 
-    fun resolveMemberFunctionCallWithoutArguments(
-        receiver: ReceiverValue,
-        callExpression: KtCallExpression,
-        context: ResolutionContext<*>
-    ): OverloadResolutionResults<FunctionDescriptor> {
-        val fakeTrace = TemporaryBindingTrace.create(context.trace, "trace to resolve fake call for", callExpression.name)
+    private fun <T : CallableDescriptor> resolveFakeCall(
+        call: Call,
+        expression: KtExpression,
+        context: ResolutionContext<*>,
+        resolveCall: (BasicCallResolutionContext) -> OverloadResolutionResults<T>
+    ): OverloadResolutionResults<T> {
+        val fakeTrace = TemporaryBindingTrace.create(context.trace, "trace to resolve fake call for", expression.name)
         val contextWithFakeTrace = context.replaceBindingTrace(fakeTrace)
-        val call = CallMaker.makeCall(receiver, null, callExpression)
-        val checkArguments = CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS
-        val dataFlowInfoForArguments = DataFlowInfoForArgumentsImpl(contextWithFakeTrace.dataFlowInfo, call)
-        val resolutionContext = BasicCallResolutionContext.create(contextWithFakeTrace, call, checkArguments, dataFlowInfoForArguments)
-        val results = callResolver.resolveFunctionCall(resolutionContext)
-        fakeTrace.commit({ _, key -> key != callExpression }, true)
+        val checkMode = CheckArgumentTypesMode.CHECK_VALUE_ARGUMENTS
+        val resolutionContext = BasicCallResolutionContext.create(contextWithFakeTrace, call, checkMode)
+        val results = resolveCall(resolutionContext)
+        fakeTrace.commit({ _, key -> key != expression }, true)
         return results
+    }
+
+    fun resolveFakePropertyCall(
+        context: ResolutionContext<*>,
+        receiver: ReceiverValue,
+        expression: KtSimpleNameExpression
+    ): OverloadResolutionResults<VariableDescriptor> {
+        val call = CallMaker.makePropertyCall(receiver, null, expression)
+        return resolveFakeCall(call, expression, context, callResolver::resolveSimpleProperty)
+    }
+
+    fun resolveFakeFunctionCall(
+        context: ResolutionContext<*>,
+        receiver: ReceiverValue,
+        expression: KtCallExpression
+    ): OverloadResolutionResults<FunctionDescriptor> {
+        val call = CallMaker.makeCall(receiver, null, expression)
+        return resolveFakeCall(call, expression, context, callResolver::resolveFunctionCall)
     }
 
     private class TracingStrategyForComponentCall(

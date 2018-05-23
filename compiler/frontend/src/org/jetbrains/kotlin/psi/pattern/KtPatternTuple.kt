@@ -20,8 +20,8 @@ import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtVisitor
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.scopes.receivers.TransientReceiver
+import org.jetbrains.kotlin.types.ErrorUtils
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
@@ -35,16 +35,26 @@ class KtPatternTuple(node: ASTNode) : KtPatternElementImpl(node), KtPatternDecon
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternTuple(this, data)
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
-        state.context.trace.record(BindingContext.PATTERN_COMPONENTS_RECEIVER, this, state.subject.receiverValue)
         val info = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
         val entries = entries
         var hasNonSingleUnderscoreEntries = false
         val componentInfo = entries.mapIndexed { i, entry ->
             hasNonSingleUnderscoreEntries = hasNonSingleUnderscoreEntries || entry.isNotEmptyDeclaration()
-            val type = resolver.getComponentType(i, entry, state)
-            val receiverValue = TransientReceiver(type)
-            val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
-            val subject = Subject(entry, receiverValue, dataFlowValue)
+            val name = entry.name()
+            val subject = if (name != null) {
+                val errorType = lazy { ErrorUtils.createErrorType("${name.text} return type") }
+                val type = resolver.getPropertyType(entry, name.text, state) ?: errorType.value
+                val receiverValue = TransientReceiver(type)
+                val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
+                Subject(this, receiverValue, dataFlowValue)
+            } else {
+                val componentName = PatternResolver.getComponentName(i)
+                val errorType = lazy { ErrorUtils.createErrorType("$componentName() return type") }
+                val type = resolver.getComponentType(componentName, entry, state) ?: errorType.value
+                val receiverValue = TransientReceiver(type)
+                val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
+                Subject(entry, receiverValue, dataFlowValue)
+            }
             entry.getTypeInfo(resolver, state.replaceSubject(subject))
         }
         if (!hasNonSingleUnderscoreEntries && !entries.isEmpty())

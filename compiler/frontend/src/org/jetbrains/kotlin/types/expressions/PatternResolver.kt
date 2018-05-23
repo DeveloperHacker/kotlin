@@ -23,12 +23,10 @@ import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1
 import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.pattern.KtPattern
 import org.jetbrains.kotlin.psi.pattern.KtPatternElement
-import org.jetbrains.kotlin.psi.pattern.KtPatternEntry
 import org.jetbrains.kotlin.psi.pattern.KtPatternVariableDeclaration
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DataClassDescriptorResolver
@@ -66,6 +64,7 @@ class ConditionalTypeInfo(val type: KotlinType, val dataFlowInfo: ConditionalDat
 }
 
 class PatternResolver(
+    private val psiFactory: KtPsiFactory,
     private val patternMatchingTypingVisitor: PatternMatchingTypingVisitor,
     private val components: ExpressionTypingComponents,
     private val facade: ExpressionTypingInternals
@@ -88,14 +87,14 @@ class PatternResolver(
             typeInfo to scope
         }
 
-    fun checkIterableConvention(reportOnExpression: KtExpression, state: PatternResolveState): Pair<KotlinType, KotlinType> {
+    fun checkIterableConvention(reportOn: KtExpression, state: PatternResolveState): Pair<KotlinType, KotlinType> {
         val subjectExpression = state.subject.expression
         val receiverValue = state.subject.receiverValue
         val context = state.context
         val (iteratorType, elementType) = components.forLoopConventionsChecker.checkIterableConventionWithFullResult(
             receiverValue,
             subjectExpression,
-            reportOnExpression,
+            reportOn,
             context
         )
         val validatedIteratorType = iteratorType ?: ErrorUtils.createErrorType("${subjectExpression.text}.iterator() return type")
@@ -103,10 +102,10 @@ class PatternResolver(
         return Pair(validatedIteratorType, validatedElementType)
     }
 
-    fun getDeconstructType(reportOnExpression: KtExpression, callExpression: KtCallExpression, state: PatternResolveState): KotlinType? {
-        val receiverValue = state.subject.receiverValue
+    fun getDeconstructType(reportOn: KtElement, callExpression: KtCallExpression, state: PatternResolveState): KotlinType? {
+        val receiver = state.subject.receiverValue
         val results = repairAfterInvoke(state) {
-            components.fakeCallResolver.resolveMemberFunctionCallWithoutArguments(receiverValue, callExpression, state.context)
+            components.fakeCallResolver.resolveFakeFunctionCall(state.context, receiver, callExpression)
         }
         if (!results.isSuccess) return null
         val resolvedCall = results.resultingCall
@@ -114,32 +113,49 @@ class PatternResolver(
         if (descriptor is ClassConstructorDescriptor) return null
         val containingDeclarationName = descriptor.containingDeclaration.fqNameUnsafe.asString()
         if (!descriptor.isDeconstructor) {
-            state.context.trace.report(Errors.DECONSTRUCTOR_MODIFIER_REQUIRED.on(reportOnExpression, descriptor, containingDeclarationName))
+            state.context.trace.report(Errors.DECONSTRUCTOR_MODIFIER_REQUIRED.on(reportOn, descriptor, containingDeclarationName))
         }
         val type = results.resultingDescriptor.returnType
-        state.context.trace.record(BindingContext.NEEDED_NULL_CHECK, reportOnExpression, type?.isMarkedNullable ?: false)
-        state.context.trace.record(BindingContext.DECONSTRUCTOR_RESOLVED_CALL, reportOnExpression, resolvedCall)
+        state.context.trace.record(BindingContext.NEEDED_NULL_CHECK, reportOn, type?.isMarkedNullable ?: false)
+        state.context.trace.record(BindingContext.CALL, reportOn, resolvedCall.call)
+        state.context.trace.record(BindingContext.RESOLVED_CALL, resolvedCall.call, resolvedCall)
         return type?.makeNotNullable()
     }
 
-    fun getComponentType(index: Int, entry: KtPatternEntry, state: PatternResolveState): KotlinType {
-        val subjectExpression = state.subject.expression
-        val componentName = getComponentName(index)
+    fun getComponentType(componentName: Name, reportOn: KtExpression, state: PatternResolveState): KotlinType? {
+        val receiver = state.subject.receiverValue
+        val expression = state.subject.expression
         val results = repairAfterInvoke(state) {
             components.fakeCallResolver.resolveFakeCall(
                 context = state.context,
-                receiver = state.subject.receiverValue,
+                receiver = receiver,
                 name = componentName,
-                callElement = subjectExpression,
-                reportErrorsOn = entry,
+                callElement = expression,
+                reportErrorsOn = reportOn,
                 callKind = FakeCallKind.COMPONENT,
                 valueArguments = emptyList()
             )
         }
-        val errorType = lazy { ErrorUtils.createErrorType("${subjectExpression.text}.$componentName() return type") }
-        if (!results.isSuccess) return errorType.value
-        val resultType = results.resultingDescriptor.returnType ?: return errorType.value
-        state.context.trace.record(BindingContext.PATTERN_COMPONENT_RESOLVED_CALL, entry, results.resultingCall)
+        if (!results.isSuccess) return null
+        val resultType = results.resultingDescriptor.returnType ?: return null
+        val resolvedCall = results.resultingCall
+        state.context.trace.record(BindingContext.CALL, reportOn, resolvedCall.call)
+        state.context.trace.record(BindingContext.RESOLVED_CALL, resolvedCall.call, resolvedCall)
+        return resultType
+    }
+
+    fun getPropertyType(reportOn: KtElement, name: String, state: PatternResolveState): KotlinType? {
+        val receiver = state.subject.receiverValue
+        val expression = psiFactory.createSimpleName(name)
+        val results = repairAfterInvoke(state) {
+            components.fakeCallResolver.resolveFakePropertyCall(state.context, receiver, expression)
+        }
+        if (!results.isSuccess) return null
+        val resultType = results.resultingDescriptor.returnType ?: return null
+        val resolvedCall = results.resultingCall
+        state.context.trace.record(BindingContext.ELEMENT_NAME_EXPRESSION, reportOn, expression)
+        state.context.trace.record(BindingContext.CALL, expression, resolvedCall.call)
+        state.context.trace.record(BindingContext.RESOLVED_CALL, resolvedCall.call, resolvedCall)
         return resultType
     }
 
@@ -190,6 +206,15 @@ class PatternResolver(
         state.context.trace.record(BindingContext.PATTERN_ELEMENT_TYPE_INFO, element, info)
         return info
     }
+
+    fun <T> createOrNull(text: String?, creator: KtPsiFactory.(String) -> T) =
+        try {
+            text?.let { psiFactory.creator(it) }
+        } catch (ex: Exception) {
+            null
+        } catch (ex: AssertionError) {
+            null
+        }
 
     fun checkCondition(expression: KtExpression, state: PatternResolveState): ConditionalDataFlowInfo {
         val context = state.context.replaceScope(state.scope)

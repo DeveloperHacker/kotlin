@@ -117,7 +117,8 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
         }
         pattern?.let {
             val visitor = this@PatternMatchingTypingVisitor
-            val resolver = PatternResolver(visitor, components, facade)
+            val psiFactory = KtPsiFactory(it.project)
+            val resolver = PatternResolver(psiFactory, visitor, components, facade)
             val subjectReceiverValue = ExpressionReceiver.create(subjectExpression ?: it, subjectType, context.trace.bindingContext)
             val subject = Subject(subjectExpression ?: it, subjectReceiverValue, subjectDataFlowValue)
             val (typeInfo, scope) = resolver.resolve(context, it, subject, allowDefinition, isNegated)

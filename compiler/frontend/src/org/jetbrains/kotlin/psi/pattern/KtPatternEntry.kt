@@ -17,8 +17,10 @@
 package org.jetbrains.kotlin.psi.pattern
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -52,6 +54,10 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
 
     val element: KtPatternElement?
         get() = findChildByClass(KtPatternElement::class.java)
+
+    fun name() = findChildByType<PsiElement>(KtTokens.IDENTIFIER)
+
+    fun hasName() = name() != null
 
     fun hasTypeReference(context: BindingContext) = getTypeReference(context) != null
 

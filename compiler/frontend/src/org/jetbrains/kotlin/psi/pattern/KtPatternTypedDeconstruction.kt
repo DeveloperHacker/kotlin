@@ -70,11 +70,11 @@ class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
         val typeCallExpression = typeCallExpression
         val emptyInfo = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
         val info = typeCallExpression?.getTypeInfo(resolver, state.setIsTuple()) ?: emptyInfo
-        val isCallExpression = getCallExpression(state.context.trace.bindingContext) != null
+        val hasCallExpression = hasCallExpression(state.context.trace.bindingContext)
         val receiverValue = TransientReceiver(info.type)
         val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
         val subject = Subject(this, receiverValue, dataFlowValue)
-        val deconstructionState = (if (isCallExpression) state.replaceSubject(subject) else state).replaceDataFlow(info.thenInfo)
+        val deconstructionState = (if (hasCallExpression) state.replaceSubject(subject) else state).replaceDataFlow(info.thenInfo)
         val error = Errors.EXPECTED_PATTERN_TYPED_DECONSTRUCTION_INSTANCE
         val patch = ConditionalTypeInfo.empty(deconstructionState.subject.type, deconstructionState.dataFlowInfo)
         val deconstructionInfo =

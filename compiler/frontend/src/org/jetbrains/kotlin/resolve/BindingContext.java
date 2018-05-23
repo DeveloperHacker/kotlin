@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor;
 import org.jetbrains.kotlin.name.FqName;
 import org.jetbrains.kotlin.name.FqNameUnsafe;
 import org.jetbrains.kotlin.psi.*;
-import org.jetbrains.kotlin.psi.pattern.*;
+import org.jetbrains.kotlin.psi.pattern.KtPatternElement;
 import org.jetbrains.kotlin.resolve.calls.inference.ConstraintSystemCompleter;
 import org.jetbrains.kotlin.resolve.calls.model.CallResolutionResult;
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall;
@@ -43,7 +43,6 @@ import org.jetbrains.kotlin.resolve.constants.CompileTimeConstant;
 import org.jetbrains.kotlin.resolve.diagnostics.Diagnostics;
 import org.jetbrains.kotlin.resolve.scopes.LexicalScope;
 import org.jetbrains.kotlin.resolve.scopes.receivers.Qualifier;
-import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue;
 import org.jetbrains.kotlin.types.DeferredType;
 import org.jetbrains.kotlin.types.KotlinType;
 import org.jetbrains.kotlin.types.expressions.*;
@@ -99,8 +98,6 @@ public interface BindingContext {
 
     WritableSlice<KtTypeReference, KotlinType> TYPE = Slices.createSimpleSlice();
     WritableSlice<KtTypeReference, KotlinType> ABBREVIATED_TYPE = Slices.createSimpleSlice();
-    WritableSlice<KtExpression, KotlinType> PATTERN_SUBJECT_TYPE = new BasicWritableSlice<>(DO_NOTHING);
-    WritableSlice<KtPatternElement, ConditionalTypeInfo> PATTERN_ELEMENT_TYPE_INFO = new BasicWritableSlice<>(DO_NOTHING);
     WritableSlice<KtExpression, KotlinTypeInfo> EXPRESSION_TYPE_INFO = new BasicWritableSlice<>(DO_NOTHING);
     WritableSlice<KtExpression, DataFlowInfo> DATA_FLOW_INFO_BEFORE = new BasicWritableSlice<>(DO_NOTHING);
     WritableSlice<KtExpression, KotlinType> EXPECTED_EXPRESSION_TYPE = new BasicWritableSlice<>(DO_NOTHING);
@@ -148,12 +145,12 @@ public interface BindingContext {
     WritableSlice<VariableDescriptorWithAccessors, ResolvedCall<FunctionDescriptor>> PROVIDE_DELEGATE_RESOLVED_CALL = Slices.createSimpleSlice();
     WritableSlice<VariableDescriptorWithAccessors, Call> PROVIDE_DELEGATE_CALL = Slices.createSimpleSlice();
 
-    WritableSlice<KtPatternTuple, ReceiverValue> PATTERN_COMPONENTS_RECEIVER = Slices.createSimpleSlice();
-    WritableSlice<KtExpression, ResolvedCall<FunctionDescriptor>> DECONSTRUCTOR_RESOLVED_CALL = Slices.createSimpleSlice();
-    WritableSlice<KtPatternEntry, ResolvedCall<FunctionDescriptor>> PATTERN_COMPONENT_RESOLVED_CALL = Slices.createSimpleSlice();
+    WritableSlice<KtExpression, KotlinType> PATTERN_SUBJECT_TYPE = Slices.createSimpleSlice();
+    WritableSlice<KtPatternElement, ConditionalTypeInfo> PATTERN_ELEMENT_TYPE_INFO = Slices.createSimpleSlice();
+    WritableSlice<KtElement, KtSimpleNameExpression> ELEMENT_NAME_EXPRESSION = Slices.createSimpleSlice();
     WritableSlice<KtExpression, PsiElement> RESOLVED_PSI_ELEMENT = Slices.createSimpleSlice();
     WritableSlice<KtPostProcessableElement, Boolean> POST_PROCESSABLE_ELEMENT = Slices.createCollectiveSetSlice();
-    WritableSlice<KtExpression, Boolean> NEEDED_NULL_CHECK = Slices.createSimpleSetSlice();
+    WritableSlice<KtElement, Boolean> NEEDED_NULL_CHECK = Slices.createSimpleSetSlice();
     WritableSlice<KtTypeReference, Boolean> USELESS_TYPE_CHECK = Slices.createSimpleSetSlice();
 
     WritableSlice<KtDestructuringDeclarationEntry, ResolvedCall<FunctionDescriptor>> COMPONENT_RESOLVED_CALL = Slices.createSimpleSlice();

@@ -9,7 +9,10 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtPostProcessableElement
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.psi.psiUtil.transferDiagnostics
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingTrace
@@ -19,17 +22,7 @@ import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
 import org.jetbrains.kotlin.types.expressions.errorAndReplaceIfNull
 
-class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node),
-    KtPostProcessableElement {
-
-    private fun <T> createOrNull(text: String?, creator: KtPsiFactory.(String) -> T) =
-        try {
-            text?.let { KtPsiFactory(project).creator(it) }
-        } catch (ex: Exception) {
-            null
-        } catch (ex: AssertionError) {
-            null
-        }
+class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node), KtPostProcessableElement {
 
     private fun resolvePsiElement(element: PsiElement, state: PatternResolveState) {
         state.context.trace.record(BindingContext.RESOLVED_PSI_ELEMENT, this, element)
@@ -57,8 +50,8 @@ class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node),
         val error = Errors.EXPECTED_TYPE_CALL_EXPRESSION_INSTANCE
         val patch = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
         val instance = instance
-        val callExpression = createOrNull(instance?.text) { createExpression("$it()") as? KtCallExpression }
-        val typeReference = createOrNull(instance?.text) { createType(it) }
+        val callExpression = resolver.createOrNull(instance?.text) { createExpression("$it()") as? KtCallExpression }
+        val typeReference = resolver.createOrNull(instance?.text) { createType(it) }
         val callInfo = callExpression
             ?.let { resolver.getDeconstructType(this, it, state) }
             ?.let { ConditionalTypeInfo.empty(it, state.dataFlowInfo) }

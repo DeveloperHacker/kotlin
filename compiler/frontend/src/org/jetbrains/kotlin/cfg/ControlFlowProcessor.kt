@@ -146,11 +146,11 @@ class ControlFlowProcessor(private val trace: BindingTrace) {
                 for (declaration in pattern.innerVariableDeclarations) {
                     builder.declareVariable(declaration)
                     val entry = declaration.parentEntry
-                    val resolvedCall = entry?.let { trace.get(BindingContext.PATTERN_COMPONENT_RESOLVED_CALL, it) }
-                    val writtenValue = if (resolvedCall != null)
-                        builder.call(declaration, resolvedCall, getReceiverValues(resolvedCall), emptyMap()).outputValue
-                    else
-                        entry?.let { createSyntheticValue(declaration, MagicKind.UNRESOLVED_CALL, it) }
+                    val writtenValue = entry
+                        ?.let { trace.get(BindingContext.CALL, it) }
+                        ?.let { trace.get(BindingContext.RESOLVED_CALL, it) }
+                        ?.let { builder.call(declaration, it, getReceiverValues(it), emptyMap()).outputValue }
+                    ?: entry?.let { createSyntheticValue(declaration, MagicKind.UNRESOLVED_CALL, it) }
                     generateInitializer(declaration, writtenValue ?: createSyntheticValue(declaration, MagicKind.FAKE_INITIALIZER))
                 }
                 for (expression in pattern.innerNotPatternExpressions) {

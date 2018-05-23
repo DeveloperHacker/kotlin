@@ -4427,9 +4427,9 @@ The "returned" value of try expression with no finally is either the last expres
         throw new IllegalArgumentException("unexpected constraint element " + element.getClass().getName());
     }
 
-    private StackValue generateMatchEntry(StackValue expressionToMatch, KtPatternEntry constraint) {
-        KtPatternElement element = constraint.getElement();
-        assert element != null: "constraint element must be defined";
+    private StackValue generateMatchEntry(StackValue expressionToMatch, KtPatternEntry entry) {
+        KtPatternElement element = entry.getElement();
+        assert element != null : "constraint element must be defined";
         if (element instanceof KtPatternConstraint) {
             return generateMatchConstraint(expressionToMatch, (KtPatternConstraint) element);
         }
@@ -4474,13 +4474,14 @@ The "returned" value of try expression with no finally is either the last expres
     private StackValue generateMatchTypedDeconstruction(StackValue expressionToMatch, KtPatternTypedDeconstruction typedDeconstruction) {
         KtPatternTypeCallExpression typeCallExpression = typedDeconstruction.getTypeCallExpression();
         KtTypeReference typeReference = let(typeCallExpression, it -> it.getTypeReference(bindingContext));
-        ResolvedCall<FunctionDescriptor> deconstructCall = bindingContext.get(DECONSTRUCTOR_RESOLVED_CALL, typeCallExpression);
-        boolean hasDeconstructor = deconstructCall != null;
+        Call deconstructorCall = bindingContext.get(CALL, typeCallExpression);
+        ResolvedCall<?> deconstructorResolvedCall = bindingContext.get(RESOLVED_CALL, deconstructorCall);
+        boolean hasDeconstructor = deconstructorResolvedCall != null;
         boolean generateIsCheck = !hasDeconstructor && typeReference != null;
         boolean generateNullCheck = elvis(bindingContext.get(NEEDED_NULL_CHECK, typeCallExpression), () -> false);
         KtPatternDeconstruction deconstruction = typedDeconstruction.getDeconstruction();
         assert deconstruction != null : "pattern deconstruction is null for " + typedDeconstruction.getText();
-        StackValue receiverStackValue = hasDeconstructor ? invokeFunction(deconstructCall, expressionToMatch) : expressionToMatch;
+        StackValue receiverStackValue = hasDeconstructor ? invokeFunction(deconstructorResolvedCall, expressionToMatch) : expressionToMatch;
         boolean generateVariable = generateNullCheck || generateIsCheck;
         return ConstantLocalVariable.makeIf(generateVariable, myFrameMap, receiverStackValue, receiverStackValue.type, Type.BOOLEAN_TYPE, receiver -> {
             StackValue result = StackValue.constant(true, Type.BOOLEAN_TYPE);
@@ -4549,10 +4550,18 @@ The "returned" value of try expression with no finally is either the last expres
         return ConstantLocalVariable.makeIf(generateVariable, myFrameMap, expressionToMatch, expressionToMatch.type, Type.BOOLEAN_TYPE, receiver -> {
             StackValue result = StackValue.constant(true, Type.BOOLEAN_TYPE);
             for (KtPatternEntry entry : entries) {
-                ResolvedCall<FunctionDescriptor> componentCall = bindingContext.get(PATTERN_COMPONENT_RESOLVED_CALL, entry);
-                assert componentCall != null : "resolved call is null for " + entry.getText();
-                StackValue expressionValue = invokeFunction(componentCall, receiver);
-                StackValue match = generateMatchEntry(expressionValue, entry);
+                StackValue subject;
+                if (entry.hasName()) {
+                    KtSimpleNameExpression nameExpression = bindingContext.get(BindingContext.ELEMENT_NAME_EXPRESSION, entry);
+                    assert nameExpression != null : "name expression must be in named entry " + entry.getText();
+                    subject = visitSimpleNameExpression(nameExpression, receiver);
+                } else {
+                    Call call = bindingContext.get(CALL, entry);
+                    ResolvedCall<?> resolvedCall = bindingContext.get(RESOLVED_CALL, call);
+                    assert resolvedCall != null : "resolved call is null for " + entry.getText();
+                    subject = invokeFunction(resolvedCall, receiver);
+                }
+                StackValue match = generateMatchEntry(subject, entry);
                 result = StackValue.and(result, match);
             }
             return result;
