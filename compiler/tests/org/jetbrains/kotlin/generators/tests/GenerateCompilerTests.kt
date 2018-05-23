@@ -142,7 +142,6 @@ fun main(args: Array<String>) {
         }
 
         testClass<AbstractParsingTest> {
-//            Failing tests 34923, 65051 on generated 121000 tests
 //            random(0, 100, "psi/patternMatching/random", ::RandomKotlinWithPatternMatching)
             model("psi", testMethod = "doParsingTest", pattern = "^(.*)\\.kts?$")
             model("parseCodeFragment/expression", testMethod = "doExpressionCodeFragmentParsingTest", extension = "kt")

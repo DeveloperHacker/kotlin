@@ -41,7 +41,7 @@ class KtPatternConstraint(node: ASTNode) : KtPatternElementImpl(node) {
     val element: KtPatternElement?
         get() = findChildByClass(KtPatternElement::class.java)
 
-    val isAsterisk: Boolean
+    val isTail: Boolean
         get() = findChildByType<PsiElement?>(KtTokens.MUL) != null
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R = visitor.visitPatternConstraint(this, data)

@@ -49,8 +49,8 @@ class KtPatternEntry(node: ASTNode) : KtPatternElementImpl(node) {
     val typedDeconstruction: KtPatternTypedDeconstruction?
         get() = constraint?.typedDeconstruction
 
-    val isAsterisk: Boolean
-        get() = declaration?.isAsterisk ?: simpleConstraint?.isAsterisk ?: false
+    val isTail: Boolean
+        get() = declaration?.isTail ?: simpleConstraint?.isTail ?: false
 
     val element: KtPatternElement?
         get() = findChildByClass(KtPatternElement::class.java)

@@ -84,11 +84,24 @@ enum class ExpressionLocation {
     LEFT, RIGHT
 }
 
-data class GenerationPatternState(val depth: Int, val isAsterisk: Boolean) {
-    fun isTopLevel() = depth == 0
-    fun stepToDepth() = GenerationPatternState(depth + 1, isAsterisk)
-    fun replaceAsterisk(isAsterisk: Boolean) = GenerationPatternState(depth, isAsterisk)
-    fun resetAsterisk() = replaceAsterisk(false)
+enum class GenerationLocation {
+    TOP,
+    TUPLE,
+    LIST
+}
+
+class GenerationPatternState private constructor(val depth: Int, private val location: GenerationLocation, val isTail: Boolean) {
+
+    constructor() : this(0, GenerationLocation.TOP, false)
+
+    fun isTopLevel() = location == GenerationLocation.TOP
+    fun isTuple() = location == GenerationLocation.TUPLE
+
+    fun toTuple() = GenerationPatternState(depth + 1, GenerationLocation.TUPLE, isTail)
+    fun toList() = GenerationPatternState(depth + 1, GenerationLocation.LIST, isTail)
+
+    fun replaceTailMarker(isTail: Boolean) = GenerationPatternState(depth, location, isTail)
+    fun resetTailMarker() = replaceTailMarker(false)
 }
 
 open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
@@ -297,25 +310,27 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     }
 
     private fun generatePattern(): KtPattern {
-        val state = GenerationPatternState(0, false)
+        val state = GenerationPatternState()
         val expression = create { createWhenCondition("is like A() && a") as KtWhenConditionIsPattern }
         val pattern = expression.pattern!!
-        pattern.replace(pattern.entry!!, generatePatternEntry(state))
+        pattern.replace(pattern.entry!!, generatePatternEntry(false, state))
         pattern.replace(pattern.guard!!, generatePatternGuard())
         return pattern
     }
 
     private fun generatePatternWithoutGuard(): KtPattern {
-        val state = GenerationPatternState(0, false)
+        val state = GenerationPatternState()
         val expression = create { createExpression("a is like A()") as KtIsExpression }
         val pattern = expression.pattern!!
-        pattern.replace(pattern.entry!!, generatePatternEntry(state))
+        pattern.replace(pattern.entry!!, generatePatternEntry(false, state))
         return pattern
     }
 
-    private fun generatePatternEntry(state: GenerationPatternState): KtPatternEntry {
-        val expression = create { createExpression("a is like A()") as KtIsExpression }
-        val entry = expression.pattern!!.entry!!
+    private fun generatePatternEntry(afterNamedEntry: Boolean, state: GenerationPatternState): KtPatternEntry {
+        val allowNamedEntry = !state.isTopLevel() && state.isTuple()
+        val name = if (afterNamedEntry || allowNamedEntry && random.nextBoolean()) generateIdentifier() + " = " else ""
+        val expression = create { createExpression("a is like A(${name}1)") as KtIsExpression }
+        val entry = expression.pattern!!.entry!!.typedDeconstruction!!.entries!![0]
         if (random.nextBoolean())
             entry.replace(entry.constraint!!, generatePatternVariableDeclaration(state))
         else
@@ -324,7 +339,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     }
 
     private fun generatePatternVariableDeclaration(state: GenerationPatternState): KtPatternVariableDeclaration {
-        val asterisk = if (state.isAsterisk) "*" else ""
+        val asterisk = if (state.isTail) "*" else ""
         val isTypeConstraint = random.nextInt(3) == 0
         val textConstraint = if (random.nextBoolean()) if (isTypeConstraint) " is A" else " = a" else ""
         val textDeclaration = if (random.nextBoolean()) "val $asterisk${generateIdentifier()}" else "${asterisk}_"
@@ -334,7 +349,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
             if (isTypeConstraint)
                 declaration.replace(it, generatePatternTypeConstraint())
             else
-                declaration.replace(it, generatePatternValueConstraint(state.resetAsterisk()))
+                declaration.replace(it, generatePatternValueConstraint(state.resetTailMarker()))
         }
         return declaration
     }
@@ -356,7 +371,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     }
 
     private fun generatePatternDeconstructionConstraint(state: GenerationPatternState): KtPatternConstraint {
-        val asterisk = if (state.isAsterisk) "*" else ""
+        val asterisk = if (state.isTail) "*" else ""
         val expression = create { createExpression("a is like [${asterisk}A()]") as KtIsExpression }
         val constraint = expression.pattern!!.entry!!.constraint!!.typedDeconstruction!!.list!!.entries.first().constraint!!
         constraint.replace(constraint.typedDeconstruction!!, generatePatternTypedDeconstruction(state))
@@ -364,7 +379,7 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
     }
 
     private fun generatePatternExpressionConstraint(state: GenerationPatternState): KtPatternConstraint {
-        val asterisk = if (state.isAsterisk) "*" else ""
+        val asterisk = if (state.isTail) "*" else ""
         val expression = create { createExpression("a is like [${asterisk}a]") as KtIsExpression }
         val constraint = expression.pattern!!.entry!!.constraint!!.typedDeconstruction!!.list!!.entries.first().constraint!!
         constraint.replace(constraint.expression!!, generatePatternExpression())
@@ -418,9 +433,9 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         else
             typedDeconstruction.remove(typeCallExpression)
         if (random.nextBoolean())
-            typedDeconstruction.replace(deconstruction, generatePatternTuple(state.stepToDepth()))
+            typedDeconstruction.replace(deconstruction, generatePatternTuple(state.toTuple()))
         else
-            typedDeconstruction.replace(deconstruction, generatePatternList(state.stepToDepth()))
+            typedDeconstruction.replace(deconstruction, generatePatternList(state.toList()))
         return typedDeconstruction
     }
 
@@ -428,8 +443,12 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         val components = if (random.nextBoolean()) "a${", a".repeat(random.nextInt(maxNumberComponentsInPatternTuple))}" else ""
         val expression = create { createExpression("a is like A($components)") as KtIsExpression }
         val tuple = expression.pattern!!.entry!!.typedDeconstruction!!.tuple!!
-        for (entry in tuple.entries)
-            tuple.replace(entry, generatePatternEntry(state.resetAsterisk()))
+        var afterNamedEntry = false
+        for (entry in tuple.entries) {
+            val newEntry = generatePatternEntry(afterNamedEntry, state.resetTailMarker())
+            tuple.replace(entry, newEntry)
+            afterNamedEntry = newEntry.hasName()
+        }
         return tuple
     }
 
@@ -439,8 +458,8 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
         val expression = create { createExpression("a is like A[$elements$asteriskEntry]") as KtIsExpression }
         val list = expression.pattern!!.entry!!.typedDeconstruction!!.list!!
         for (entry in list.entries) {
-            val entryState = state.replaceAsterisk(entry.isAsterisk)
-            list.replace(entry, generatePatternEntry(entryState))
+            val entryState = state.replaceTailMarker(entry.isTail)
+            list.replace(entry, generatePatternEntry(false, entryState))
         }
         return list
     }

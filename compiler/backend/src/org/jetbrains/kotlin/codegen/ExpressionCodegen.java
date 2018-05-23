@@ -4517,7 +4517,7 @@ The "returned" value of try expression with no finally is either the last expres
             StackValue result = StackValue.constant(true, Type.BOOLEAN_TYPE);
             boolean visitAsteriskEntry = false;
             for (KtPatternEntry entry : entries) {
-                if (entry.isAsterisk()) {
+                if (entry.isTail()) {
                     if (visitAsteriskEntry) {
                         throw new IllegalArgumentException("unexpected more than one asterisk entries " + list.getText());
                     }

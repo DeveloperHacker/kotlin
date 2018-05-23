@@ -25,7 +25,7 @@ class KtPatternList(node: ASTNode) : KtPatternElementImpl(node), KtPatternDecons
         val info = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
         val (iteratorType, elementType) = resolver.checkIterableConvention(this, state)
         val elementsInfo = entries.map {
-            val type = if (it.isAsterisk) iteratorType else elementType
+            val type = if (it.isTail) iteratorType else elementType
             val receiverValue = TransientReceiver(type)
             val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
             val subject = Subject(it, receiverValue, dataFlowValue)

@@ -1870,6 +1870,27 @@ public class ParsingTestGenerated extends AbstractParsingTest {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/patternMatching/patternMatching.kt");
                 doParsingTest(fileName);
             }
+
+            @TestMetadata("compiler/testData/psi/patternMatching/random")
+            @TestDataPath("$PROJECT_ROOT")
+            @RunWith(JUnit3RunnerWithInners.class)
+            public static class Random extends AbstractParsingTest {
+                public void testAllFilesPresentInRandom() throws Exception {
+                    KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/psi/patternMatching/random"), Pattern.compile("^(.*)\\.kts?$"), TargetBackend.ANY, true);
+                }
+
+                @TestMetadata("rnd12077.kt")
+                public void testRnd12077() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/patternMatching/random/rnd12077.kt");
+                    doParsingTest(fileName);
+                }
+
+                @TestMetadata("rnd19856.kt")
+                public void testRnd19856() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/psi/patternMatching/random/rnd19856.kt");
+                    doParsingTest(fileName);
+                }
+            }
         }
 
         @TestMetadata("compiler/testData/psi/platformTypesRecovery")

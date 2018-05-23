@@ -13,7 +13,6 @@ private val GUARD_PREFIX = ANDAND!!
 
 enum class ParsingLocation {
     TOP,
-    NAME,
     DECLARATION,
     DECONSTRUCTION
 }
@@ -21,7 +20,6 @@ enum class ParsingLocation {
 data class ParsingState(val isExpression: Boolean, val location: ParsingLocation) {
     val isTopLevel get() = location == ParsingLocation.TOP
 
-    fun toName() = ParsingState(isExpression, ParsingLocation.NAME)
     fun toDeclaration() = ParsingState(isExpression, ParsingLocation.DECLARATION)
     fun toDeconstruction() = ParsingState(isExpression, ParsingLocation.DECONSTRUCTION)
 }
@@ -97,21 +95,17 @@ class PatternMatchingParsing(
 
     private fun parsePatternEntry(state: ParsingState) {
         val patternMarker = mark()
-        val hasName = tryParseEntryName(state)
+        if (atNamedEntry()) {
+            errorIf(state.isTopLevel, "named entry not allowed in this position")
+            expect(IDENTIFIER, "expected identifier in begin of named entry")
+            expect(EQ, "expected '=' after name of named entry")
+        }
         if (atPatternVariableDeclaration()) {
             parsePatternVariableDeclaration(state.toDeclaration())
         } else {
-            parsePatternValueConstraint(if (hasName) state.toName() else state)
+            parsePatternValueConstraint(state)
         }
         patternMarker.done(PATTERN_ENTRY)
-    }
-
-    private fun tryParseEntryName(state: ParsingState): Boolean {
-        if (!atNamedEntry()) return false
-        errorIf(state.isTopLevel, "named entry not allowed in this position")
-        expect(IDENTIFIER, "expected identifier in begin of named entry")
-        expect(EQ, "expected '=' after name of named entry")
-        return true
     }
 
     private fun parsePatternVariableDeclaration(state: ParsingState) {

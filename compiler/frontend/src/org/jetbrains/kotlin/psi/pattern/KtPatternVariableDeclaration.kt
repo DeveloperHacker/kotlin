@@ -178,7 +178,7 @@ class KtPatternVariableDeclaration(node: ASTNode) : KtPatternElementImpl(node), 
         return visitor.visitPatternVariableDeclaration(this, data)
     }
 
-    val isAsterisk: Boolean
+    val isTail: Boolean
         get() = findChildByType<PsiElement?>(KtTokens.MUL) != null
 
     val isEmpty: Boolean
