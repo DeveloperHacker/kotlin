@@ -41,20 +41,17 @@ class KtPatternTuple(node: ASTNode) : KtPatternElementImpl(node), KtPatternDecon
         val componentInfo = entries.mapIndexed { i, entry ->
             hasNonSingleUnderscoreEntries = hasNonSingleUnderscoreEntries || entry.isNotEmptyDeclaration()
             val name = entry.name()
-            val subject = if (name != null) {
+            val type = if (name != null) {
                 val errorType = lazy { ErrorUtils.createErrorType("${name.text} return type") }
-                val type = resolver.getPropertyType(entry, name.text, state) ?: errorType.value
-                val receiverValue = TransientReceiver(type)
-                val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
-                Subject(this, receiverValue, dataFlowValue)
+                resolver.getPropertyType(entry, name.text, state) ?: errorType.value
             } else {
                 val componentName = PatternResolver.getComponentName(i)
                 val errorType = lazy { ErrorUtils.createErrorType("$componentName() return type") }
-                val type = resolver.getComponentType(componentName, entry, state) ?: errorType.value
-                val receiverValue = TransientReceiver(type)
-                val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
-                Subject(entry, receiverValue, dataFlowValue)
+                resolver.getComponentType(componentName, entry, state) ?: errorType.value
             }
+            val receiverValue = TransientReceiver(type)
+            val dataFlowValue = resolver.dataFlowValueFactory.createDataFlowValue(receiverValue, state.context)
+            val subject = Subject(entry, receiverValue, dataFlowValue)
             entry.getTypeInfo(resolver, state.replaceSubject(subject))
         }
         if (!hasNonSingleUnderscoreEntries && !entries.isEmpty())

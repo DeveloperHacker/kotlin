@@ -30,58 +30,67 @@ class PatternMatchingParsing(
 ) : AbstractKotlinParsing(builder) {
 
     /**
-     * pattern
-     * : patternEntry (patternGuard)?
-     * ;
+     * patternCondition ::=
+     * EXPRESSION 'is' 'like' pattern
+     * |	'is' 'like' patternWithGuard
      *
+     * pattern ::=
      * patternEntry
-     * : (identifier "=")? patternVariableDeclaration
-     * : (identifier "=")? patternTypedTuple
-     * : (identifier "=")? patternTypedList
-     * : (identifier "=")? patternExpression
-     * ;
      *
-     * patternAsteriskEntry
-     * : patternVariableDeclaration-asterisk
-     * : "*" patternTypedTuple
-     * : "*" patternTypedList
-     * : "*" patternExpression
-     * ;
+     * patternWithGuard ::=
+     * patternEntry (patternGuard)?
      *
+     * patternEntry ::=
      * patternVariableDeclaration
-     * : "val" identifier ("is" patternTypeReference)?
-     * : "val" identifier ("=" patternExpression | patternTypedTuple)?
-     * ;
+     * |	patternTypedDeconstruction
+     * |	patternExpression
      *
-     * patternVariableDeclaration-asterisk
-     * : "val" "*" identifier ("is" patternTypeReference)?
-     * : "val" "*" identifier ("=" patternExpression | patternTypedTuple)?
-     * ;
+     * patternTailEntry ::=
+     * patternTailVariableDeclaration
+     * |	'*' patternTypedDeconstruction
+     * |	'*' patternExpression
      *
-     * patternExpression
-     * : ("eq")? expression)
-     * ;
+     * patternVariableDeclaration ::=
+     * 'val' IDENTIFIER ('is' patternTypeReference)?
+     * |	'val' IDENTIFIER ('=' (patternExpression | patternTypedDeconstruction))?
+     * |	UNDERSCORE
      *
-     * patternTypeReference
-     * : typeRef
-     * ;
+     * patternTailVariableDeclaration ::=
+     * 'val' '*' IDENTIFIER ('is' patternTypeReference)?
+     * |	'val' '*' IDENTIFIER ('=' (patternExpression | patternTypedDeconstruction))?
+     * |	'*' UNDERSCORE
      *
-     * patternDeconstruction
-     * : patternTypeReference? patternTuple
-     * : patternTypeReference? patternList
-     * ;
+     * patternExpression ::=
+     * ('eq')? EXPRESSION
      *
-     * patternTuple
-     * : "(" patternEntry{","}? ")"
-     * ;
+     * patternTypeCallReference ::=
+     * simpleTypeReference
+     * |	simpleCallReference
      *
-     * patternList
-     * : "[" patternEntry{","}? ("," patternAsteriskEntry)? "]"
-     * ;
+     * patternTypeReference ::=
+     * simpleTypeReference
      *
-     * patternGuard
-     * : "&&" expression
-     * ;
+     * patternTypedDeconstruction ::=
+     * patternTypeCallReference? patternTuple
+     * |	patternTypeCallReference? patternList
+     *
+     * patternTuple ::=
+     * '(' (patternEntry (',' patternEntry)*)? ((',' IDENTIFIER '=' patternEntry)*)? ')'
+     *
+     * patternList ::=
+     * '[' (patternEntry (',' patternEntry)*)? (',' patternTailEntry)? ']'
+     *
+     * patternGuard ::=
+     * '&&' EXPRESSION
+     *
+     * typeArguments ::=
+     * '<' (TYPE_ARGUMENT (',' TYPE_ARGUMENT)*)? '>'
+     *
+     * simpleTypeReference ::=
+     * IDENTIFIER typeArguments? '?'*
+     *
+     * simpleCallReference ::=
+     * IDENTIFIER typeArguments?
      */
     fun parsePattern(isExpression: Boolean) {
         val state = ParsingState(isExpression, ParsingLocation.TOP)
