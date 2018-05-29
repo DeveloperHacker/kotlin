@@ -915,6 +915,8 @@ public interface Errors {
     DiagnosticFactory2<PsiElement, FunctionDescriptor, String> DECONSTRUCTOR_MODIFIER_REQUIRED = DiagnosticFactory2.create(ERROR);
     DiagnosticFactory1<PsiElement, String> INAPPLICABLE_DECONSTRUCTOR_MODIFIER = DiagnosticFactory1.create(ERROR);
 
+    DiagnosticFactory0<KtExpression> EXPECTED_PARENTHESISE_GUARD = DiagnosticFactory0.create(WARNING);
+
     DiagnosticFactory0<KtPattern> EXPECTED_PATTERN_ENTRY = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternConstraint> EXPECTED_PATTERN_CONSTRAINT_ELEMENT = DiagnosticFactory0.create(ERROR);
     DiagnosticFactory0<KtPatternEntry> EXPECTED_PATTERN_ENTRY_ELEMENT = DiagnosticFactory0.create(ERROR);

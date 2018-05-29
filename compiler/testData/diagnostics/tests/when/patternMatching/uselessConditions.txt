@@ -5,6 +5,10 @@ public fun foo10(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo11(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo12(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo13(/*0*/ a: Base<Base<kotlin.Int>>): kotlin.Int
+public fun foo14(/*0*/ a: kotlin.Any): kotlin.Int
+public fun foo15(/*0*/ a: kotlin.Any): kotlin.Int
+public fun foo16(/*0*/ a: kotlin.Any): kotlin.Any
+public fun foo17(/*0*/ a: kotlin.Any): kotlin.Any
 public fun foo2(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo3(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo4(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
@@ -13,6 +17,18 @@ public fun foo6(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo7(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo8(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo9(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
+
+public final data class B {
+    public constructor B(/*0*/ a: kotlin.Any, /*1*/ b: kotlin.Any)
+    public final val a: kotlin.Any
+    public final val b: kotlin.Any
+    public final operator /*synthesized*/ fun component1(): kotlin.Any
+    public final operator /*synthesized*/ fun component2(): kotlin.Any
+    public final /*synthesized*/ fun copy(/*0*/ a: kotlin.Any = ..., /*1*/ b: kotlin.Any = ...): B
+    public open override /*1*/ /*synthesized*/ fun equals(/*0*/ other: kotlin.Any?): kotlin.Boolean
+    public open override /*1*/ /*synthesized*/ fun hashCode(): kotlin.Int
+    public open override /*1*/ /*synthesized*/ fun toString(): kotlin.String
+}
 
 public final data class Base</*0*/ T> {
     public constructor Base</*0*/ T>(/*0*/ a: kotlin.Int, /*1*/ b: T)

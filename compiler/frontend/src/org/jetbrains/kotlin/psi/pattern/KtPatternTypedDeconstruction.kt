@@ -78,7 +78,7 @@ class KtPatternTypedDeconstruction(node: ASTNode) : KtPatternElementImpl(node) {
         val error = Errors.EXPECTED_PATTERN_TYPED_DECONSTRUCTION_INSTANCE
         val patch = ConditionalTypeInfo.empty(deconstructionState.subject.type, deconstructionState.dataFlowInfo)
         val deconstructionInfo =
-            deconstruction?.getTypeInfo(resolver, deconstructionState).errorAndReplaceIfNull(this, deconstructionState, error, patch)
+            deconstruction?.getTypeInfo(resolver, deconstructionState).reportAndReplaceIfNull(this, deconstructionState, error, patch)
         info.and(deconstructionInfo)
     }
 }

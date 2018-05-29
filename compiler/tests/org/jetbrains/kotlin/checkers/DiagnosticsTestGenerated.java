@@ -25195,6 +25195,12 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
                     doTest(fileName);
                 }
 
+                @TestMetadata("guards.kt")
+                public void testGuards() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/guards.kt");
+                    doTest(fileName);
+                }
+
                 @TestMetadata("records.kt")
                 public void testRecords() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/records.kt");
@@ -25210,6 +25216,12 @@ public class DiagnosticsTestGenerated extends AbstractDiagnosticsTest {
                 @TestMetadata("syntax.kt")
                 public void testSyntax() throws Exception {
                     String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/syntax.kt");
+                    doTest(fileName);
+                }
+
+                @TestMetadata("typeDeconstructors.kt")
+                public void testTypeDeconstructors() throws Exception {
+                    String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/tests/when/patternMatching/typeDeconstructors.kt");
                     doTest(fileName);
                 }
 

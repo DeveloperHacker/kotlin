@@ -10,10 +10,10 @@ import com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.lexer.KtTokens.KEYWORDS
 import org.jetbrains.kotlin.lexer.KtTokens.SOFT_KEYWORDS
-import org.jetbrains.kotlin.parsing.KotlinExpressionParsing
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.pattern.*
 import org.jetbrains.kotlin.psi.psiUtil.*
+import org.jetbrains.kotlin.types.expressions.precedence
 import java.util.*
 
 
@@ -236,19 +236,6 @@ open class RandomKotlin(seed: Long, project: Project) : Generator(project) {
                     ExpressionLocation.RIGHT -> it.precedence >= parentExpression.precedence
                 }
             }
-        }
-
-    private val KtExpression.precedence: Int
-        get() = when (this) {
-            is KtIfExpression -> Int.MAX_VALUE
-            is KtIsExpression -> KotlinExpressionParsing.Precedence.IN_OR_IS.ordinal
-            is KtBinaryExpression -> KotlinExpressionParsing.Precedence.values().asSequence()
-                .filter { it.operations.contains(operationToken) }
-                .map(KotlinExpressionParsing.Precedence::ordinal)
-                .max() ?: throw IllegalStateException("unresolved binary expression precedence")
-            is KtPrefixExpression -> KotlinExpressionParsing.Precedence.PREFIX.ordinal
-            is KtPostfixExpression -> KotlinExpressionParsing.Precedence.POSTFIX.ordinal
-            else -> -1
         }
 
     private fun generateWhenExpression(): KtWhenExpression {

@@ -93,7 +93,8 @@ class PatternMatchingTypingVisitor internal constructor(facade: ExpressionTyping
         val deconstruction = pattern.deconstruction
         val uselessDeclaration = declaration?.let { uselessDeclaration(context, it) } ?: true
         val uselessDeconstruction = deconstruction?.let { uselessTypedDeconstruction(context, it) } ?: true
-        return uselessDeclaration && uselessDeconstruction
+        val hasGuard = pattern.hasGuard()
+        return uselessDeclaration && uselessDeconstruction && !hasGuard
     }
 
     private fun analyseIsMatch(

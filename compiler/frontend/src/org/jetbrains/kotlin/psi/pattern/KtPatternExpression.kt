@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtVisitor
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
-import org.jetbrains.kotlin.types.expressions.errorAndReplaceIfNull
+import org.jetbrains.kotlin.types.expressions.reportAndReplaceIfNull
 
 class KtPatternExpression(node: ASTNode) : KtPatternElementImpl(node) {
 
@@ -43,6 +43,6 @@ class KtPatternExpression(node: ASTNode) : KtPatternElementImpl(node) {
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val error = Errors.EXPECTED_PATTERN_EXPRESSION_INSTANCE
         val patch = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
-        expression?.let { resolver.getTypeInfo(it, state) }.errorAndReplaceIfNull(this, state, error, patch)
+        expression?.let { resolver.getTypeInfo(it, state) }.reportAndReplaceIfNull(this, state, error, patch)
     }
 }

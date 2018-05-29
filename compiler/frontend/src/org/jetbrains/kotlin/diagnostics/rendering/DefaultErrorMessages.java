@@ -62,6 +62,7 @@ public class DefaultErrorMessages {
     }
 
     static {
+        MAP.put(EXPECTED_PARENTHESISE_GUARD, "Use ");
         MAP.put(EXPECTED_PATTERN_ENTRY, "Expected pattern entry");
         MAP.put(EXPECTED_PATTERN_CONSTRAINT_ELEMENT, "Expected pattern element");
         MAP.put(EXPECTED_PATTERN_ENTRY_ELEMENT, "Expected pattern entry element");

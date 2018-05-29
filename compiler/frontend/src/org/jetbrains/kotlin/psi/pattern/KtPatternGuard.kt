@@ -18,14 +18,10 @@ package org.jetbrains.kotlin.psi.pattern
 
 import com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.parsing.GUARD_PREFIX
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtVisitor
-import org.jetbrains.kotlin.resolve.calls.smartcasts.ConditionalDataFlowInfo
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowInfo
-import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
-import org.jetbrains.kotlin.types.expressions.PatternResolveState
-import org.jetbrains.kotlin.types.expressions.PatternResolver
-import org.jetbrains.kotlin.types.expressions.errorAndReplaceIfNull
+import org.jetbrains.kotlin.types.expressions.*
 
 class KtPatternGuard(node: ASTNode) : KtPatternElementImpl(node) {
 
@@ -36,8 +32,13 @@ class KtPatternGuard(node: ASTNode) : KtPatternElementImpl(node) {
 
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val error = Errors.EXPECTED_PATTERN_GUARD_INSTANCE
-        val patch = ConditionalDataFlowInfo(state.dataFlowInfo, DataFlowInfo.EMPTY)
-        val dataFlow = expression?.let { resolver.checkCondition(it, state) }.errorAndReplaceIfNull(this, state, error, patch)
-        ConditionalTypeInfo(resolver.builtIns.booleanType, dataFlow)
+        val warning = Errors.EXPECTED_PARENTHESISE_GUARD
+        val patch = ConditionalTypeInfo.empty(resolver.builtIns.booleanType, state.dataFlowInfo)
+        expression?.let {
+            if (it.precedence > GUARD_PREFIX.precedence) {
+                state.context.trace.report(warning.on(it))
+            }
+            resolver.checkCondition(it, state)
+        }.reportAndReplaceIfNull(this, state, error, patch)
     }
 }

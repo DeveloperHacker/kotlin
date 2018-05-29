@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
-import org.jetbrains.kotlin.types.expressions.errorAndReplaceIfNull
+import org.jetbrains.kotlin.types.expressions.reportAndReplaceIfNull
 
 class KtPattern(node: ASTNode) : KtPatternElementImpl(node) {
 
@@ -50,7 +50,7 @@ class KtPattern(node: ASTNode) : KtPatternElementImpl(node) {
 
     private fun hasEntryDynamicLimits(context: BindingContext) = entry?.hasDynamicLimits(context) ?: true
 
-    private fun hasGuard() = guard != null
+    fun hasGuard() = guard != null
 
     fun isSimple(context: BindingContext) = guard == null && entry?.isSimple(context) ?: true
 
@@ -63,7 +63,7 @@ class KtPattern(node: ASTNode) : KtPatternElementImpl(node) {
     override fun getTypeInfo(resolver: PatternResolver, state: PatternResolveState) = resolver.restoreOrCreate(this, state) {
         val error = Errors.EXPECTED_PATTERN_ENTRY
         val patch = ConditionalTypeInfo.empty(state.subject.type, state.dataFlowInfo)
-        val entryInfo = entry?.getTypeInfo(resolver, state).errorAndReplaceIfNull(this, state, error, patch)
+        val entryInfo = entry?.getTypeInfo(resolver, state).reportAndReplaceIfNull(this, state, error, patch)
         val guardState = state.replaceDataFlow(entryInfo.dataFlowInfo.thenInfo)
         val guardInfo = guard?.getTypeInfo(resolver, guardState)
         entryInfo.and(guardInfo)

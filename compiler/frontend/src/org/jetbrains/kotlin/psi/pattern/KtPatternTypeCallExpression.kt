@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.resolve.diagnostics.MutableDiagnosticsWithSuppressio
 import org.jetbrains.kotlin.types.expressions.ConditionalTypeInfo
 import org.jetbrains.kotlin.types.expressions.PatternResolveState
 import org.jetbrains.kotlin.types.expressions.PatternResolver
-import org.jetbrains.kotlin.types.expressions.errorAndReplaceIfNull
+import org.jetbrains.kotlin.types.expressions.reportAndReplaceIfNull
 
 class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node), KtPostProcessableElement {
 
@@ -63,6 +63,6 @@ class KtPatternTypeCallExpression(node: ASTNode) : KtPatternElementImpl(node), K
             state.context.trace.report(Errors.UNRESOLVED_PATTERN_TYPE_CALL_EXPRESSION.on(this, it))
             resolvePsiElement(it, state)
         }
-        info.errorAndReplaceIfNull(this, state, error, patch)
+        info.reportAndReplaceIfNull(this, state, error, patch)
     }
 }

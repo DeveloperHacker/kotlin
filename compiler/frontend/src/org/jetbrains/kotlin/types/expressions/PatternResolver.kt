@@ -18,12 +18,13 @@ package org.jetbrains.kotlin.types.expressions
 
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
+import com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory0
-import org.jetbrains.kotlin.diagnostics.DiagnosticFactory1
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.parsing.KotlinExpressionParsing
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.pattern.KtPattern
 import org.jetbrains.kotlin.psi.pattern.KtPatternElement
@@ -216,11 +217,11 @@ class PatternResolver(
             null
         }
 
-    fun checkCondition(expression: KtExpression, state: PatternResolveState): ConditionalDataFlowInfo {
+    fun checkCondition(expression: KtExpression, state: PatternResolveState): ConditionalTypeInfo {
         val context = state.context.replaceScope(state.scope)
         val visitor = ControlStructureTypingVisitor(facade)
-        val conditionalInfo = visitor.checkCondition(expression, context)
-        return ConditionalDataFlowInfo(conditionalInfo, context.dataFlowInfo)
+        val info = visitor.checkCondition(expression, context)
+        return ConditionalTypeInfo.empty(builtIns.booleanType, info)
     }
 
     fun defineVariable(declaration: KtPatternVariableDeclaration, state: PatternResolveState): DataFlowInfo {
@@ -239,19 +240,30 @@ class PatternResolver(
         val variableDataFlowValue =
             dataFlowValueFactory.createDataFlowValue(declaration, descriptor, trace.bindingContext, usageModuleDescriptor)
         val subjectDataFlowValue = state.subject.dataFlowValue
-        return state.dataFlowInfo.assign(variableDataFlowValue, subjectDataFlowValue, components.languageVersionSettings)
+        val i = state.dataFlowInfo.assign(variableDataFlowValue, subjectDataFlowValue, components.languageVersionSettings)
+        return i
     }
 }
 
-fun <T, E : PsiElement> T?.errorAndReplaceIfNull(element: E, state: PatternResolveState, error: DiagnosticFactory0<E>, patch: T): T {
-    if (this != null) return this
-    state.context.trace.report(error.on(element))
-    return patch
-}
+val IElementType.precedence
+    get() = KotlinExpressionParsing.Precedence.values().asSequence()
+        .filter { it.operations.contains(this) }
+        .map(KotlinExpressionParsing.Precedence::ordinal)
+        .max() ?: throw IllegalStateException("unresolved element precedence")
 
-fun <T, E : PsiElement> T?.errorAndReplaceIfNull(element: E, state: PatternResolveState, error: DiagnosticFactory1<E, E>, patch: T): T {
+val KtExpression.precedence: Int
+    get() = when (this) {
+        is KtIfExpression -> Int.MAX_VALUE
+        is KtIsExpression -> KotlinExpressionParsing.Precedence.IN_OR_IS.ordinal
+        is KtBinaryExpression -> operationToken.precedence
+        is KtPrefixExpression -> KotlinExpressionParsing.Precedence.PREFIX.ordinal
+        is KtPostfixExpression -> KotlinExpressionParsing.Precedence.POSTFIX.ordinal
+        else -> -1
+    }
+
+fun <T, E : PsiElement> T?.reportAndReplaceIfNull(element: E, state: PatternResolveState, diagnostic: DiagnosticFactory0<E>, patch: T): T {
     if (this != null) return this
-    state.context.trace.report(error.on(element, element))
+    state.context.trace.report(diagnostic.on(element))
     return patch
 }
 

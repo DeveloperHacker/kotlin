@@ -9,7 +9,7 @@ import com.intellij.psi.tree.TokenSet
 import org.jetbrains.kotlin.KtNodeTypes.*
 import org.jetbrains.kotlin.lexer.KtTokens.*
 
-private val GUARD_PREFIX = ANDAND!!
+val GUARD_PREFIX = ANDAND!!
 
 enum class ParsingLocation {
     TOP,

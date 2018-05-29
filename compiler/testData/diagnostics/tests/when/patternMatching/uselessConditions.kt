@@ -3,6 +3,8 @@ data class Base<T>(val a: Int, val b: T)
 
 typealias A = Base<Int>
 
+data class B(val a: Any, val b: Any)
+
 fun foo1(a: A) = when (a) {
     <!USELESS_IS_CHECK!>is like val _<!> -> 0
 }
@@ -53,4 +55,28 @@ fun foo12(a: A) = <!NO_ELSE_IN_WHEN!>when<!> (a) {
 
 fun foo13(a: Base<Base<Int>>) = when (a) {
     is like (_, <!USELESS_TUPLE_DECONSTRUCTION!>(_, _)<!>) -> 0
+}
+
+fun foo14(a: Any) = when (<!DEBUG_INFO_SMARTCAST!>a<!>) {
+    is like B(1, 2) -> 1
+    is B -> 4
+    else -> 0
+}
+
+fun foo15(a: Any) = when (<!DEBUG_INFO_SMARTCAST!>a<!>) {
+    is like B(_, val b is Int) -> <!DEBUG_INFO_SMARTCAST!>b<!>
+    is B -> 4
+    else -> 0
+}
+
+fun foo16(a: Any) = when (<!DEBUG_INFO_SMARTCAST!>a<!>) {
+    is like B(val b) -> b
+    is <!DUPLICATE_LABEL_IN_WHEN!>B<!> -> 4
+    else -> 0
+}
+
+fun foo17(a: Any) = when (<!DEBUG_INFO_SMARTCAST!>a<!>) {
+    is like B(_, val b) && b is Int -> b
+    is B -> 4
+    else -> 0
 }
