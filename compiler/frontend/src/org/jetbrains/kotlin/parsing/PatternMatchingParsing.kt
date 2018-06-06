@@ -13,14 +13,12 @@ val GUARD_PREFIX = ANDAND!!
 
 enum class ParsingLocation {
     TOP,
-    DECLARATION,
     DECONSTRUCTION
 }
 
 data class ParsingState(val isExpression: Boolean, val location: ParsingLocation) {
     val isTopLevel get() = location == ParsingLocation.TOP
 
-    fun toDeclaration() = ParsingState(isExpression, ParsingLocation.DECLARATION)
     fun toDeconstruction() = ParsingState(isExpression, ParsingLocation.DECONSTRUCTION)
 }
 
@@ -110,7 +108,7 @@ class PatternMatchingParsing(
             expect(EQ, "expected '=' after name of named entry")
         }
         if (atPatternVariableDeclaration()) {
-            parsePatternVariableDeclaration(state.toDeclaration())
+            parsePatternVariableDeclaration(state)
         } else {
             parsePatternValueConstraint(state)
         }

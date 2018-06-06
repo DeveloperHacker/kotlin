@@ -13920,6 +13920,33 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
             doTest(fileName);
         }
 
+        @TestMetadata("compiler/testData/codegen/box/patternMatching/examples")
+        @TestDataPath("$PROJECT_ROOT")
+        @RunWith(JUnit3RunnerWithInners.class)
+        public static class Examples extends AbstractIrBlackBoxCodegenTest {
+            public void testAllFilesPresentInExamples() throws Exception {
+                KotlinTestUtils.assertAllTestsPresentByMetadata(this.getClass(), new File("compiler/testData/codegen/box/patternMatching/examples"), Pattern.compile("^(.+)\\.kt$"), TargetBackend.JVM, true);
+            }
+
+            @TestMetadata("generics.kt")
+            public void testGenerics() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/examples/generics.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("joinLists.kt")
+            public void testJoinLists() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/examples/joinLists.kt");
+                doTest(fileName);
+            }
+
+            @TestMetadata("strings.kt")
+            public void testStrings() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/examples/strings.kt");
+                doTest(fileName);
+            }
+        }
+
         @TestMetadata("compiler/testData/codegen/box/patternMatching/if")
         @TestDataPath("$PROJECT_ROOT")
         @RunWith(JUnit3RunnerWithInners.class)
