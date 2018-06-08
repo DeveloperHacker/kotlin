@@ -14,8 +14,8 @@ deconstructor fun String.Boolean() = when (this) {
 fun parseOrNull(string: String): Int? {
     if (string.split(" ") is like [Int(val value1), Boolean(val multiply), val *other]) {
         return when (other) {
-            is like [Int(val value2)] && multiply -> value1 * value2
             is like [] && !multiply -> value1
+            is like [Int(val value2)] && multiply -> value1 * value2
             else -> null
         }
     }
@@ -30,5 +30,6 @@ fun box(): String {
     assertEquals(null, parseOrNull("some text"))
     assertEquals(null, parseOrNull("1 true 1 some text"))
     assertEquals(null, parseOrNull("1 false some text"))
+    assertEquals(null, parseOrNull("1 false some"))
     return "OK"
 }

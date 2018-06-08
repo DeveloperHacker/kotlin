@@ -13940,6 +13940,12 @@ public class IrBlackBoxCodegenTestGenerated extends AbstractIrBlackBoxCodegenTes
                 doTest(fileName);
             }
 
+            @TestMetadata("simplify.kt")
+            public void testSimplify() throws Exception {
+                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/examples/simplify.kt");
+                doTest(fileName);
+            }
+
             @TestMetadata("strings.kt")
             public void testStrings() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/codegen/box/patternMatching/examples/strings.kt");
