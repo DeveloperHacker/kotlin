@@ -1901,7 +1901,7 @@ public class KotlinParsing extends AbstractKotlinParsing {
     private final TokenSet POSSIBLE_TYPE_COMPLETIONS =
             orSet(andNot(OPERATIONS, TokenSet.create(IDENTIFIER)), TokenSet.create(ARROW, COMMA));
 
-    void parseIsExpression(boolean isExpression) {
+    void parseIsExpression(boolean inWhenIsCondition) {
         if (at(LIKE_KEYWORD)) {
             PsiBuilder.Marker marker = mark();
             parseTypeRef();
@@ -1911,7 +1911,7 @@ public class KotlinParsing extends AbstractKotlinParsing {
             }
             marker.rollbackTo();
             advance(); // LIKE_KEYWORD
-            myPatternMatchingParsing.parsePattern(isExpression);
+            myPatternMatchingParsing.parsePattern(inWhenIsCondition);
         } else {
             parseTypeRef();
         }

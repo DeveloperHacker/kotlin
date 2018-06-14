@@ -1,6 +1,6 @@
 package
 
-public fun </*0*/ F, /*1*/ S> foo(/*0*/ a: A<F?, S?>): kotlin.Boolean
+public fun foo(/*0*/ a: A<*, *>): kotlin.Boolean
 public fun </*0*/ F, /*1*/ S> A<F?, S?>.NotNull(): Pair<F, S>?
 public fun </*0*/ F, /*1*/ S> A<F, S>.Unapply(): Pair<F, S>
 

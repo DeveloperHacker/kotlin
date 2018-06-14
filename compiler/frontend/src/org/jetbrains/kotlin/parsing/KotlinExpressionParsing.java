@@ -182,7 +182,7 @@ public class KotlinExpressionParsing extends AbstractKotlinParsing {
             @Override
             public KtNodeType parseRightHandSide(IElementType operation, KotlinExpressionParsing parser) {
                 if (operation == IS_KEYWORD || operation == NOT_IS) {
-                    parser.myKotlinParsing.parseIsExpression(true);
+                    parser.myKotlinParsing.parseIsExpression(false);
                     return IS_EXPRESSION;
                 }
 
@@ -979,7 +979,7 @@ public class KotlinExpressionParsing extends AbstractKotlinParsing {
                 error("Expecting a type");
             }
             else {
-                myKotlinParsing.parseIsExpression(false);
+                myKotlinParsing.parseIsExpression(true);
             }
             condition.done(WHEN_CONDITION_IS_PATTERN);
         }

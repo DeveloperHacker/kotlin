@@ -8,7 +8,7 @@ deconstructor fun <F, S> A<F?, S?>.NotNull() = if (a != null && b != null) Pair(
 
 deconstructor fun <F, S> A<F, S>.Unapply() = Pair(a, b)
 
-fun <F, S>foo(a: A<F?, S?>) = when (a) {
+fun foo(a: A<*, *>) = when (a) {
     is like SameValues(val f, val s) -> f == s
     is like NotNull(val f, val s) -> f != s
     is like Unapply(val f, val s) -> f == s

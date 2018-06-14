@@ -11,15 +11,20 @@ import org.jetbrains.kotlin.lexer.KtTokens.*
 
 val GUARD_PREFIX = ANDAND!!
 
+val LOW_PRECEDENCE_OPERATORS = TokenSet.orSet(*KotlinExpressionParsing.Precedence.values()
+    .filter { it.ordinal > KotlinExpressionParsing.Precedence.IN_OR_IS.ordinal }
+    .map { it.operations }.toTypedArray()
+)
+
 enum class ParsingLocation {
     TOP,
     DECONSTRUCTION
 }
 
-data class ParsingState(val isExpression: Boolean, val location: ParsingLocation) {
+data class ParsingState(val inWhenIsCondition: Boolean, val location: ParsingLocation) {
     val isTopLevel get() = location == ParsingLocation.TOP
 
-    fun toDeconstruction() = ParsingState(isExpression, ParsingLocation.DECONSTRUCTION)
+    fun toDeconstruction() = ParsingState(inWhenIsCondition, ParsingLocation.DECONSTRUCTION)
 }
 
 class PatternMatchingParsing(
@@ -90,8 +95,8 @@ class PatternMatchingParsing(
      * simpleCallReference ::=
      * IDENTIFIER typeArguments?
      */
-    fun parsePattern(isExpression: Boolean) {
-        val state = ParsingState(isExpression, ParsingLocation.TOP)
+    fun parsePattern(inWhenIsCondition: Boolean) {
+        val state = ParsingState(inWhenIsCondition, ParsingLocation.TOP)
         val patternMarker = mark()
         parsePatternEntry(state)
         if (atGuard(state)) {
@@ -281,10 +286,14 @@ class PatternMatchingParsing(
         val patternMarker = mark()
         if (atDistinguishablePatternExpression())
             advance() // EQ_KEYWORD
-        if (state.isTopLevel)
+        if (state.isTopLevel) {
             KotlinExpressionParsing.Precedence.IN_OR_IS.parseHigherPrecedence(kotlinParsing.myExpressionParsing)
-        else
+            if (state.inWhenIsCondition && atSet(LOW_PRECEDENCE_OPERATORS)) {
+                errorUntil("Use parentheses for operators $LOW_PRECEDENCE_OPERATORS", TokenSet.create(ARROW, COMMA, LBRACE, RBRACE))
+            }
+        } else {
             kotlinParsing.myExpressionParsing.parseExpression()
+        }
         patternMarker.done(PATTERN_EXPRESSION)
     }
 
@@ -305,7 +314,7 @@ class PatternMatchingParsing(
     }
 
     private fun atGuard(state: ParsingState): Boolean {
-        return !state.isExpression && at(GUARD_PREFIX)
+        return state.inWhenIsCondition && at(GUARD_PREFIX)
     }
 
     private fun atAsteriskSingleUnderscore(): Boolean {
