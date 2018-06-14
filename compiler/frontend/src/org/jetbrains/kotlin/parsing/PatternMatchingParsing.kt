@@ -279,10 +279,12 @@ class PatternMatchingParsing(
 
     private fun parsePatternExpression(state: ParsingState) {
         val patternMarker = mark()
-        errorIf(state.isTopLevel, "pattern expression not allowed in this position")
         if (atDistinguishablePatternExpression())
             advance() // EQ_KEYWORD
-        kotlinParsing.myExpressionParsing.parseExpression()
+        if (state.isTopLevel)
+            KotlinExpressionParsing.Precedence.IN_OR_IS.parseHigherPrecedence(kotlinParsing.myExpressionParsing)
+        else
+            kotlinParsing.myExpressionParsing.parseExpression()
         patternMarker.done(PATTERN_EXPRESSION)
     }
 

@@ -57,6 +57,10 @@ fun foo13(a: Base<Base<Int>>) = when (a) {
     is like (_, <!USELESS_TUPLE_DECONSTRUCTION!>(_, _)<!>) -> 0
 }
 
+fun foo14(a: A) = when (a) {
+    is like (_, 2) -> 0
+}
+
 fun foo14(a: Any) = when (<!DEBUG_INFO_SMARTCAST!>a<!>) {
     is like B(1, 2) -> 1
     is B -> 4

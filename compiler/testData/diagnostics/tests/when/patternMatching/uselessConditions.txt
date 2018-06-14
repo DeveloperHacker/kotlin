@@ -5,6 +5,7 @@ public fun foo10(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo11(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo12(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo13(/*0*/ a: Base<Base<kotlin.Int>>): kotlin.Int
+public fun foo14(/*0*/ a: A /* = Base<kotlin.Int> */): kotlin.Int
 public fun foo14(/*0*/ a: kotlin.Any): kotlin.Int
 public fun foo15(/*0*/ a: kotlin.Any): kotlin.Int
 public fun foo16(/*0*/ a: kotlin.Any): kotlin.Any

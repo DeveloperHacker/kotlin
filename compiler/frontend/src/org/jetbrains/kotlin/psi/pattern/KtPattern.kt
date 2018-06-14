@@ -48,6 +48,9 @@ class KtPattern(node: ASTNode) : KtPatternElementImpl(node) {
     val declaration: KtPatternVariableDeclaration?
         get() = entry?.declaration
 
+    val expression: KtPatternExpression?
+        get() = entry?.expression
+
     private fun hasEntryDynamicLimits(context: BindingContext) = entry?.hasDynamicLimits(context) ?: true
 
     fun hasGuard() = guard != null

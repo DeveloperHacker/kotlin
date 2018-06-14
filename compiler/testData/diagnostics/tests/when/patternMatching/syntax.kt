@@ -1,14 +1,52 @@
 
 fun foo(a: Int) = when (a) {
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>10<!> -> 10
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>a<!> -> 10
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>a + 3<!> -> 10
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>field = <!SYNTAX!><!>10<!> -> 10
-    is like val b -> b
-    is like val b = <!SYNTAX!><!>10 -> b
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>eq 10<!> -> 10
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>eq a<!> -> 10
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>eq a + 3<!> -> 10
-    <!USELESS_IS_CHECK!>is like <!SYNTAX!><!>field = <!SYNTAX!><!>eq 10<!> -> 10
-    is like val b = <!SYNTAX!><!>eq 10 -> b
+    is like 3 -> 10
+    is like 3 > 3 -> 10
+    is like 3 == 3 -> 10
+    is like 3 && 3 -> 10
+    is like 3 || 3 -> 10
+    is like a -> 10
+    is like a > 3 -> 10
+    is like a == 3 -> 10
+    is like a && 3 -> 10
+    is like a || 3 -> 10
+    is like a + 3 -> 10
+    is like a + 3 > 3 -> 10
+    is like a + 3 == 3 -> 10
+    is like a + 3 && 3 -> 10
+    is like a + 3 || 3 -> 10
+    is like <!SYNTAX!><!>field = 3 -> 10
+    is like <!SYNTAX!><!>field = a + 3 -> 10
+    is like <!SYNTAX!><!>field = a + 3 > 3 -> 10
+    is like <!SYNTAX!><!>field = a + 3 == 3 -> 10
+    is like <!SYNTAX!><!>field = a + 3 && 3 -> 10
+    is like <!SYNTAX!><!>field = a + 3 || 3 -> 10
+    is like <!SYNTAX!><!>field = eq 3 -> 10
+    is like <!SYNTAX!><!>field = eq a + 3 -> 10
+    is like <!SYNTAX!><!>field = eq a + 3 > 3 -> 10
+    is like <!SYNTAX!><!>field = eq a + 3 == 3 -> 10
+    is like <!SYNTAX!><!>field = eq a + 3 && 3 -> 10
+    is like <!SYNTAX!><!>field = eq a + 3 || 3 -> 10
+    is like val field = eq 3 -> 10
+    is like val field = eq a + 3 -> 10
+    is like val field = eq a + 3 > 3 -> 10
+    is like val field = eq a + 3 == 3 -> 10
+    is like val field = eq a + 3 && 3 -> 10
+    is like val field = eq a + 3 || 3 -> 10
+    is like val field = 3 -> 10
+    is like val field = a + 3 -> 10
+    is like val field = a + 3 > 3 -> 10
+    is like val field = a + 3 == 3 -> 10
+    is like val field = a + 3 && 3 -> 10
+    is like val field = a + 3 || 3 -> 10
+    is like eq a + 3 -> 10
+    is like eq a + 3 > 3 -> 10
+    is like eq a + 3 == 3 -> 10
+    is like eq a + 3 && 3 -> 10
+    is like eq a + 3 || 3 -> 10
+    is like eq (a + 3) -> 10
+    is like eq (a + 3 > 3) -> 10
+    is like eq (a + 3 == 3) -> 10
+    is like eq (a + 3 && 3) -> 10
+    is like eq (a + 3 || 3) -> 10
 }
