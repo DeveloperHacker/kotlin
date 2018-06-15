@@ -270,11 +270,6 @@ fun <T, E : PsiElement> T?.reportAndReplaceIfNull(element: E, state: PatternReso
 data class Subject(val expression: KtExpression, val receiverValue: ReceiverValue, val dataFlowValue: DataFlowValue) {
     val type: KotlinType
         get() = receiverValue.type
-
-    fun replaceType(type: KotlinType): Subject {
-        val receiverValue = receiverValue.replaceType(type)
-        return Subject(expression, receiverValue, dataFlowValue)
-    }
 }
 
 class PatternResolveState private constructor(
@@ -304,11 +299,6 @@ class PatternResolveState private constructor(
 
     fun replaceDataFlow(dataFlowInfo: DataFlowInfo): PatternResolveState {
         val context = context.replaceDataFlowInfo(dataFlowInfo)
-        return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject, usefulCheckCounter)
-    }
-
-    fun replaceSubjectType(type: KotlinType): PatternResolveState {
-        val subject = subject.replaceType(type)
         return PatternResolveState(scope, context, allowDefinition, isNegated, isTuple, subject, usefulCheckCounter)
     }
 
