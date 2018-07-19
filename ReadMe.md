@@ -4,7 +4,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/org.jetbrains.kotlin/kotlin-maven-plugin.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.jetbrains.kotlin%22)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
-# Kotlin Programming Language
+# Kotlin Programming Language with Pattern Matching
 
 Welcome to [Kotlin](https://kotlinlang.org/)! Some handy links:
 
@@ -18,6 +18,49 @@ Welcome to [Kotlin](https://kotlinlang.org/)! Some handy links:
  * [Follow Kotlin on Twitter](https://twitter.com/kotlin)
  * [Public Slack channel](http://slack.kotlinlang.org/)
  * [TeamCity CI build](https://teamcity.jetbrains.com/project.html?tab=projectOverview&projectId=Kotlin)
+
+## Pattern Matching
+
+See more exmples at pattern matching [test cases](https://github.com/DeveloperHacker/kotlin/tree/pattern-matching/compiler/testData/codegen/box/patternMatching)
+
+### Simplification of symbolic expressions 
+```
+sealed class Expression
+
+enum class Operation { MUL, DIV, ADD, SUB }
+
+data class Const<T>(val value: T): Expression()
+
+data class Name(val name: String): Expression()
+
+data class Binary(val left: Expression, val operation: Operation, val right: Expression): Expression()
+
+fun simplify(expression: Expression): Expression = when (expression) {
+    is like Binary(_, Operation.MUL, val right = Const(0)) -> right
+    is like Binary(val left = Const(0), Operation.MUL, _) -> left
+    is like Binary(val left, Operation.MUL, Const(1)) -> simplify(left)
+    is like Binary(Const(1), Operation.MUL, val right) -> simplify(right)
+    is like Binary(Const(val left is Int), Operation.MUL, Const(val right is Int)) -> Const(left * right)
+    else -> expression
+}
+```
+
+### Representation of notifications
+```
+sealed class Notification
+
+data class Email(val sender: String, val title: String, val body: String) : Notification()
+
+data class SMS(val caller: String, val message: String) : Notification()
+
+data class VoiceRecording(val contactName: String, val link: String) : Notification()
+
+fun showNotification(notification: Notification): String = when(notification) {
+    is like Email(val email, val title, _) -> "You got an email from $email with title: $title"
+    is like SMS(val number, val message) -> "You got an SMS from $number! Message: $message"
+    is like VoiceRecording(val name, val link) -> "You received a Voice Recording from $name! Click the link to hear it: $link"
+}
+```
 
 ## Editing Kotlin
 
