@@ -21,7 +21,7 @@ Welcome to [Kotlin](https://kotlinlang.org/)! Some handy links:
 
 ## Pattern Matching
 
-See more exmples at pattern matching [test cases](https://github.com/DeveloperHacker/kotlin/tree/pattern-matching/compiler/testData/codegen/box/patternMatching)
+See more exmples at pattern matching [test cases](https://github.com/DeveloperHacker/kotlin/compiler/testData/codegen/box/patternMatching)
 
 ### Simplification of symbolic expressions 
 ```
